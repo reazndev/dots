@@ -8,20 +8,20 @@ $git_status\
 $character"""
 
 [directory]
-style = "bold #9BA296"
+style = "bold #495F76"
 format = "[$path]($style) "
 truncation_length = 3
 truncate_to_repo = true
 
 [git_branch]
 symbol = " "
-style = "bold #ECA747"
+style = "bold #9A6565"
 format = "on [$symbol$branch]($style) "
 
 [git_status]
-style = "bold #A37662"
+style = "bold #5A4D58"
 format = "[\\[$all_status$ahead_behind\\]]($style) "
 
 [character]
-success_symbol = "[➜](bold #5B605A) "
-error_symbol = "[➜](bold #462A26) "
+success_symbol = "[➜](bold #6A352B) "
+error_symbol = "[➜](bold #1F2530) "

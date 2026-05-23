@@ -72,3 +72,12 @@ zed/themes/*
 !vicinae/
 vicinae/*
 !vicinae/settings.json
+
+# GTK-3.0 & GTK-4.0 configurations
+!gtk-3.0/
+gtk-3.0/*
+!gtk-3.0/gtk.css
+
+!gtk-4.0/
+gtk-4.0/*
+!gtk-4.0/gtk.css

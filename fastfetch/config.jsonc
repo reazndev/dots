@@ -3,7 +3,7 @@
   "logo": {
     "source": "/home/reazn/.config/fastfetch/logo.png",
     "type": "kitty",
-    "width": 28,
+    "width": 38,
     "padding": {
       "right": 4
     }
@@ -16,28 +16,23 @@
     "separator",
     {
       "type": "os",
-      "key": "OS   ",
-      "keyColor": "34" // Cyan/Blue
-    },
-    {
-      "type": "host",
-      "key": "Host ",
-      "keyColor": "35" // Purple/Magenta
+      "key": "OS    ",
+      "keyColor": "34"
     },
     {
       "type": "kernel",
       "key": "Kernel",
-      "keyColor": "36" // Light Cyan
+      "keyColor": "36"
     },
     {
       "type": "uptime",
       "key": "Uptime",
-      "keyColor": "32" // Green
+      "keyColor": "32"
     },
     {
       "type": "packages",
       "key": "Pkgs  ",
-      "keyColor": "33" // Yellow
+      "keyColor": "33"
     },
     {
       "type": "shell",
@@ -55,19 +50,31 @@
       "keyColor": "36"
     },
     {
+      "type": "display",
+      "key": "Res   ",
+      "keyColor": "32",
+      "compactType": "original"
+    },
+    {
       "type": "cpu",
       "key": "CPU   ",
-      "keyColor": "32"
+      "keyColor": "33"
     },
     {
       "type": "gpu",
       "key": "GPU   ",
-      "keyColor": "33"
+      "keyColor": "35"
     },
     {
       "type": "memory",
       "key": "Memory",
       "keyColor": "34"
+    },
+    {
+      "type": "media",
+      "key": "Now   ",
+      "keyColor": "32",
+      "format": "{title} - {artist}"
     },
     "break",
     "colors"

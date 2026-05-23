@@ -22,7 +22,7 @@
       "@sovereign/store.vicinae.awww-switcher": {
          "preferences": {
             "wallpaperPath": "/home/reazn/Pictures/Wallpaper",
-            "postCommand": "/usr/bin/wallust run \"${wallpaper}\" && touch /home/reazn/.config/ghostty/config && touch /home/reazn/.config/ghostty/config.ghostty"
+            "postCommand": "/usr/bin/wallust run \"${wallpaper}\" && python3 /home/reazn/.config/fastfetch/generate_logo_png.py && touch /home/reazn/.config/ghostty/config && touch /home/reazn/.config/ghostty/config.ghostty"
          }
       },
       "@thomaslombart/store.raycast.github": {

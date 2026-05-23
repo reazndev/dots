@@ -86,3 +86,9 @@ gtk-4.0/*
 
 # KDE / Dolphin / QT configuration
 !kdeglobals
+
+# Fastfetch configurations
+!fastfetch/
+fastfetch/*
+!fastfetch/config.jsonc
+!fastfetch/logo.txt

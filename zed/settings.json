@@ -1,39 +1,39 @@
 {
   "outline_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "collaboration_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "git_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "agent": {
     "tool_permissions": {
       "tools": {
         "terminal": {
-          "default": "allow"
+          "default": "allow",
         },
         "create_directory": {
-          "default": "allow"
-        }
-      }
+          "default": "allow",
+        },
+      },
     },
     "default_model": {
       "provider": "zed.dev",
       "model": "gpt-5.2-codex",
       "enable_thinking": true,
-      "effort": "medium"
+      "effort": "medium",
     },
     "dock": "left",
     "favorite_models": [],
-    "model_parameters": []
+    "model_parameters": [],
   },
   "terminal": {
-    "dock": "right"
+    "dock": "right",
   },
   "project_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "redact_private_values": false,
   "session": {
@@ -42,7 +42,7 @@
   "icon_theme": {
     "mode": "dark",
     "light": "Colored Zed Icons Theme Dark",
-    "dark": "Colored Zed Icons Theme Dark"
+    "dark": "Colored Zed Icons Theme Dark",
   },
   "ui_font_size": 16,
   "buffer_font_size": 15,
@@ -52,68 +52,98 @@
       "formatter": {
         "external": {
           "command": "npx",
-          "arguments": ["--no-install", "prettier", "--stdin-filepath", "{buffer_path}"]
-        }
-      }
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
     },
     "JavaScript": {
       "formatter": {
         "external": {
           "command": "npx",
-          "arguments": ["--no-install", "prettier", "--stdin-filepath", "{buffer_path}"]
-        }
-      }
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
     },
     "HTML": {
       "formatter": {
         "external": {
           "command": "npx",
-          "arguments": ["--no-install", "prettier", "--stdin-filepath", "{buffer_path}"]
-        }
-      }
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
     },
     "CSS": {
       "formatter": {
         "external": {
           "command": "npx",
-          "arguments": ["--no-install", "prettier", "--stdin-filepath", "{buffer_path}"]
-        }
-      }
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
     },
     "JSON": {
       "formatter": {
         "external": {
           "command": "npx",
-          "arguments": ["--no-install", "prettier", "--stdin-filepath", "{buffer_path}"]
-        }
-      }
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
     },
     "Markdown": {
       "formatter": {
         "external": {
           "command": "npx",
-          "arguments": ["--no-install", "prettier", "--stdin-filepath", "{buffer_path}"]
-        }
-      }
-    }
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
   },
   "theme": {
     "mode": "dark",
     "light": "Gruvbox Light",
-    "dark": "Wallust"
+    "dark": "Wallust",
   },
   "agent_servers": {
     "gemini": {
-      "type": "registry"
+      "type": "registry",
     },
     "codex-acp": {
-      "type": "registry"
+      "type": "registry",
     },
     "agoragentic-acp": {
-      "type": "registry"
+      "type": "registry",
     },
     "claude-acp": {
-      "type": "registry"
+      "type": "registry",
     },
     "Kimi Code CLI": {
       "type": "custom",
@@ -130,7 +160,7 @@
         // Base URL for all language icons
         "base_icons_url": "https://raw.githubusercontent.com/xhyrom/zed-discord-presence/main/assets/icons/",
 
-        "state": "Working on {filename}",
+        // "state": "",
         "details": "In {workspace}",
         // URL for the large image
         "large_image": "{base_icons_url}/{language:lo}.png", // :lo lowercase the language name

@@ -7,25 +7,25 @@ $character"""
 add_newline = false
 
 [directory]
-style = "bold #9BA296"
+style = "bold #30A0CB"
 format = "[$path]($style)"
 truncation_length = 0
 truncate_to_repo = false
 
 [git_status]
 format = " $ahead_behind$staged$modified$untracked$deleted$renamed$stashed"
-ahead = "[↑$count](bold #5B605A)"
-behind = "[↓$count](bold #462A26)"
-diverged = "[↑$ahead_count↓$behind_count](bold #462A26)"
-staged = "[\\[$count staged\\]](bold #5B605A)"
-modified = "[\\[~$count\\]](bold #ECA747)"
-untracked = "[\\[?$count\\]](bold #A37662)"
-deleted = "[\\[✗$count\\]](bold #462A26)"
-renamed = "[\\[»$count\\]](bold #A37662)"
-stashed = "[\\[≡$count stashed\\]](bold #9BA296)"
+ahead = "[↑$count](bold #12507C)"
+behind = "[↓$count](bold #071E60)"
+diverged = "[↑$ahead_count↓$behind_count](bold #071E60)"
+staged = "[\\[$count staged\\]](bold #12507C)"
+modified = "[\\[~$count\\]](bold #5DCCE2)"
+untracked = "[\\[?$count\\]](bold #2A78A9)"
+deleted = "[\\[✗$count\\]](bold #071E60)"
+renamed = "[\\[»$count\\]](bold #2A78A9)"
+stashed = "[\\[≡$count stashed\\]](bold #30A0CB)"
 ignore_submodules = true
 
 [character]
-success_symbol = "[↪](bold #5B605A) "
-error_symbol = "[↪](bold #462A26) "
-vicmd_symbol = "[↪](bold #9BA296) "
+success_symbol = "[↪](bold #12507C) "
+error_symbol = "[↪](bold #071E60) "
+vicmd_symbol = "[↪](bold #30A0CB) "

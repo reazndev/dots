@@ -1,5 +1,5 @@
 # Ghostty configuration
-theme = wallust
+theme = "/home/reazn/.config/ghostty/themes/wallust"
 background-opacity = 0.98
 font-family = Lilex Nerd Font
-font-size = 11
+font-size = 13

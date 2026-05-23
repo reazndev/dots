@@ -5,12 +5,12 @@ import "../../components"
 
 Rectangle {
     id: root
-    height: 16
-    width: Math.max(16, countText.implicitWidth + 8)
+    height: 28
+    width: Math.max(28, countText.implicitWidth + 16)
     radius: height / 2
-    color: Theme.accent
+    color: Theme.bg
     border.color: Theme.border
-    border.width: 0
+    border.width: Theme.borderWidth
 
     property int count: NotificationService.unreadCount
     property bool visibleBadge: count > 0
@@ -25,9 +25,9 @@ Rectangle {
         id: countText
         anchors.centerIn: parent
         text: root.count > 9 ? "9+" : root.count.toString()
-        color: Theme.bg
+        color: Theme.accent
         font.bold: true
-        font.pixelSize: 10
+        font.pixelSize: 11
         font.family: Theme.fontFamilyUi
     }
 

@@ -99,8 +99,8 @@ ColumnLayout {
                 // Notification Icon / Fallback
                 Item {
                     id: notificationIconBox
-                    width: 20
-                    height: 20
+                    width: 32
+                    height: 32
                     Layout.alignment: Qt.AlignTop
                     
                     Image {
@@ -108,6 +108,8 @@ ColumnLayout {
                         anchors.fill: parent
                         source: NotificationService.appIconSource(modelData)
                         fillMode: Image.PreserveAspectFit
+                        smooth: true
+                        mipmap: true
                         cache: false
                         visible: status === Image.Ready
                     }
@@ -127,15 +129,7 @@ ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 1
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        StyledText {
-                            text: NotificationService.appLabel(modelData)
-                            font.bold: true
-                            role: "accent"
-                            font.pixelSize: Theme.fontSize - 1
-                        }
-                    }
+
 
                     StyledText {
                         text: modelData.summary || ""

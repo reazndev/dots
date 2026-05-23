@@ -3,41 +3,41 @@
  * ============================================================================== */
 
 /* GTK 3 Core Variables */
-@define-color theme_bg_color #22202C;
-@define-color theme_fg_color #E4FDFC;
-@define-color theme_base_color #211F2A;
-@define-color theme_text_color #E4FDFC;
-@define-color theme_selected_bg_color #30A0CB;
-@define-color theme_selected_fg_color #252330;
-@define-color theme_view_bg_color #211F2A;
-@define-color theme_view_text_color #E4FDFC;
-@define-color theme_header_background #211F2A;
-@define-color theme_header_foreground #E4FDFC;
-@define-color theme_sidebar_background #211F2A;
-@define-color theme_sidebar_foreground #E4FDFC;
+@define-color theme_bg_color #151717;
+@define-color theme_fg_color #FCFAE7;
+@define-color theme_base_color #141616;
+@define-color theme_text_color #FCFAE7;
+@define-color theme_selected_bg_color #9BA296;
+@define-color theme_selected_fg_color #171919;
+@define-color theme_view_bg_color #141616;
+@define-color theme_view_text_color #FCFAE7;
+@define-color theme_header_background #141616;
+@define-color theme_header_foreground #FCFAE7;
+@define-color theme_sidebar_background #141616;
+@define-color theme_sidebar_foreground #FCFAE7;
 
 /* GTK 3 Muted States & Borders */
-@define-color insensitive_bg_color #24222E;
-@define-color insensitive_fg_color #92AAAA;
-@define-color insensitive_base_color #24222E;
-@define-color borders #758888;
-@define-color outline #758888;
+@define-color insensitive_bg_color #161818;
+@define-color insensitive_fg_color #A9A895;
+@define-color insensitive_base_color #161818;
+@define-color borders #878677;
+@define-color outline #878677;
 
 /* GTK 4 / Libadwaita Core Overrides */
-@define-color window_bg_color #22202C;
-@define-color window_fg_color #E4FDFC;
-@define-color view_bg_color #211F2A;
-@define-color view_fg_color #E4FDFC;
-@define-color headerbar_bg_color #211F2A;
-@define-color headerbar_fg_color #E4FDFC;
-@define-color sidebar_bg_color #211F2A;
-@define-color sidebar_fg_color #E4FDFC;
-@define-color card_bg_color #24222E;
-@define-color card_fg_color #E4FDFC;
-@define-color popover_bg_color #24222E;
-@define-color popover_fg_color #E4FDFC;
+@define-color window_bg_color #151717;
+@define-color window_fg_color #FCFAE7;
+@define-color view_bg_color #141616;
+@define-color view_fg_color #FCFAE7;
+@define-color headerbar_bg_color #141616;
+@define-color headerbar_fg_color #FCFAE7;
+@define-color sidebar_bg_color #141616;
+@define-color sidebar_fg_color #FCFAE7;
+@define-color card_bg_color #161818;
+@define-color card_fg_color #FCFAE7;
+@define-color popover_bg_color #161818;
+@define-color popover_fg_color #FCFAE7;
 
 /* Libadwaita Selection & Accent Highlights */
-@define-color accent_color #30A0CB;
-@define-color accent_bg_color #30A0CB;
-@define-color accent_fg_color #252330;
+@define-color accent_color #9BA296;
+@define-color accent_bg_color #9BA296;
+@define-color accent_fg_color #171919;

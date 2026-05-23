@@ -12,8 +12,8 @@ RowLayout {
 
     Item {
         id: iconOrFallback
-        width: 22
-        height: 22
+        width: 26
+        height: 26
         Layout.alignment: Qt.AlignVCenter
 
         Image {
@@ -21,6 +21,8 @@ RowLayout {
             anchors.fill: parent
             source: NotificationService.appIconSource(notification)
             fillMode: Image.PreserveAspectFit
+            smooth: true
+            mipmap: true
             cache: false
             visible: status === Image.Ready
         }
@@ -41,7 +43,30 @@ RowLayout {
         text: {
             if (!notification)
                 return "Notifications";
-            var text = notification.summary || notification.body || NotificationService.appLabel(notification);
+            
+            var summary = (notification.summary || "").trim();
+            var body = (notification.body || "").trim();
+            var appLabel = (NotificationService.appLabel(notification) || "").trim();
+            var appName = (notification.appName || "").trim();
+            
+            var text = summary;
+            
+            var isAppName = false;
+            if (summary) {
+                var sLower = summary.toLowerCase();
+                var labelLower = appLabel.toLowerCase();
+                var nameLower = appName.toLowerCase();
+                if (sLower === labelLower || sLower === nameLower || sLower === "vesktop" || sLower === "discord" || sLower === "element" || sLower === "spotify" || sLower === "cachyos-hello" || sLower === "cachyos hello") {
+                    isAppName = true;
+                }
+            }
+            
+            if (body && (!summary || isAppName)) {
+                text = body;
+            } else if (!text) {
+                text = body || appLabel;
+            }
+            
             if (text.length > 42)
                 return text.substring(0, 42) + "…";
             return text;

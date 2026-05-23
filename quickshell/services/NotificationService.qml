@@ -1,6 +1,8 @@
 pragma Singleton
 import QtQuick
+import Quickshell
 import Quickshell.Services.Notifications
+import "DesktopIcons.js" as DesktopIcons
 
 Item {
     id: root
@@ -23,14 +25,170 @@ Item {
     }
 
     function appIconSource(notification) {
-        if (!notification || !notification.appIcon)
+        if (!notification)
             return "";
 
-        var icon = String(notification.appIcon);
-        if (icon.indexOf("/") === 0 || icon.indexOf("file://") === 0 || icon.indexOf("qrc:/") === 0)
-            return icon;
+        // 1. Try custom notification image/avatar (e.g. sender avatar)
+        if (notification.image) {
+            var img = String(notification.image);
+            if (img.indexOf("/") === 0 || img.indexOf("file://") === 0 || img.indexOf("qrc:/") === 0)
+                return img;
+        }
 
-        return "image://theme/" + icon;
+        // Helper to resolve an icon name with aliases and fallbacks
+        var resolveIcon = function(name) {
+            if (!name)
+                return "";
+            
+            var key = String(name).toLowerCase().trim();
+            var resolved = "";
+
+            // Custom local png icon mapping
+            var customPngMap = {
+                "vesktop": "discord.png",
+                "discord": "discord.png",
+                "discord-client": "discord.png",
+                "element": "element2.png",
+                "element-desktop": "element2.png",
+                "element-desktop-nightly": "element2.png",
+                "element desktop": "element2.png",
+                "ghostty": "ghostty.png",
+                "com.mitchellh.ghostty": "ghostty.png",
+                "helium": "helium.png",
+                "helium-browser": "helium.png",
+                "helium browser": "helium.png",
+                "spotify": "spotify.png",
+                "spotify-launcher": "spotify.png",
+                "vleer": "vleer.png",
+                "zed": "zed.png",
+                "zeditor": "zed.png",
+                "zed preview": "zed.png",
+                "dev.zed.zed-preview": "zed.png",
+                "github": "github.png",
+                "github-desktop": "github.png",
+                "hyprpicker": "hyprpicker.png",
+                "hyprshot": "hyprshot.png",
+                "screenshot": "hyprshot.png",
+                "accessories-screenshot": "hyprshot.png",
+                "localsend": "localsend.png",
+                "protonvpn": "protonvpn.png",
+                "proton vpn": "protonvpn.png",
+                "proton-vpn": "protonvpn.png",
+                "proton.vpn.app.gtk": "protonvpn.png",
+                "cachy": "cachy.png",
+                "cachyos": "cachy.png",
+                "cachyos-hello": "cachy.png",
+                "cachyos hello": "cachy.png",
+                "arch": "arch.png",
+                "console": "console.png",
+                "terminal": "console.png",
+                "alacritty": "console.png",
+                "kitty": "console.png"
+            };
+
+            var cleanedKey = key.replace(/\s+desktop$/g, "")
+                                .replace(/\s+client$/g, "")
+                                .replace(/\s+\d+$/g, "")
+                                .replace(/[\s\-_]+/g, "");
+
+            var customFile = customPngMap[key] || customPngMap[cleanedKey];
+            if (!customFile) {
+                for (var customKey in customPngMap) {
+                    if (key.indexOf(customKey) !== -1 || cleanedKey.indexOf(customKey) !== -1) {
+                        customFile = customPngMap[customKey];
+                        break;
+                    }
+                }
+            }
+
+            if (customFile) {
+                return "file:///home/reazn/.config/icons/png/" + customFile;
+            }
+
+            // A. Check the auto-generated desktop file icon mapping
+            var desktopIcon = DesktopIcons.getIcon(key);
+            if (desktopIcon) {
+                resolved = Quickshell.iconPath(desktopIcon, true);
+                if (resolved) return resolved;
+            }
+            
+            // Try standard cleaned key in desktop file icon mapping
+            var cleanedKey = key.replace(/\s+desktop$/g, "")
+                                .replace(/\s+client$/g, "")
+                                .replace(/\s+\d+$/g, "") // remove trailing numbers
+                                .replace(/[\s\-_]+/g, ""); // strip spaces/hyphens
+                                
+            var cleanedDesktopIcon = DesktopIcons.getIcon(cleanedKey);
+            if (cleanedDesktopIcon) {
+                resolved = Quickshell.iconPath(cleanedDesktopIcon, true);
+                if (resolved) return resolved;
+            }
+
+            // B. Common manual icon/appName aliases as a backup
+            var aliases = {
+                "vesktop": "discord",
+                "element desktop": "element",
+                "element": "element",
+                "hyprshot": "accessories-screenshot",
+                "screenshot": "accessories-screenshot",
+                "discord-client": "discord",
+                "discord": "discord"
+            };
+
+            // Try explicit alias first
+            if (aliases[key]) {
+                resolved = Quickshell.iconPath(aliases[key], true);
+                if (resolved) return resolved;
+            }
+            
+            if (aliases[cleanedKey]) {
+                resolved = Quickshell.iconPath(aliases[cleanedKey], true);
+                if (resolved) return resolved;
+            }
+            
+            // C. Try the name directly
+            resolved = Quickshell.iconPath(key, true);
+            if (resolved) return resolved;
+            
+            // Try cleaned key directly
+            resolved = Quickshell.iconPath(cleanedKey, true);
+            if (resolved) return resolved;
+            
+            // D. Generic fallback categories for common key prefixes/suffixes
+            if (key.indexOf("shot") !== -1 || key.indexOf("screen") !== -1) {
+                resolved = Quickshell.iconPath("accessories-screenshot", true) || Quickshell.iconPath("camera-photo", true);
+                if (resolved) return resolved;
+            }
+            
+            return "";
+        };
+
+        // 2. Try the app icon specified by the app
+        if (notification.appIcon) {
+            var icon = String(notification.appIcon);
+            if (icon.indexOf("/") === 0 || icon.indexOf("file://") === 0 || icon.indexOf("qrc:/") === 0)
+                return icon;
+
+            var resolvedAppIcon = resolveIcon(icon);
+            if (resolvedAppIcon)
+                return resolvedAppIcon;
+        }
+
+        // 3. Try the desktop entry name specified by the notification (e.g. desktop-entry hint)
+        if (notification.desktopEntry) {
+            var resolvedDesktopEntry = resolveIcon(notification.desktopEntry);
+            if (resolvedDesktopEntry)
+                return resolvedDesktopEntry;
+        }
+
+        // 4. Try resolving the application name
+        if (notification.appName) {
+            var resolvedAppName = resolveIcon(notification.appName);
+            if (resolvedAppName)
+                return resolvedAppName;
+        }
+
+        return "";
     }
 
     function appLabel(notification) {

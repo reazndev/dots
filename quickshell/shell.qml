@@ -11,6 +11,12 @@ ShellRoot {
         systemPopup: systemPopupWindow
     }
 
+    HyprlandFocusGrab {
+        windows: [bar]
+        active: bar.islandExpanded
+        onCleared: bar.islandExpanded = false
+    }
+
     PopupWindow {
         id: systemPopupWindow
         anchor.window: bar

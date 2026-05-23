@@ -33,6 +33,7 @@ Rectangle {
     }
     property int compactPaddingLeft: 12
     property int compactPaddingRight: 8
+    readonly property int compactWidth: mainLoader.implicitWidth + compactPaddingLeft + compactPaddingRight
 
     function displayedIslandType() {
         var island = IslandManager.activeIsland;
@@ -45,6 +46,12 @@ Rectangle {
         if (NotificationService.unreadCount > 0)
             return "notification";
         return "";
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        z: -1
+        onClicked: root.expanded = false
     }
 
     function showNotificationBadge() {
@@ -181,6 +188,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         height: 28
+        visible: !root.expanded || root.displayedIslandType() !== "notification"
 
         Item {
             id: mainArea
@@ -215,10 +223,10 @@ Rectangle {
     Loader {
         id: expandedLoader
         anchors.top: parent.top
-        anchors.topMargin: 28
+        anchors.topMargin: (root.expanded && root.displayedIslandType() === "notification") ? 0 : 28
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width
-        height: parent.height - 28
+        height: parent.height - anchors.topMargin
         opacity: root.expanded ? 1 : 0
         enabled: root.expanded
         visible: root.expanded || opacity > 0

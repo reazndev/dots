@@ -10,6 +10,7 @@ PanelRoot {
     property var networkPopup: null
     property var bluetoothPopup: null
     property var systemPopup: null
+    property alias islandExpanded: island.expanded
 
     extraHeight: island.visible ? Math.max(0, island.expandedHeight - (Theme.barHeight + 28) / 2) : 0
     islandMaskX: island.x
@@ -25,6 +26,16 @@ PanelRoot {
         anchors.rightMargin: 12
         height: Theme.barHeight
 
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                island.expanded = false;
+                if (barPanel.networkPopup) barPanel.networkPopup.visible = false;
+                if (barPanel.bluetoothPopup) barPanel.bluetoothPopup.visible = false;
+                if (barPanel.systemPopup) barPanel.systemPopup.visible = false;
+            }
+        }
+
         WorkspaceWidget {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -39,9 +50,9 @@ PanelRoot {
 
         NotificationBadgeWidget {
             id: notificationBadge
-            anchors.verticalCenter: island.verticalCenter
-            anchors.left: island.right
-            anchors.leftMargin: 6
+            anchors.verticalCenter: parent.verticalCenter
+            x: parent.width / 2 + island.compactWidth / 2 + 6
+            visible: notificationBadge.visibleBadge && !(island.expanded && island.displayedIslandType() === "notification")
             onActivated: {
                 island.forceNotificationIsland = true;
                 island.expanded = true;

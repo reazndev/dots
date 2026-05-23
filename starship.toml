@@ -26,6 +26,6 @@ stashed = "[\\[≡$count stashed\\]](bold #9BA296)"
 ignore_submodules = true
 
 [character]
-success_symbol = "\n[->](bold #5B605A) "
-error_symbol = "\n[->](bold #462A26) "
-vicmd_symbol = "\n[->](bold #9BA296) "
+success_symbol = "[↪](bold #5B605A) "
+error_symbol = "[↪](bold #462A26) "
+vicmd_symbol = "[↪](bold #9BA296) "

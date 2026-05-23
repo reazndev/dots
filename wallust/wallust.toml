@@ -15,3 +15,4 @@ hyprland = { src = "hyprland.template", dst = "/home/reazn/.config/hypr/colors.c
 zed = { src = "zed.template", dst = "/home/reazn/.config/zed/themes/wallust.json" }
 gtk3 = { src = "gtk.css.template", dst = "/home/reazn/.config/gtk-3.0/gtk.css" }
 gtk4 = { src = "gtk.css.template", dst = "/home/reazn/.config/gtk-4.0/gtk.css" }
+kdeglobals = { src = "kdeglobals.template", dst = "/home/reazn/.config/kdeglobals" }

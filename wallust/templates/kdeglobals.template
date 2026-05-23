@@ -1,0 +1,40 @@
+[General]
+ColorScheme=BreezeDark
+Name=Wallust
+
+[Colors:Window]
+BackgroundNormal={{background | darken(0.08) | rgb}}
+ForegroundNormal={{foreground | rgb}}
+BackgroundAlternate={{background | darken(0.04) | rgb}}
+ForegroundInactive={{color8 | rgb}}
+
+[Colors:View]
+BackgroundNormal={{background | darken(0.12) | rgb}}
+ForegroundNormal={{foreground | rgb}}
+BackgroundAlternate={{background | darken(0.1) | rgb}}
+ForegroundInactive={{color8 | rgb}}
+
+[Colors:Selection]
+BackgroundNormal={{color4 | rgb}}
+ForegroundNormal={{background | rgb}}
+BackgroundAlternate={{color4 | blend(background) | rgb}}
+
+[Colors:Button]
+BackgroundNormal={{background | darken(0.04) | rgb}}
+ForegroundNormal={{foreground | rgb}}
+BackgroundAlternate={{background | darken(0.08) | rgb}}
+
+[Colors:Tooltip]
+BackgroundNormal={{background | darken(0.04) | rgb}}
+ForegroundNormal={{foreground | rgb}}
+
+[Colors:Header]
+BackgroundNormal={{background | darken(0.12) | rgb}}
+ForegroundNormal={{foreground | rgb}}
+BackgroundAlternate={{background | darken(0.1) | rgb}}
+
+[WM]
+activeBackground={{color4 | rgb}}
+activeForeground={{background | rgb}}
+inactiveBackground={{background | darken(0.08) | rgb}}
+inactiveForeground={{color8 | rgb}}

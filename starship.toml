@@ -9,9 +9,8 @@ add_newline = false
 [directory]
 style = "bold #9BA296"
 format = "[$path]($style)"
-truncation_length = 4
-truncate_to_repo = true
-truncation_symbol = "…/"
+truncation_length = 0
+truncate_to_repo = false
 
 [git_status]
 format = " $ahead_behind$staged$modified$untracked$deleted$renamed$stashed"

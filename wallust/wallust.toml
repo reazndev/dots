@@ -1,0 +1,15 @@
+# ~/.config/wallust/wallust.toml
+
+# Color extraction engine settings
+backend = "resized"
+color_space = "lab"
+palette = "dark"
+
+# Template mappings to dynamically write configuration files
+[templates]
+quickshell = { src = "Theme.qml.template", dst = "/home/reazn/.config/quickshell/services/Theme.qml" }
+ghostty = { src = "ghostty.template", dst = "/home/reazn/.config/ghostty/themes/wallust" }
+starship = { src = "starship.toml.template", dst = "/home/reazn/.config/starship.toml" }
+kitty = { src = "kitty.template", dst = "/home/reazn/.config/kitty/theme.conf" }
+hyprland = { src = "hyprland.template", dst = "/home/reazn/.config/hypr/colors.conf" }
+zed = { src = "zed.template", dst = "/home/reazn/.config/zed/themes/wallust.json" }

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
+  "name": "Wallust",
+  "author": "Antigravity",
+  "themes": [
+    {
+      "name": "Wallust",
+      "appearance": "dark",
+      "style": {
+        "background": "{{background | darken(0.1)}}",
+        "foreground": "{{foreground}}",
+        "editor.background": "{{background | darken(0.1)}}",
+        "editor.foreground": "{{foreground}}",
+        "editor.line_number": "{{color8}}",
+        "editor.active_line_number": "{{color4}}",
+        "editor.wrap_guide": "{{color8}}",
+        "editor.active_line.background": "{{background | lighten(0.04)}}",
+        "border": "{{color8 | darken(0.2)}}",
+        "tab.active_background": "{{background}}",
+        "tab.inactive_background": "{{background | darken(0.12)}}",
+        "tab.active_foreground": "{{foreground}}",
+        "tab.inactive_foreground": "{{color8}}",
+        "title_bar.background": "{{background | darken(0.12)}}",
+        "status_bar.background": "{{background | darken(0.12)}}",
+        "pane.background": "{{background | darken(0.12)}}",
+        "panel.background": "{{background | darken(0.12)}}",
+        "syntax": {
+          "comment": { "color": "#7A889B" },
+          "string": { "color": "#98C379" },
+          "keyword": { "color": "#C678DD" },
+          "function": { "color": "#61AFEF" },
+          "type": { "color": "#E5C07B" },
+          "number": { "color": "#D19A66" },
+          "property": { "color": "#ABB2BF" },
+          "constant": { "color": "#D19A66" },
+          "operator": { "color": "#56B6C2" }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+# ==============================================================================
+# Whitelist-only .gitignore for Safe, Sensitive-free Dotfiles Management
+# ==============================================================================
+
+# 1. Ignore everything by default
+*
+
+# 2. Allow this .gitignore file
+!.gitignore
+
+# ==============================================================================
+# ALLOWED DIRECTORIES AND FILES
+# ==============================================================================
+
+# Starship shell prompt config
+!starship.toml
+
+# Hyprland window manager configurations
+!hypr/
+hypr/*
+!hypr/*.conf
+
+# Wallust theme template generator configurations
+!wallust/
+wallust/*
+!wallust/wallust.toml
+!wallust/templates/
+wallust/templates/*
+!wallust/templates/*.template
+
+# Quickshell desktop shell bar widget files
+!quickshell/
+quickshell/*
+!quickshell/**/*.qml
+!quickshell/**/*.js
+!quickshell/**/*.png
+!quickshell/**/*.svg
+!quickshell/**/*.conf
+
+# Ghostty terminal configurations
+!ghostty/
+ghostty/*
+!ghostty/config
+!ghostty/config.ghostty
+!ghostty/themes/
+ghostty/themes/*
+!ghostty/themes/wallust
+
+# Kitty terminal configurations
+!kitty/
+kitty/*
+!kitty/kitty.conf
+!kitty/theme.conf
+
+# Fish shell configurations
+!fish/
+fish/*
+!fish/config.fish
+!fish/functions/
+fish/functions/*
+!fish/functions/*.fish
+
+# Zed editor configurations & themes
+!zed/
+zed/*
+!zed/settings.json
+!zed/themes/
+zed/themes/*
+!zed/themes/wallust.json
+
+# Vicinae extension settings
+!vicinae/
+vicinae/*
+!vicinae/settings.json

@@ -1,0 +1,38 @@
+pragma Singleton
+import QtQuick
+
+QtObject {
+    // Backgrounds
+    property color bg: "{{background}}"
+    property color bgTransparent: "transparent"
+
+    // Foregrounds
+    property color fg: "{{foreground}}"
+    property color fgDim: "{{color8}}"
+
+    // Accents
+    property color accent: "{{color4}}"
+    property color green: "{{color2}}"
+    property color yellow: "{{color3}}"
+    property color red: "{{color1}}"
+    property color blue: "{{color5}}"
+
+    // Geometry
+    property int barHeight: 36
+    property int barMargin: 16
+    property int radius: 10
+    property int borderWidth: 1
+
+    // Opacity
+    property real bgOpacity: 0.92
+
+    // Border
+    property color border: "{{color8}}"
+
+    // Typography
+    property int fontSize: 13
+    property int fontSizeLarge: 16
+    property string fontFamily: "monospace"
+    property string fontFamilyUi: "sans-serif"
+    property string iconFontFamily: "lucide"
+}

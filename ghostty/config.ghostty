@@ -1,0 +1,5 @@
+# Ghostty configuration
+theme = wallust
+background-opacity = 0.98
+font-family = Lilex Nerd Font
+font-size = 11

@@ -93,3 +93,5 @@ fastfetch/*
 !fastfetch/config.jsonc
 !fastfetch/logo.txt
 !fastfetch/generate_logo_png.py
+
+!icons/

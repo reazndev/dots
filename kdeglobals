@@ -3,38 +3,38 @@ ColorScheme=BreezeDark
 Name=Wallust
 
 [Colors:Window]
-BackgroundNormal=27,22,22
-ForegroundNormal=239,217,213
-BackgroundAlternate=28,23,23
-ForegroundInactive=157,134,131
+BackgroundNormal=21,23,23
+ForegroundNormal=252,250,231
+BackgroundAlternate=22,24,24
+ForegroundInactive=169,168,149
 
 [Colors:View]
-BackgroundNormal=26,21,21
-ForegroundNormal=239,217,213
-BackgroundAlternate=26,22,22
-ForegroundInactive=157,134,131
+BackgroundNormal=20,22,22
+ForegroundNormal=252,250,231
+BackgroundAlternate=21,23,23
+ForegroundInactive=169,168,149
 
 [Colors:Selection]
-BackgroundNormal=73,95,118
-ForegroundNormal=29,24,24
-BackgroundAlternate=51,60,71
+BackgroundNormal=155,162,150
+ForegroundNormal=23,25,25
+BackgroundAlternate=89,94,88
 
 [Colors:Button]
-BackgroundNormal=28,23,23
-ForegroundNormal=239,217,213
-BackgroundAlternate=27,22,22
+BackgroundNormal=22,24,24
+ForegroundNormal=252,250,231
+BackgroundAlternate=21,23,23
 
 [Colors:Tooltip]
-BackgroundNormal=28,23,23
-ForegroundNormal=239,217,213
+BackgroundNormal=22,24,24
+ForegroundNormal=252,250,231
 
 [Colors:Header]
-BackgroundNormal=26,21,21
-ForegroundNormal=239,217,213
-BackgroundAlternate=26,22,22
+BackgroundNormal=20,22,22
+ForegroundNormal=252,250,231
+BackgroundAlternate=21,23,23
 
 [WM]
-activeBackground=73,95,118
-activeForeground=29,24,24
-inactiveBackground=27,22,22
-inactiveForeground=157,134,131
+activeBackground=155,162,150
+activeForeground=23,25,25
+inactiveBackground=21,23,23
+inactiveForeground=169,168,149

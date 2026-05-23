@@ -18,12 +18,12 @@ format = " $ahead_behind$staged$modified$untracked$deleted$renamed$stashed"
 ahead = "[↑$count](bold {{color2}})"
 behind = "[↓$count](bold {{color1}})"
 diverged = "[↑$ahead_count↓$behind_count](bold {{color1}})"
-staged = "[\[$count staged\]](bold {{color2}})"
-modified = "[\[~$count\]](bold {{color5}})"
-untracked = "[\[?$count\]](bold {{color3}})"
-deleted = "[\[✗$count\]](bold {{color1}})"
-renamed = "[\[»$count\]](bold {{color3}})"
-stashed = "[\[≡$count stashed\]](bold {{color4}})"
+staged = "[\\[$count staged\\]](bold {{color2}})"
+modified = "[\\[~$count\\]](bold {{color5}})"
+untracked = "[\\[?$count\\]](bold {{color3}})"
+deleted = "[\\[✗$count\\]](bold {{color1}})"
+renamed = "[\\[»$count\\]](bold {{color3}})"
+stashed = "[\\[≡$count stashed\\]](bold {{color4}})"
 ignore_submodules = true
 
 [character]

@@ -95,3 +95,5 @@ fastfetch/*
 !fastfetch/generate_logo_png.py
 
 !icons/
+!icons/**
+

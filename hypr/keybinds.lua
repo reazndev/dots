@@ -22,6 +22,8 @@ hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("vicinae vicinae://launch/clipboard/h
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("helium-browser"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("zeditor"))
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("t3code-nightly"))
+hl.bind(mainMod .. " + ALT + D", hl.dsp.exec_cmd("element-desktop-nightly & vesktop"))
+hl.bind(mainMod .. " + ALT + G", hl.dsp.exec_cmd("spotify-launcher"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "l" }))

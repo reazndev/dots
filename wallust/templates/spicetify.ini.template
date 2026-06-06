@@ -1,0 +1,50 @@
+[wallust]
+text               = {{foreground}}
+subtext            = {{color8}}
+main               = {{background}}
+sidebar            = {{background}}
+player             = {{background}}
+card               = {{color0}}
+shadow             = {{color0}}
+selected-row       = {{color8}}
+button             = {{color4}}
+button-active      = {{color4}}
+button-disabled    = {{color8}}
+tab-active         = {{color4}}
+notification       = {{color4}}
+notification-error = {{color1}}
+misc               = {{color7}}
+
+[Base]
+text               = {{foreground}}
+subtext            = {{color8}}
+main               = {{background}}
+sidebar            = {{background}}
+player             = {{background}}
+card               = {{color0}}
+shadow             = {{color0}}
+selected-row       = {{color8}}
+button             = {{color4}}
+button-active      = {{color4}}
+button-disabled    = {{color8}}
+tab-active         = {{color4}}
+notification       = {{color4}}
+notification-error = {{color1}}
+misc               = {{color7}}
+
+[Marketplace]
+text               = {{foreground}}
+subtext            = {{color8}}
+main               = {{background}}
+sidebar            = {{background}}
+player             = {{background}}
+card               = {{color0}}
+shadow             = {{color0}}
+selected-row       = {{color8}}
+button             = {{color4}}
+button-active      = {{color4}}
+button-disabled    = {{color8}}
+tab-active         = {{color4}}
+notification       = {{color4}}
+notification-error = {{color1}}
+misc               = {{color7}}

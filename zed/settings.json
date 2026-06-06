@@ -1,4 +1,8 @@
 {
+  "cli_default_open_behavior": "existing_window",
+  "edit_predictions": {
+    "provider": "copilot"
+  },
   "outline_panel": {
     "dock": "right",
   },
@@ -133,6 +137,9 @@
     "dark": "Wallust",
   },
   "agent_servers": {
+    "github-copilot-cli": {
+      "type": "registry"
+    },
     "gemini": {
       "type": "registry",
     },

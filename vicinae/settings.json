@@ -10,34 +10,81 @@
 
 {
    "$schema": "https://vicinae.com/schemas/config.json",
+   "font": {
+      "normal": {
+         "family": "Lilex"
+      }
+   },
    "theme": {
       "dark": {
-         "name": "zenwritten-dark"
+         "name": "wallust"
       }
    },
    "telemetry": {
       "system_info": false
    },
+   "launcher_window": {
+      "opacity": 0.98
+   },
    "providers": {
+      "@mmazzarolo/store.raycast.unicode-symbols": {
+         "entrypoints": {
+            "index": {
+               "alias": "uni"
+            }
+         }
+      },
       "@sovereign/store.vicinae.awww-switcher": {
          "preferences": {
             "wallpaperPath": "/home/reazn/Pictures/Wallpaper",
-            "postCommand": "/usr/bin/wallust run \"${wallpaper}\" && python3 /home/reazn/.config/fastfetch/generate_logo_png.py && touch /home/reazn/.config/ghostty/config.ghostty"
+            "postCommand": "/usr/bin/wallust run \"${wallpaper}\" && python3 /home/reazn/.config/fastfetch/generate_logo_png.py && touch /home/reazn/.config/ghostty/config.ghostty && vicinae theme set wallust && spicetify apply"
          }
       },
       "@thomaslombart/store.raycast.github": {
          "entrypoints": {
+            "create-issue": {
+               "enabled": false
+            },
             "create-pull-request": {
+               "enabled": false
+            },
+            "download-repository": {
                "enabled": false
             },
             "my-issues": {
                "enabled": false
             },
+            "my-projects": {
+               "enabled": false
+            },
             "my-pull-requests": {
                "enabled": false
             },
+            "my-starred-repositories": {
+               "enabled": true
+            },
             "search-pull-requests": {
                "enabled": false
+            },
+            "search-repositories": {
+               "alias": "repo"
+            }
+         }
+      },
+      "applications": {
+         "entrypoints": {
+            "dev.zed.Zed-Preview": {
+               "alias": "zd"
+            },
+            "helium": {
+               "alias": "h"
+            }
+         }
+      },
+      "clipboard": {
+         "entrypoints": {
+            "history": {
+               "alias": "k"
             }
          }
       },

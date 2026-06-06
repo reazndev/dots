@@ -30,12 +30,19 @@ wallust/templates/*
 
 # Quickshell desktop shell bar widget files
 !quickshell/
-quickshell/*
+quickshell/**
+!quickshell/**/
 !quickshell/**/*.qml
 !quickshell/**/*.js
+!quickshell/**/*.py
+!quickshell/**/*.json
+!quickshell/**/qmldir
 !quickshell/**/*.png
 !quickshell/**/*.svg
 !quickshell/**/*.conf
+
+# Sensitive: usage tracking API tokens
+quickshell/usage.json
 
 # Ghostty terminal configurations
 !ghostty/

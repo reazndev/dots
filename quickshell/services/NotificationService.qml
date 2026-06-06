@@ -11,7 +11,8 @@ Item {
     property alias trackedNotifications: server.trackedNotifications
     property alias server: server
     readonly property int unreadCount: trackedNotifications.values.length
-    readonly property var latestNotification: unreadCount > 0 ? trackedNotifications.values[unreadCount - 1] : null
+    property var activeTransientNotification: null
+    readonly property var latestNotification: activeTransientNotification !== null ? activeTransientNotification : (unreadCount > 0 ? trackedNotifications.values[unreadCount - 1] : null)
     property string presentationMode: "none" // none, sticky, transient
     property int transientDuration: 10000
 
@@ -21,6 +22,7 @@ Item {
         repeat: false
         onTriggered: {
             root.presentationMode = root.unreadCount > 0 ? "sticky" : "none";
+            root.activeTransientNotification = null;
         }
     }
 
@@ -36,10 +38,10 @@ Item {
         }
 
         // Helper to resolve an icon name with aliases and fallbacks
-        var resolveIcon = function(name) {
+        var resolveIcon = function (name) {
             if (!name)
                 return "";
-            
+
             var key = String(name).toLowerCase().trim();
             var resolved = "";
 
@@ -83,13 +85,14 @@ Item {
                 "console": "console.png",
                 "terminal": "console.png",
                 "alacritty": "console.png",
-                "kitty": "console.png"
+                "kitty": "console.png",
+                "fish": "fish.png",
+                "claude": "claude.png",
+                "claude-code": "cc.png",
+                "claude code": "cc.png"
             };
 
-            var cleanedKey = key.replace(/\s+desktop$/g, "")
-                                .replace(/\s+client$/g, "")
-                                .replace(/\s+\d+$/g, "")
-                                .replace(/[\s\-_]+/g, "");
+            var cleanedKey = key.replace(/\s+desktop$/g, "").replace(/\s+client$/g, "").replace(/\s+\d+$/g, "").replace(/[\s\-_]+/g, "");
 
             var customFile = customPngMap[key] || customPngMap[cleanedKey];
             if (!customFile) {
@@ -109,19 +112,19 @@ Item {
             var desktopIcon = DesktopIcons.getIcon(key);
             if (desktopIcon) {
                 resolved = Quickshell.iconPath(desktopIcon, true);
-                if (resolved) return resolved;
+                if (resolved)
+                    return resolved;
             }
-            
+
             // Try standard cleaned key in desktop file icon mapping
-            var cleanedKey = key.replace(/\s+desktop$/g, "")
-                                .replace(/\s+client$/g, "")
-                                .replace(/\s+\d+$/g, "") // remove trailing numbers
-                                .replace(/[\s\-_]+/g, ""); // strip spaces/hyphens
-                                
+            var cleanedKey = key.replace(/\s+desktop$/g, "").replace(/\s+client$/g, "").replace(/\s+\d+$/g, "") // remove trailing numbers
+            .replace(/[\s\-_]+/g, ""); // strip spaces/hyphens
+
             var cleanedDesktopIcon = DesktopIcons.getIcon(cleanedKey);
             if (cleanedDesktopIcon) {
                 resolved = Quickshell.iconPath(cleanedDesktopIcon, true);
-                if (resolved) return resolved;
+                if (resolved)
+                    return resolved;
             }
 
             // B. Common manual icon/appName aliases as a backup
@@ -138,28 +141,33 @@ Item {
             // Try explicit alias first
             if (aliases[key]) {
                 resolved = Quickshell.iconPath(aliases[key], true);
-                if (resolved) return resolved;
+                if (resolved)
+                    return resolved;
             }
-            
+
             if (aliases[cleanedKey]) {
                 resolved = Quickshell.iconPath(aliases[cleanedKey], true);
-                if (resolved) return resolved;
+                if (resolved)
+                    return resolved;
             }
-            
+
             // C. Try the name directly
             resolved = Quickshell.iconPath(key, true);
-            if (resolved) return resolved;
-            
+            if (resolved)
+                return resolved;
+
             // Try cleaned key directly
             resolved = Quickshell.iconPath(cleanedKey, true);
-            if (resolved) return resolved;
-            
+            if (resolved)
+                return resolved;
+
             // D. Generic fallback categories for common key prefixes/suffixes
             if (key.indexOf("shot") !== -1 || key.indexOf("screen") !== -1) {
                 resolved = Quickshell.iconPath("accessories-screenshot", true) || Quickshell.iconPath("camera-photo", true);
-                if (resolved) return resolved;
+                if (resolved)
+                    return resolved;
             }
-            
+
             return "";
         };
 
@@ -197,13 +205,50 @@ Item {
         return notification.appName;
     }
 
+    function shouldTrack(notification) {
+        if (!notification)
+            return false;
+
+        var app = (notification.appName || "").toLowerCase();
+        var summary = (notification.summary || "").toLowerCase();
+        var body = (notification.body || "").toLowerCase();
+
+        // 1. Screenshot check
+        if (app.indexOf("hyprshot") !== -1 || app.indexOf("screenshot") !== -1 ||
+            summary.indexOf("screenshot") !== -1 || body.indexOf("screenshot") !== -1) {
+            return false;
+        }
+
+        // 2. Ghostty check
+        if (app.indexOf("ghostty") !== -1) {
+            return false;
+        }
+
+        // 3. Claude Code check
+        if (app.indexOf("claude") !== -1 || summary.indexOf("claude") !== -1) {
+            return false;
+        }
+
+        return true;
+    }
+
     function receiveNotification(notification) {
         if (!notification)
             return;
 
-        notification.tracked = true;
+        var tracked = shouldTrack(notification);
+        if (tracked) {
+            notification.tracked = true;
+        } else {
+            notification.tracked = false;
+        }
 
-        if (IslandManager.activeIsland && IslandManager.activeIsland.type !== "notification") {
+        root.activeTransientNotification = notification;
+
+        if (!tracked) {
+            root.presentationMode = "transient";
+            transientTimer.restart();
+        } else if (IslandManager.activeIsland && IslandManager.activeIsland.type !== "notification") {
             root.presentationMode = "transient";
             transientTimer.restart();
         } else {
@@ -221,8 +266,8 @@ Item {
         bodyImagesSupported: true
         actionsSupported: true
         imageSupported: true
-        
-        onNotification: (n) => {
+
+        onNotification: n => {
             console.log("New notification received: " + n.summary + " | " + n.body);
             root.receiveNotification(n);
         }

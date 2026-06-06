@@ -10,7 +10,18 @@ PanelRoot {
     property var networkPopup: null
     property var bluetoothPopup: null
     property var systemPopup: null
+    property var usagePopup: null
+    property var nightlightPopup: null
     property alias islandExpanded: island.expanded
+
+    function toggleNotifications() {
+        if (island.expanded && island.displayedIslandType() === "notification") {
+            island.expanded = false;
+        } else {
+            island.forceNotificationIsland = true;
+            island.expanded = true;
+        }
+    }
 
     extraHeight: island.visible ? Math.max(0, island.expandedHeight - (Theme.barHeight + 28) / 2) : 0
     islandMaskX: island.x
@@ -33,6 +44,8 @@ PanelRoot {
                 if (barPanel.networkPopup) barPanel.networkPopup.visible = false;
                 if (barPanel.bluetoothPopup) barPanel.bluetoothPopup.visible = false;
                 if (barPanel.systemPopup) barPanel.systemPopup.visible = false;
+                if (barPanel.usagePopup) barPanel.usagePopup.visible = false;
+                if (barPanel.nightlightPopup) barPanel.nightlightPopup.visible = false;
             }
         }
 
@@ -69,6 +82,11 @@ PanelRoot {
                 popup: barPanel.systemPopup
             }
 
+            UsageWidget {
+                Layout.alignment: Qt.AlignVCenter
+                popup: barPanel.usagePopup
+            }
+
             NetworkWidget {
                 id: networkWidget
                 Layout.alignment: Qt.AlignVCenter
@@ -81,6 +99,13 @@ PanelRoot {
                 Layout.preferredHeight: Theme.fontSize + 4
                 popup: barPanel.bluetoothPopup
             }
+            NightlightWidget {
+                id: nightlightWidget
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredHeight: Theme.fontSize + 4
+                popup: barPanel.nightlightPopup
+            }
+
             ClockWidget {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredHeight: Theme.fontSize + 4

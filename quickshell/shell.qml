@@ -1,5 +1,6 @@
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Io
 import "modules/bar"
 import "services"
 
@@ -9,6 +10,8 @@ ShellRoot {
         networkPopup: networkPopupWindow
         bluetoothPopup: bluetoothPopupWindow
         systemPopup: systemPopupWindow
+        usagePopup: usagePopupWindow
+        nightlightPopup: nightlightPopupWindow
     }
 
     HyprlandFocusGrab {
@@ -21,7 +24,7 @@ ShellRoot {
         id: systemPopupWindow
         anchor.window: bar
         anchor.rect.x: bar.width - 260 - Theme.barMargin
-        anchor.rect.y: bar.height + 4
+        anchor.rect.y: Theme.barHeight + 4
         implicitWidth: 220
         implicitHeight: 240
         visible: false
@@ -41,7 +44,7 @@ ShellRoot {
         id: networkPopupWindow
         anchor.window: bar
         anchor.rect.x: bar.width - 260 - Theme.barMargin
-        anchor.rect.y: bar.height + 4
+        anchor.rect.y: Theme.barHeight + 4
         implicitWidth: 260
         implicitHeight: 340
         visible: false
@@ -61,7 +64,7 @@ ShellRoot {
         id: bluetoothPopupWindow
         anchor.window: bar
         anchor.rect.x: bar.width - 260 - Theme.barMargin
-        anchor.rect.y: bar.height + 4
+        anchor.rect.y: Theme.barHeight + 4
         implicitWidth: 260
         implicitHeight: 280
         visible: false
@@ -77,5 +80,50 @@ ShellRoot {
         }
     }
 
-}
+    PopupWindow {
+        id: usagePopupWindow
+        anchor.window: bar
+        anchor.rect.x: bar.width - 320 - Theme.barMargin
+        anchor.rect.y: Theme.barHeight + 4
+        implicitWidth: 300
+        implicitHeight: 360
+        visible: false
+        grabFocus: true
+        color: "transparent"
 
+        UsagePopup {}
+
+        HyprlandFocusGrab {
+            windows: [usagePopupWindow]
+            active: usagePopupWindow.visible
+            onCleared: usagePopupWindow.visible = false
+        }
+    }
+
+    PopupWindow {
+        id: nightlightPopupWindow
+        anchor.window: bar
+        anchor.rect.x: bar.width - 260 - Theme.barMargin
+        anchor.rect.y: Theme.barHeight + 4
+        implicitWidth: 260
+        implicitHeight: 220
+        visible: false
+        grabFocus: true
+        color: "transparent"
+
+        NightlightPopup {}
+
+        HyprlandFocusGrab {
+            windows: [nightlightPopupWindow]
+            active: nightlightPopupWindow.visible
+            onCleared: nightlightPopupWindow.visible = false
+        }
+    }
+
+    IpcHandler {
+        target: "bar"
+        function toggleNotifications(): void {
+            bar.toggleNotifications();
+        }
+    }
+}

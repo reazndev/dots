@@ -1,0 +1,7 @@
+singleton Theme 1.0 Theme.qml
+singleton TimeService 1.0 TimeService.qml
+singleton SystemMonitorService 1.0 SystemMonitorService.qml
+singleton IslandManager 1.0 IslandManager.qml
+singleton NotificationService 1.0 NotificationService.qml
+singleton UsageTrackingService 1.0 UsageTrackingService.qml
+singleton NightlightService 1.0 NightlightService.qml

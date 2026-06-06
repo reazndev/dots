@@ -10,7 +10,7 @@ Rectangle {
     width: {
         var mainType = displayedIslandType();
         if (expanded && mainType === "notification") {
-            if (NotificationService.unreadCount > 0) {
+            if (NotificationService.unreadCount > 0 || NotificationService.activeTransientNotification !== null) {
                 return 380;
             }
         }
@@ -37,14 +37,19 @@ Rectangle {
 
     function displayedIslandType() {
         var island = IslandManager.activeIsland;
+        
+        if (NotificationService.presentationMode === "transient" && NotificationService.activeTransientNotification !== null)
+            return "notification";
+            
         if (forceNotificationIsland && NotificationService.unreadCount > 0)
             return "notification";
-        if (NotificationService.presentationMode === "transient" && island && island.type !== "notification")
-            return "notification";
+            
         if (island)
             return island.type;
-        if (NotificationService.unreadCount > 0)
+            
+        if (NotificationService.unreadCount > 0 || NotificationService.activeTransientNotification !== null)
             return "notification";
+            
         return "";
     }
 

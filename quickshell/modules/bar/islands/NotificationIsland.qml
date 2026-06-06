@@ -41,8 +41,8 @@ RowLayout {
     }
 
     StyledText {
-        Layout.preferredWidth: Theme.islandNotificationCompactTextWidth
-        Layout.maximumWidth: Theme.islandNotificationCompactTextWidth
+        Layout.preferredWidth: count > 1 ? Theme.islandNotificationCompactTextWidth : Theme.islandNotificationCompactTextWidth + 38
+        Layout.maximumWidth: Layout.preferredWidth
         text: {
             if (!notification)
                 return "Notifications";
@@ -66,6 +66,8 @@ RowLayout {
             
             if (body && (!summary || isAppName)) {
                 text = body;
+            } else if (body && summary) {
+                text = summary + ": " + body;
             } else if (!text) {
                 text = body || appLabel;
             }

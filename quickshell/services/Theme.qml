@@ -24,6 +24,8 @@ QtObject {
     property int borderWidth: 1
     property int islandCompactHeight: 28
     property int islandCompactRadius: 14
+    property int islandExpandedRadius: 32
+    property int islandNotificationCompactRadius: 22
     property int islandPadding: 14
     property int islandGap: 10
     property int islandButtonSize: 32
@@ -37,6 +39,8 @@ QtObject {
     property int islandNotificationCompactWidth: 330
     property int islandNotificationCompactHeight: 48
     property int islandNotificationCompactTextWidth: 230
+    property int islandNotificationIconSize: 34
+    property int islandNotificationRowMinHeight: 58
     property int islandCompactModuleMinWidth: 82
     property int islandMediaWidth: 380
     property int islandMediaHeight: 178

@@ -19,11 +19,13 @@ Rectangle {
             if (mainType === "clock")
                 return Theme.islandClockWidth;
         }
+        if (mainType === "notification")
+            return expanded ? Theme.islandNotificationWidth : Theme.islandNotificationCompactWidth;
         if (expanded && mainType === "notification")
             return Theme.islandNotificationWidth;
         return compactRow.implicitWidth + compactPaddingLeft + compactPaddingRight;
     }
-    radius: Theme.islandCompactRadius
+    radius: expanded ? Theme.islandExpandedRadius : (displayedIslandType() === "notification" ? Theme.islandNotificationCompactRadius : Theme.islandCompactRadius)
     color: Theme.bg
     border.color: Theme.border
     border.width: Theme.borderWidth
@@ -48,7 +50,7 @@ Rectangle {
     }
     property int compactPaddingLeft: 12
     property int compactPaddingRight: 8
-    readonly property int compactHeight: Theme.islandCompactHeight
+    readonly property int compactHeight: displayedIslandType() === "notification" && !expanded ? Theme.islandNotificationCompactHeight : Theme.islandCompactHeight
     readonly property int compactWidth: compactRow.implicitWidth + compactPaddingLeft + compactPaddingRight
 
     function displayedIslandType() {
@@ -323,6 +325,15 @@ Rectangle {
         height: root.compactHeight
         visible: !root.expanded || (root.displayedIslandType() !== "notification" && root.displayedIslandType() !== "media")
 
+        Loader {
+            id: compactNotificationLoader
+            anchors.left: parent.left
+            anchors.leftMargin: root.compactPaddingLeft
+            anchors.verticalCenter: parent.verticalCenter
+            source: "islands/NotificationIsland.qml"
+            visible: root.displayedIslandType() === "notification" && !root.expanded
+        }
+
         RowLayout {
             id: compactRow
             z: 1
@@ -330,6 +341,7 @@ Rectangle {
             anchors.leftMargin: root.compactPaddingLeft
             anchors.verticalCenter: parent.verticalCenter
             spacing: Theme.islandGap
+            visible: root.displayedIslandType() !== "notification" || root.expanded
 
             RoundedImage {
                 id: compactAlbumArt
@@ -386,6 +398,10 @@ Rectangle {
             onClicked: mouse => {
                 if (mouse.button === Qt.RightButton) {
                     root.toggleWorkspaceOverview();
+                    return;
+                }
+                if (root.displayedIslandType() === "notification") {
+                    root.expanded = true;
                     return;
                 }
                 root.expandDefaultAction();

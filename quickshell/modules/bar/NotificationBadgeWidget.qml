@@ -14,9 +14,6 @@ Rectangle {
 
     property int count: NotificationService.unreadCount
     property bool visibleBadge: count > 0
-                           && IslandManager.activeIsland
-                           && IslandManager.activeIsland.type !== "notification"
-                           && NotificationService.presentationMode !== "transient"
     signal activated()
 
     visible: visibleBadge

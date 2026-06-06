@@ -18,7 +18,7 @@
 # Hyprland window manager configurations
 !hypr/
 hypr/*
-!hypr/*.conf
+!hypr/*.lua
 
 # Wallust theme template generator configurations
 !wallust/
@@ -103,4 +103,3 @@ fastfetch/*
 
 !icons/
 !icons/**
-

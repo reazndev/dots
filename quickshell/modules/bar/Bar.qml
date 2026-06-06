@@ -74,7 +74,7 @@ PanelRoot {
             id: notificationBadge
             anchors.verticalCenter: parent.verticalCenter
             x: parent.width / 2 + island.compactWidth / 2 + 6
-            visible: notificationBadge.visibleBadge && !island.expanded
+            visible: notificationBadge.visibleBadge && !island.expanded && island.displayedIslandType() !== "notification"
             onActivated: {
                 island.forceNotificationIsland = true;
                 island.expanded = true;

@@ -10,16 +10,20 @@ Row {
 
     property var allWorkspaces: Hyprland.workspaces.values
     property var activeSpecials: []
+    property var occupiedSpecials: []
 
     Process {
         running: true
-        command: ["bash", "-c", "while true; do hyprctl monitors -j | python3 -c 'import sys,json; print(json.dumps([m.get(\\\"specialWorkspace\\\",{}).get(\\\"name\\\",\\\"\\\") for m in json.load(sys.stdin)]))'; sleep 1; done"]
+        command: ["python3", "-c", "import subprocess, json, time\nwhile True:\n    try:\n        monitors = json.loads(subprocess.check_output(['hyprctl', 'monitors', '-j']))\n        active = [m.get('specialWorkspace', {}).get('name', '') for m in monitors]\n    except Exception:\n        active = []\n    try:\n        workspaces = json.loads(subprocess.check_output(['hyprctl', 'workspaces', '-j']))\n        occupied = [w.get('name', '') for w in workspaces if w.get('name', '').startswith('special:')]\n    except Exception:\n        occupied = []\n    print(json.dumps({'active': active, 'occupied': occupied}), flush=True)\n    time.sleep(0.1)"]
         stdout: SplitParser {
             onRead: data => {
                 try {
-                    root.activeSpecials = JSON.parse(data.trim());
+                    var parsed = JSON.parse(data.trim());
+                    root.activeSpecials = parsed.active || [];
+                    root.occupiedSpecials = parsed.occupied || [];
                 } catch (e) {
                     root.activeSpecials = [];
+                    root.occupiedSpecials = [];
                 }
             }
         }
@@ -33,32 +37,39 @@ Row {
         return null;
     }
 
-    function circleColor(ws) {
-        if (!ws)
-            return Theme.fgDim;
-        if (ws.focused)
-            return Theme.accent;
-        if (ws.lastIpcObject && ws.lastIpcObject["windows"] > 0)
-            return Theme.fg;
-        return Theme.fgDim;
-    }
-
-    function specialColor(name) {
+    function isSpecialActive(name) {
         for (var i = 0; i < activeSpecials.length; i++) {
             if (activeSpecials[i] === name)
-                return Theme.accent;
+                return true;
         }
-        return Theme.fgDim;
+        return false;
+    }
+
+    function isSpecialOccupied(name) {
+        for (var i = 0; i < occupiedSpecials.length; i++) {
+            if (occupiedSpecials[i] === name)
+                return true;
+        }
+        return false;
     }
 
     // Workspaces 1-5
     Repeater {
         model: 5
         delegate: Rectangle {
-            width: 12
+            id: wsRect
+            property var ws: findWorkspace(index + 1)
+            property bool isFocused: ws ? ws.focused : false
+            property bool hasItems: ws ? (ws.lastIpcObject && ws.lastIpcObject["windows"] > 0) : false
+
+            width: 24
             height: 12
             radius: 6
-            color: circleColor(findWorkspace(index + 1))
+            color: isFocused ? Theme.blue : (hasItems ? Theme.fg : Theme.fgDim)
+            opacity: isFocused ? 1.0 : (hasItems ? 0.8 : 0.35)
+
+            Behavior on color { ColorAnimation { duration: 75 } }
+            Behavior on opacity { NumberAnimation { duration: 75 } }
 
             MouseArea {
                 anchors.fill: parent
@@ -76,10 +87,18 @@ Row {
 
     // Special: messenger
     Rectangle {
-        width: 14
-        height: 14
-        radius: 7
-        color: specialColor("special:messenger")
+        id: messengerRect
+        property bool isActive: isSpecialActive("special:messenger")
+        property bool hasItems: isSpecialOccupied("special:messenger")
+
+        width: 24
+        height: 12
+        radius: 6
+        color: isActive ? Theme.blue : (hasItems ? Theme.fg : Theme.fgDim)
+        opacity: isActive ? 1.0 : (hasItems ? 0.8 : 0.35)
+
+        Behavior on color { ColorAnimation { duration: 75 } }
+        Behavior on opacity { NumberAnimation { duration: 75 } }
 
         Icon {
             anchors.centerIn: parent
@@ -97,10 +116,18 @@ Row {
 
     // Special: music
     Rectangle {
-        width: 14
-        height: 14
-        radius: 7
-        color: specialColor("special:music")
+        id: musicRect
+        property bool isActive: isSpecialActive("special:music")
+        property bool hasItems: isSpecialOccupied("special:music")
+
+        width: 24
+        height: 12
+        radius: 6
+        color: isActive ? Theme.blue : (hasItems ? Theme.fg : Theme.fgDim)
+        opacity: isActive ? 1.0 : (hasItems ? 0.8 : 0.35)
+
+        Behavior on color { ColorAnimation { duration: 75 } }
+        Behavior on opacity { NumberAnimation { duration: 75 } }
 
         Icon {
             anchors.centerIn: parent
@@ -113,6 +140,35 @@ Row {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             onClicked: Hyprland.dispatch("togglespecialworkspace", "music")
+        }
+    }
+
+    // Special: dev
+    Rectangle {
+        id: devRect
+        property bool isActive: isSpecialActive("special:dev")
+        property bool hasItems: isSpecialOccupied("special:dev")
+
+        width: 24
+        height: 12
+        radius: 6
+        color: isActive ? Theme.blue : (hasItems ? Theme.fg : Theme.fgDim)
+        opacity: isActive ? 1.0 : (hasItems ? 0.8 : 0.35)
+
+        Behavior on color { ColorAnimation { duration: 75 } }
+        Behavior on opacity { NumberAnimation { duration: 75 } }
+
+        Icon {
+            anchors.centerIn: parent
+            text: "\uE093"
+            font.pixelSize: 8
+            color: Theme.bg
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Hyprland.dispatch("togglespecialworkspace", "dev")
         }
     }
 }

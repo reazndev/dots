@@ -111,13 +111,7 @@ hl.window_rule({
     workspace = "2 silent",
 })
 
--- Workspace 3: Terminals
-hl.window_rule({
-    match = {
-        class = "ghostty|ghostty-preview|com\\.mitchellh\\.ghostty|foot|Alacritty|kitty",
-    },
-    workspace = "3 silent",
-})
+-- Workspace 3: SPARE
 
 -- Workspace 4: Office
 hl.window_rule({

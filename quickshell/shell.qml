@@ -10,7 +10,6 @@ ShellRoot {
         networkPopup: networkPopupWindow
         bluetoothPopup: bluetoothPopupWindow
         systemPopup: systemPopupWindow
-        usagePopup: usagePopupWindow
         nightlightPopup: nightlightPopupWindow
     }
 
@@ -77,26 +76,6 @@ ShellRoot {
             windows: [bluetoothPopupWindow]
             active: bluetoothPopupWindow.visible
             onCleared: bluetoothPopupWindow.visible = false
-        }
-    }
-
-    PopupWindow {
-        id: usagePopupWindow
-        anchor.window: bar
-        anchor.rect.x: bar.width - 320 - Theme.barMargin
-        anchor.rect.y: Theme.barHeight + 4
-        implicitWidth: 300
-        implicitHeight: 360
-        visible: false
-        grabFocus: true
-        color: "transparent"
-
-        UsagePopup {}
-
-        HyprlandFocusGrab {
-            windows: [usagePopupWindow]
-            active: usagePopupWindow.visible
-            onCleared: usagePopupWindow.visible = false
         }
     }
 

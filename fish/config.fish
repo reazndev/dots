@@ -72,3 +72,6 @@ end
 
 # Customize fish colors for readability
 set -g fish_color_autosuggestion 999999
+
+# kimi-code
+fish_add_path -g "/home/reazn/.kimi-code/bin"

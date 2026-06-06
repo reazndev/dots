@@ -10,7 +10,6 @@ PanelRoot {
     property var networkPopup: null
     property var bluetoothPopup: null
     property var systemPopup: null
-    property var usagePopup: null
     property var nightlightPopup: null
     property alias islandExpanded: island.expanded
 
@@ -44,7 +43,6 @@ PanelRoot {
                 if (barPanel.networkPopup) barPanel.networkPopup.visible = false;
                 if (barPanel.bluetoothPopup) barPanel.bluetoothPopup.visible = false;
                 if (barPanel.systemPopup) barPanel.systemPopup.visible = false;
-                if (barPanel.usagePopup) barPanel.usagePopup.visible = false;
                 if (barPanel.nightlightPopup) barPanel.nightlightPopup.visible = false;
             }
         }
@@ -80,11 +78,6 @@ PanelRoot {
             SystemWidget {
                 Layout.alignment: Qt.AlignVCenter
                 popup: barPanel.systemPopup
-            }
-
-            UsageWidget {
-                Layout.alignment: Qt.AlignVCenter
-                popup: barPanel.usagePopup
             }
 
             NetworkWidget {

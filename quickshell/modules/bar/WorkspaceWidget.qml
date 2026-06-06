@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell.Hyprland
-import Quickshell.Io
 import "../../services"
 import "../../components"
 
@@ -8,26 +7,7 @@ Row {
     id: root
     spacing: 8
 
-    property var allWorkspaces: Hyprland.workspaces.values
-    property var activeSpecials: []
-    property var occupiedSpecials: []
-
-    Process {
-        running: true
-        command: ["python3", "-c", "import subprocess, json, time\nwhile True:\n    try:\n        monitors = json.loads(subprocess.check_output(['hyprctl', 'monitors', '-j']))\n        active = [m.get('specialWorkspace', {}).get('name', '') for m in monitors]\n    except Exception:\n        active = []\n    try:\n        workspaces = json.loads(subprocess.check_output(['hyprctl', 'workspaces', '-j']))\n        occupied = [w.get('name', '') for w in workspaces if w.get('name', '').startswith('special:')]\n    except Exception:\n        occupied = []\n    print(json.dumps({'active': active, 'occupied': occupied}), flush=True)\n    time.sleep(0.1)"]
-        stdout: SplitParser {
-            onRead: data => {
-                try {
-                    var parsed = JSON.parse(data.trim());
-                    root.activeSpecials = parsed.active || [];
-                    root.occupiedSpecials = parsed.occupied || [];
-                } catch (e) {
-                    root.activeSpecials = [];
-                    root.occupiedSpecials = [];
-                }
-            }
-        }
-    }
+    property var allWorkspaces: HyprlandSnapshotService.workspaces
 
     function findWorkspace(id) {
         for (var i = 0; i < allWorkspaces.length; i++) {
@@ -38,16 +18,18 @@ Row {
     }
 
     function isSpecialActive(name) {
-        for (var i = 0; i < activeSpecials.length; i++) {
-            if (activeSpecials[i] === name)
+        var monitors = HyprlandSnapshotService.monitors || [];
+        for (var i = 0; i < monitors.length; i++) {
+            if (monitors[i].specialWorkspace && monitors[i].specialWorkspace.name === name)
                 return true;
         }
         return false;
     }
 
     function isSpecialOccupied(name) {
-        for (var i = 0; i < occupiedSpecials.length; i++) {
-            if (occupiedSpecials[i] === name)
+        var workspaces = HyprlandSnapshotService.workspaces || [];
+        for (var i = 0; i < workspaces.length; i++) {
+            if (workspaces[i].name === name)
                 return true;
         }
         return false;
@@ -59,8 +41,8 @@ Row {
         delegate: Rectangle {
             id: wsRect
             property var ws: findWorkspace(index + 1)
-            property bool isFocused: ws ? ws.focused : false
-            property bool hasItems: ws ? (ws.lastIpcObject && ws.lastIpcObject["windows"] > 0) : false
+            property bool isFocused: HyprlandSnapshotService.activeWorkspaceId === index + 1
+            property bool hasItems: ws ? ws.windows > 0 : false
 
             width: 24
             height: 12

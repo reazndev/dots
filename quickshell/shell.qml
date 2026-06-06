@@ -104,5 +104,9 @@ ShellRoot {
         function toggleNotifications(): void {
             bar.toggleNotifications();
         }
+
+        function toggleWorkspaceOverview(): void {
+            bar.toggleWorkspaceOverview();
+        }
     }
 }

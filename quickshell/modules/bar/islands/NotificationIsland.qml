@@ -5,7 +5,8 @@ import "../../../components"
 
 RowLayout {
     id: root
-    spacing: 8
+    spacing: Theme.islandGap
+    height: Theme.islandNotificationCompactHeight - 10
 
     property int count: NotificationService.unreadCount
     property var notification: NotificationService.latestNotification
@@ -40,6 +41,8 @@ RowLayout {
     }
 
     StyledText {
+        Layout.preferredWidth: Theme.islandNotificationCompactTextWidth
+        Layout.maximumWidth: Theme.islandNotificationCompactTextWidth
         text: {
             if (!notification)
                 return "Notifications";
@@ -67,13 +70,14 @@ RowLayout {
                 text = body || appLabel;
             }
             
-            if (text.length > 42)
-                return text.substring(0, 42) + "…";
             return text;
         }
         role: "fg"
         font.bold: true
         Layout.alignment: Qt.AlignVCenter
+        wrapMode: Text.Wrap
+        maximumLineCount: 2
+        elide: Text.ElideRight
     }
 
     // Number badge on the right when there are multiple notifications

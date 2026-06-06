@@ -22,6 +22,28 @@ QtObject {
     property int barMargin: 16
     property int radius: 10
     property int borderWidth: 1
+    property int islandCompactHeight: 28
+    property int islandCompactRadius: 14
+    property int islandPadding: 14
+    property int islandGap: 10
+    property int islandButtonSize: 32
+    property int islandAlbumSize: 58
+    property int islandOverviewCellWidth: 138
+    property int islandOverviewCellHeight: 82
+    property int islandOverviewCellGap: 6
+    property int islandAnimationDuration: 180
+    property int islandNotificationWidth: 380
+    property int islandNotificationHeight: 300
+    property int islandNotificationCompactWidth: 330
+    property int islandNotificationCompactHeight: 48
+    property int islandNotificationCompactTextWidth: 230
+    property int islandCompactModuleMinWidth: 82
+    property int islandMediaWidth: 380
+    property int islandMediaHeight: 178
+    property int islandBluetoothWidth: 340
+    property int islandBluetoothHeight: 156
+    property int islandClockWidth: 220
+    property int islandClockHeight: 96
 
     // Opacity
     property real bgOpacity: 0.92

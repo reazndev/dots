@@ -91,7 +91,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 
 -- Screenshot
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("hyprshot -m window"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region -z"))
 
 -- Screen recording
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("/home/reazn/.config/hypr/scripts/record-region.sh"))
@@ -105,3 +105,32 @@ hl.bind(mainMod .. " + CTRL + SHIFT + N", hl.dsp.exec_cmd("hyprctl hyprsunset te
 
 -- Toggle notifications panel
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("quickshell ipc call bar toggleNotifications"))
+
+--###########################################
+--## DYNAMIC ULTRAWIDE LAYOUT CONTROLLER  ###
+--###########################################
+
+local regional_workspaces = {}    -- Tracks regionally constrained workspaces
+
+-- Toggle Behavior: Regional centering constraint (SUPER + X)
+local function toggle_center_region()
+    local ws = hl.get_active_workspace()
+    local id = tostring(ws.id)
+
+    if regional_workspaces[id] then
+        -- Disable: Reset gapsout for the workspace
+        hl.workspace_rule({ workspace = id, gaps_out = 0 })
+        regional_workspaces[id] = nil
+        hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: DISABLED'")
+    else
+        -- Enable: Set 600px left/right margins for all tiled windows
+        hl.workspace_rule({ workspace = id, gaps_out = { left = 600, right = 600 } })
+        regional_workspaces[id] = true
+        hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: ENABLED (600px sides)'")
+    end
+end
+
+-- Bind the toggle
+hl.bind(mainMod .. " + X", toggle_center_region)
+
+

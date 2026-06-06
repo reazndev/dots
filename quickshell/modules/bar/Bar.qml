@@ -12,6 +12,13 @@ PanelRoot {
     property var systemPopup: null
     property var nightlightPopup: null
     property alias islandExpanded: island.expanded
+    readonly property int reservedIslandHeight: Math.max(
+        Theme.islandNotificationHeight,
+        Theme.islandMediaHeight,
+        Theme.islandBluetoothHeight,
+        Theme.islandClockHeight,
+        Theme.islandOverviewCellHeight * 2 + Theme.islandOverviewCellGap + Theme.islandPadding * 2
+    )
 
     function toggleNotifications() {
         if (island.expanded && island.displayedIslandType() === "notification") {
@@ -22,11 +29,15 @@ PanelRoot {
         }
     }
 
-    extraHeight: island.visible ? Math.max(0, island.expandedHeight - (Theme.barHeight + 28) / 2) : 0
+    function toggleWorkspaceOverview() {
+        island.toggleWorkspaceOverview();
+    }
+
+    extraHeight: Math.max(0, island.y + reservedIslandHeight - Theme.barHeight + 4)
     islandMaskX: island.x
     islandMaskY: island.y
     islandMaskWidth: island.width
-    islandMaskHeight: island.visible ? island.height : 0
+    islandMaskHeight: island.visible ? island.height + 4 : 0
 
     Item {
         anchors.top: parent.top
@@ -55,7 +66,7 @@ PanelRoot {
         DynamicIslandWidget {
             id: island
             anchors.top: parent.top
-            anchors.topMargin: (Theme.barHeight - 28) / 2
+            anchors.topMargin: (Theme.barHeight - Theme.islandCompactHeight) / 2
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -63,7 +74,7 @@ PanelRoot {
             id: notificationBadge
             anchors.verticalCenter: parent.verticalCenter
             x: parent.width / 2 + island.compactWidth / 2 + 6
-            visible: notificationBadge.visibleBadge && !(island.expanded && island.displayedIslandType() === "notification")
+            visible: notificationBadge.visibleBadge && !island.expanded
             onActivated: {
                 island.forceNotificationIsland = true;
                 island.expanded = true;
@@ -99,10 +110,6 @@ PanelRoot {
                 popup: barPanel.nightlightPopup
             }
 
-            ClockWidget {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.preferredHeight: Theme.fontSize + 4
-            }
         }
     }
 }

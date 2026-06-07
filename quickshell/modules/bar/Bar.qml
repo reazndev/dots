@@ -17,7 +17,7 @@ PanelRoot {
         Theme.islandMediaHeight,
         Theme.islandBluetoothHeight,
         Theme.islandClockHeight,
-        Theme.islandOverviewCellHeight * 2 + Theme.islandOverviewCellGap + Theme.islandPadding * 2
+        island.workspaceExpandedHeight()
     )
 
     function toggleNotifications() {
@@ -92,11 +92,6 @@ PanelRoot {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 12
 
-            SystemWidget {
-                Layout.alignment: Qt.AlignVCenter
-                popup: barPanel.systemPopup
-            }
-
             NetworkWidget {
                 id: networkWidget
                 Layout.alignment: Qt.AlignVCenter
@@ -114,6 +109,11 @@ PanelRoot {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredHeight: Theme.fontSize + 4
                 popup: barPanel.nightlightPopup
+            }
+
+            SystemWidget {
+                Layout.alignment: Qt.AlignVCenter
+                popup: barPanel.systemPopup
             }
 
         }

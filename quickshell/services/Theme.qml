@@ -33,6 +33,9 @@ QtObject {
     property int islandOverviewCellWidth: 138
     property int islandOverviewCellHeight: 82
     property int islandOverviewCellGap: 6
+    property int islandOverviewOuterPadding: 14
+    property int islandOverviewLargeRadius: 30
+    property int islandOverviewSmallRadius: 16
     property int islandAnimationDuration: 180
     property int islandNotificationWidth: 380
     property int islandNotificationHeight: 300
@@ -61,4 +64,7 @@ QtObject {
     property string fontFamily: "monospace"
     property string fontFamilyUi: "sans-serif"
     property string iconFontFamily: "lucide"
+
+    // Assets
+    property string overviewWallpaperPath: "/home/reazn/Pictures/Wallpaper/441980-ultrawide-painting-oil-painting-canvas-artwork-1610770620.jpg"
 }

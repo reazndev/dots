@@ -10,6 +10,8 @@ Item {
     property var monitors: []
     property var activeWorkspace: null
     property var windowByAddress: ({})
+    property var specialWorkspaceNames: []
+    property var configuredSpecialWorkspaceNames: ["special:messenger", "special:music", "special:dev"]
     property int activeWorkspaceId: activeWorkspace && activeWorkspace.id ? activeWorkspace.id : 1
     property string activeSpecialWorkspaceName: activeSpecialWorkspace()
     property bool ready: false
@@ -24,6 +26,7 @@ Item {
             activeWorkspaceId = activeWorkspace && activeWorkspace.id ? activeWorkspace.id : activeWorkspaceId;
             activeSpecialWorkspaceName = activeSpecialWorkspace();
             rebuildWindowIndex();
+            rebuildSpecialWorkspaces();
             ready = true;
         } catch (e) {
             ready = false;
@@ -58,6 +61,35 @@ Item {
         return result;
     }
 
+    function windowsForWorkspaceName(name) {
+        var result = [];
+        for (var i = 0; i < clients.length; i++) {
+            var client = clients[i];
+            if (client && client.workspace && client.workspace.name === name)
+                result.push(client);
+        }
+        return result;
+    }
+
+    function rebuildSpecialWorkspaces() {
+        var seen = {};
+        var result = configuredSpecialWorkspaceNames.slice();
+        for (var configuredIndex = 0; configuredIndex < result.length; configuredIndex++)
+            seen[result[configuredIndex]] = true;
+
+        for (var i = 0; i < clients.length; i++) {
+            var workspace = clients[i] && clients[i].workspace ? clients[i].workspace : null;
+            var name = workspace && workspace.name ? workspace.name : "";
+            if (name.indexOf("special:") === 0 && !seen[name]) {
+                seen[name] = true;
+                result.push(name);
+            }
+        }
+        if (activeSpecialWorkspaceName !== "" && !seen[activeSpecialWorkspaceName])
+            result.push(activeSpecialWorkspaceName);
+        specialWorkspaceNames = result;
+    }
+
     function activeSpecialWorkspace() {
         for (var i = 0; i < monitors.length; i++) {
             var special = monitors[i].specialWorkspace;
@@ -70,6 +102,16 @@ Item {
     function specialWorkspaceShortName(name) {
         var value = String(name || "");
         return value.indexOf("special:") === 0 ? value.slice(8) : value;
+    }
+
+    function specialWorkspaceDisplayName(name) {
+        var shortName = specialWorkspaceShortName(name);
+        switch (shortName) {
+        case "messenger":
+            return "msg";
+        default:
+            return shortName;
+        }
     }
 
     function specialWorkspaceIcon(name) {

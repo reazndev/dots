@@ -7,6 +7,7 @@
 
 local programs = require("programs")
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local Alt = "ALT"       -- For readability in binds using ALT
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(programs.terminal))
@@ -106,11 +107,14 @@ hl.bind(mainMod .. " + CTRL + SHIFT + N", hl.dsp.exec_cmd("hyprctl hyprsunset te
 -- Toggle notifications panel
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("quickshell ipc call bar toggleNotifications"))
 
+-- Toggle workspace overview
+hl.bind(Alt .. " + Tab", hl.dsp.exec_cmd("quickshell ipc call bar toggleWorkspaceOverview"))
+
 --###########################################
 --## DYNAMIC ULTRAWIDE LAYOUT CONTROLLER  ###
 --###########################################
 
-local regional_workspaces = {}    -- Tracks regionally constrained workspaces
+local regional_workspaces = {} -- Tracks regionally constrained workspaces
 
 -- Toggle Behavior: Regional centering constraint (SUPER + X)
 local function toggle_center_region()
@@ -132,5 +136,3 @@ end
 
 -- Bind the toggle
 hl.bind(mainMod .. " + X", toggle_center_region)
-
-

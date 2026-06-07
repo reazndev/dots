@@ -11,7 +11,7 @@ Rectangle {
         var mainType = displayedIslandType();
         if (expanded) {
             if (mainType === "workspace")
-                return Theme.islandOverviewCellWidth * 5 + Theme.islandOverviewCellGap * 4 + Theme.islandPadding * 2;
+                return workspaceExpandedWidth();
             if (mainType === "media")
                 return Theme.islandMediaWidth;
             if (mainType === "bluetooth")
@@ -44,7 +44,7 @@ Rectangle {
             return Theme.islandNotificationHeight;
         }
         if (type === "workspace")
-            return Theme.islandOverviewCellHeight * 2 + Theme.islandOverviewCellGap + Theme.islandPadding * 2;
+            return workspaceExpandedHeight();
         if (type === "media")
             return Theme.islandMediaHeight;
         if (type === "clock")
@@ -57,6 +57,32 @@ Rectangle {
     property int compactPaddingRight: 8
     readonly property int compactHeight: displayedIslandType() === "notification" && !expanded ? Theme.islandNotificationCompactHeight : Theme.islandCompactHeight
     readonly property int compactWidth: compactRow.implicitWidth + compactPaddingLeft + compactPaddingRight
+
+    function workspaceExpandedWidth() {
+        var fallback = Theme.islandOverviewCellWidth * 5 + Theme.islandOverviewCellGap * 4 + Theme.islandOverviewOuterPadding * 2;
+        return parent ? Math.max(fallback, parent.width - Theme.barMargin * 2) : fallback;
+    }
+
+    function workspaceMonitorAspect() {
+        var monitor = HyprlandSnapshotService.monitors && HyprlandSnapshotService.monitors.length > 0
+            ? HyprlandSnapshotService.monitors[0]
+            : null;
+        var width = monitor && monitor.width ? Number(monitor.width) : 1920;
+        var height = monitor && monitor.height ? Number(monitor.height) : 1080;
+        return width > 0 ? Math.max(0.22, Math.min(0.58, height / width)) : 0.5625;
+    }
+
+    function workspaceOverviewRows() {
+        return Math.max(1, Math.ceil((7 + HyprlandSnapshotService.specialWorkspaceNames.length) / 5));
+    }
+
+    function workspaceExpandedHeight() {
+        var contentWidth = workspaceExpandedWidth() - Theme.islandOverviewOuterPadding * 2;
+        var cellWidth = (contentWidth - Theme.islandOverviewCellGap * 4) / 5;
+        var cellHeight = Math.max(Theme.islandOverviewCellHeight, Math.round(cellWidth * workspaceMonitorAspect()));
+        var rows = workspaceOverviewRows();
+        return cellHeight * rows + Theme.islandOverviewCellGap * (rows - 1) + Theme.islandOverviewOuterPadding * 2;
+    }
 
     function displayedIslandType() {
         var island = IslandManager.activeIsland;
@@ -102,12 +128,17 @@ Rectangle {
 
     function toggleWorkspaceOverview() {
         if (expanded && displayedIslandType() === "workspace") {
-            expanded = false;
-            forceWorkspaceIsland = false;
+            closeWorkspaceOverview();
             return;
         }
         forceWorkspaceIsland = true;
         expanded = true;
+    }
+
+    function closeWorkspaceOverview() {
+        expanded = false;
+        forceWorkspaceIsland = false;
+        IslandManager.removeIsland("workspace");
     }
 
     MouseArea {
@@ -401,7 +432,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         height: root.compactHeight
-        visible: !root.expanded || (root.displayedIslandType() !== "notification" && root.displayedIslandType() !== "media")
+        visible: !root.expanded || (root.displayedIslandType() !== "notification" && root.displayedIslandType() !== "media" && root.displayedIslandType() !== "workspace")
 
         Loader {
             id: compactNotificationLoader
@@ -502,7 +533,7 @@ Rectangle {
     Loader {
         id: expandedLoader
         anchors.top: parent.top
-        anchors.topMargin: (root.expanded && (root.displayedIslandType() === "notification" || root.displayedIslandType() === "media")) ? 0 : Theme.islandCompactHeight
+        anchors.topMargin: (root.expanded && (root.displayedIslandType() === "notification" || root.displayedIslandType() === "media" || root.displayedIslandType() === "workspace")) ? 0 : Theme.islandCompactHeight
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width
         height: parent.height - anchors.topMargin
@@ -515,6 +546,10 @@ Rectangle {
                 return "";
             type = type.charAt(0).toUpperCase() + type.slice(1);
             return "islands/" + type + "IslandExpanded.qml";
+        }
+        onLoaded: {
+            if (item && item.closeRequested)
+                item.closeRequested.connect(root.closeWorkspaceOverview);
         }
 
         MouseArea {

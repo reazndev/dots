@@ -32,7 +32,16 @@ Item {
         if (!notification)
             return "";
 
-        var notificationText = ((notification.appName || "") + " " + (notification.summary || "") + " " + (notification.body || "")).toLowerCase();
+        var notificationText = [
+            notification.appName || "",
+            notification.summary || "",
+            notification.body || "",
+            notification.appIcon || "",
+            notification.desktopEntry || ""
+        ].join(" ").toLowerCase();
+
+        // Content-specific icons must win over the app that delivered the notification
+        // e.g. Codex messages sent through Ghostty should not use the Ghostty icon.
         if (notificationText.indexOf("codex") !== -1)
             return "file:///home/reazn/.config/icons/png/codex.png";
         if (notificationText.indexOf("color picker") !== -1)

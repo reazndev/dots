@@ -16,6 +16,8 @@ Rectangle {
                 return Theme.islandMediaWidth;
             if (mainType === "bluetooth")
                 return Theme.islandBluetoothWidth;
+            if (mainType === "volume")
+                return Theme.islandClockWidth;
             if (mainType === "clock")
                 return Theme.islandClockWidth;
         }
@@ -35,6 +37,7 @@ Rectangle {
     property bool expanded: false
     property bool forceNotificationIsland: false
     property bool forceWorkspaceIsland: false
+    property bool autoExpandedByTrack: false
     property int expandedHeight: {
         var type = displayedIslandType();
         if (type === "notification") {
@@ -45,6 +48,8 @@ Rectangle {
         if (type === "media")
             return Theme.islandMediaHeight;
         if (type === "clock")
+            return Theme.islandClockHeight;
+        if (type === "volume")
             return Theme.islandClockHeight;
         return Theme.islandBluetoothHeight;
     }
@@ -68,7 +73,7 @@ Rectangle {
         if (island)
             return island.type;
             
-        return "";
+        return "clock";
     }
 
     function compactModuleType() {
@@ -81,12 +86,18 @@ Rectangle {
     }
 
     function expandDefaultAction() {
-        if (MediaService.hasPlayer) {
+        if (MediaService.isPlaying) {
             IslandManager.addIsland("media", 1, {});
+            autoExpandedByTrack = false;
             expanded = true;
             return;
         }
         expanded = !expanded;
+    }
+
+    function markManualMediaInteraction() {
+        if (displayedIslandType() === "media")
+            autoExpandedByTrack = false;
     }
 
     function toggleWorkspaceOverview() {
@@ -135,6 +146,9 @@ Rectangle {
         if (!expanded) {
             forceNotificationIsland = false;
             forceWorkspaceIsland = false;
+            autoExpandedByTrack = false;
+            if (IslandManager.activeIsland && IslandManager.activeIsland.type === "media" && MediaService.isPlaying)
+                IslandManager.addIsland("media", 1, {});
         }
     }
 
@@ -167,13 +181,40 @@ Rectangle {
 
     Item {
         id: mediaController
+        property string lastTrackKey: MediaService.trackKey
+
+        Timer {
+            id: mediaAutoHideTimer
+            interval: 3600
+            repeat: false
+            onTriggered: {
+                if (root.expanded && root.displayedIslandType() === "media" && root.autoExpandedByTrack)
+                    root.expanded = false;
+            }
+        }
 
         function checkMedia() {
-            if (MediaService.hasPlayer) {
+            if (MediaService.isPlaying) {
                 IslandManager.addIsland("media", 1, {});
             } else {
                 IslandManager.removeIsland("media");
             }
+        }
+
+        function showTrackChangePreview() {
+            if (!MediaService.isPlaying)
+                return;
+            if (root.displayedIslandType() === "notification" || root.displayedIslandType() === "bluetooth")
+                return;
+            if (root.expanded && root.displayedIslandType() === "media" && !root.autoExpandedByTrack)
+                return;
+
+            IslandManager.addIsland("media", 6, {});
+            root.forceNotificationIsland = false;
+            root.forceWorkspaceIsland = false;
+            root.autoExpandedByTrack = true;
+            root.expanded = true;
+            mediaAutoHideTimer.restart();
         }
 
         Connections {
@@ -181,8 +222,20 @@ Rectangle {
             function onHasPlayerChanged() {
                 mediaController.checkMedia();
             }
+            function onIsPlayingChanged() {
+                mediaController.checkMedia();
+            }
             function onActivePlayerChanged() {
                 mediaController.checkMedia();
+            }
+            function onTrackKeyChanged() {
+                if (mediaController.lastTrackKey === MediaService.trackKey)
+                    return;
+
+                var previousTrackKey = mediaController.lastTrackKey;
+                mediaController.lastTrackKey = MediaService.trackKey;
+                if (previousTrackKey !== "" && MediaService.trackKey !== "")
+                    mediaController.showTrackChangePreview();
             }
         }
 
@@ -244,7 +297,7 @@ Rectangle {
 
         Timer {
             id: workspaceHideTimer
-            interval: 1300
+            interval: 650
             repeat: false
             onTriggered: {
                 if (!root.expanded)
@@ -299,6 +352,31 @@ Rectangle {
         }
     }
 
+    Item {
+        id: volumeController
+
+        Timer {
+            id: volumeHideTimer
+            interval: 900
+            repeat: false
+            onTriggered: {
+                if (!root.expanded)
+                    IslandManager.removeIsland("volume");
+            }
+        }
+
+        Connections {
+            target: VolumeService
+            function onVolumeAdjusted() {
+                IslandManager.addIsland("volume", 7, {});
+                root.forceNotificationIsland = false;
+                root.forceWorkspaceIsland = false;
+                root.expanded = false;
+                volumeHideTimer.restart();
+            }
+        }
+    }
+
     // Notification controller
     Item {
         id: notificationController
@@ -343,13 +421,24 @@ Rectangle {
             spacing: Theme.islandGap
             visible: root.displayedIslandType() !== "notification" || root.expanded
 
+            StyledText {
+                id: compactVolumeAmount
+                Layout.alignment: Qt.AlignVCenter
+                text: VolumeService.displayText
+                role: "fg"
+                font.family: Theme.fontFamilyUi
+                font.pixelSize: Theme.fontSizeLarge
+                font.bold: true
+                visible: root.displayedIslandType() === "volume"
+            }
+
             RoundedImage {
                 id: compactAlbumArt
                 Layout.preferredWidth: Theme.islandCompactHeight - 6
                 Layout.preferredHeight: Theme.islandCompactHeight - 6
                 maskSource: "file:///home/reazn/.config/quickshell/assets/mask_compact.png"
                 source: MediaService.artUrl
-                visible: MediaService.hasPlayer
+                visible: MediaService.isPlaying && root.displayedIslandType() !== "volume"
 
                 Icon {
                     anchors.centerIn: parent
@@ -362,7 +451,7 @@ Rectangle {
 
             Item {
                 Layout.alignment: Qt.AlignVCenter
-                Layout.preferredWidth: Theme.islandCompactModuleMinWidth
+                Layout.preferredWidth: Math.max(Theme.islandCompactModuleMinWidth, mainLoader.implicitWidth)
                 Layout.preferredHeight: Theme.islandCompactHeight
 
                 Loader {
@@ -382,11 +471,11 @@ Rectangle {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredWidth: 18
                 Layout.preferredHeight: 18
-                value: MediaService.progress * 100
+                value: root.displayedIslandType() === "volume" ? VolumeService.displayPercent : MediaService.progress * 100
                 icon: ""
-                fgColor: Theme.green
-                lineWidth: 2
-                visible: MediaService.hasPlayer
+                fgColor: Theme.blue
+                lineWidth: 3
+                visible: root.displayedIslandType() === "volume" || MediaService.isPlaying
             }
         }
 
@@ -426,6 +515,16 @@ Rectangle {
                 return "";
             type = type.charAt(0).toUpperCase() + type.slice(1);
             return "islands/" + type + "IslandExpanded.qml";
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+            propagateComposedEvents: true
+            onPressed: mouse => {
+                root.markManualMediaInteraction();
+                mouse.accepted = false;
+            }
         }
 
         Behavior on opacity {

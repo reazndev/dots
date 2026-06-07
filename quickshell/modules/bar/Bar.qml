@@ -21,6 +21,12 @@ PanelRoot {
     )
 
     function toggleNotifications() {
+        if (NotificationService.unreadCount === 0 && NotificationService.activeTransientNotification === null) {
+            island.expanded = false;
+            island.forceNotificationIsland = false;
+            return;
+        }
+
         if (island.expanded && island.displayedIslandType() === "notification") {
             island.expanded = false;
         } else {
@@ -73,7 +79,7 @@ PanelRoot {
         NotificationBadgeWidget {
             id: notificationBadge
             anchors.verticalCenter: parent.verticalCenter
-            x: parent.width / 2 + island.compactWidth / 2 + 6
+            x: island.x + island.width + 6
             visible: notificationBadge.visibleBadge && !island.expanded && island.displayedIslandType() !== "notification"
             onActivated: {
                 island.forceNotificationIsland = true;

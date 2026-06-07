@@ -78,6 +78,9 @@
             },
             "helium": {
                "alias": "h"
+            },
+            "spotify-launcher": {
+               "alias": "sp"
             }
          }
       },

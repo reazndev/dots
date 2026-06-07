@@ -32,8 +32,8 @@ RowLayout {
     StyledText {
         id: label
         text: root.hasSpecial
-            ? "WS " + root.specialLabel(root.specialName)
-            : "WS " + root.workspaceId
+            ? "Workspace " + root.specialLabel(root.specialName)
+            : "Workspace " + root.workspaceId
         role: "fg"
         font.family: Theme.fontFamilyUi
         font.pixelSize: Theme.fontSizeLarge

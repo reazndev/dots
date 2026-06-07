@@ -11,30 +11,12 @@ Item {
     property real progress: 0
     property string timePlayed: "0:00"
     property string timeTotal: "0:00"
+    property string trackKey: ""
 
     readonly property bool hasPlayer: activePlayer !== null && trackTitle !== ""
     readonly property bool isPlaying: activePlayer && activePlayer.playbackState === MprisPlaybackState.Playing
-    readonly property string trackTitle: {
-        if (!activePlayer)
-            return "";
-        if (activePlayer.trackTitle)
-            return activePlayer.trackTitle;
-        if (activePlayer.title)
-            return activePlayer.title;
-        if (activePlayer.metadata && activePlayer.metadata["xesam:title"])
-            return activePlayer.metadata["xesam:title"];
-        return "";
-    }
-    readonly property string artist: {
-        if (!activePlayer)
-            return "";
-        var value = activePlayer.artist || "";
-        if (!value && activePlayer.metadata)
-            value = activePlayer.metadata["xesam:artist"] || "";
-        if (Array.isArray(value))
-            return value.join(", ");
-        return value ? String(value) : "";
-    }
+    readonly property string trackTitle: readTrackTitle(activePlayer)
+    readonly property string artist: readArtist(activePlayer)
     readonly property string artUrl: {
         if (!activePlayer)
             return "";
@@ -63,6 +45,42 @@ Item {
         var minutes = Math.floor(totalSeconds / 60);
         var seconds = Math.floor(totalSeconds % 60);
         return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+    }
+
+    function readTrackTitle(player) {
+        if (!player)
+            return "";
+        if (player.trackTitle)
+            return player.trackTitle;
+        if (player.title)
+            return player.title;
+        if (player.metadata && player.metadata["xesam:title"])
+            return player.metadata["xesam:title"];
+        return "";
+    }
+
+    function readArtist(player) {
+        if (!player)
+            return "";
+        var value = player.artist || "";
+        if (!value && player.metadata)
+            value = player.metadata["xesam:artist"] || "";
+        if (Array.isArray(value))
+            return value.join(", ");
+        return value ? String(value) : "";
+    }
+
+    function buildTrackKey(player) {
+        if (!player)
+            return "";
+        var trackId = player.metadata ? (player.metadata["mpris:trackid"] || "") : "";
+        return String(player.dbusName || "") + "|" + String(trackId) + "|" + readTrackTitle(player) + "|" + readArtist(player);
+    }
+
+    function updateTrackKey() {
+        var nextTrackKey = buildTrackKey(activePlayer);
+        if (trackKey !== nextTrackKey)
+            trackKey = nextTrackKey;
     }
 
     function playerHasTrackInfo(player) {
@@ -117,6 +135,7 @@ Item {
         if (activePlayer && activePlayer.dbusName)
             lastActivePlayerDbusName = activePlayer.dbusName;
         updateProgress();
+        updateTrackKey();
     }
 
     function updateProgress() {

@@ -37,7 +37,7 @@ RowLayout {
         Layout.preferredHeight: 18
         value: MediaService.progress * 100
         icon: ""
-        fgColor: Theme.green
-        lineWidth: 2
+        fgColor: Theme.blue
+        lineWidth: 3
     }
 }

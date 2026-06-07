@@ -34,6 +34,7 @@ ColumnLayout {
 
         ColumnLayout {
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
             spacing: 1
 
             StyledText {
@@ -53,6 +54,7 @@ ColumnLayout {
         }
 
         Rectangle {
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             Layout.preferredWidth: Math.max(74, clearText.implicitWidth + Theme.islandGap * 2)
             Layout.preferredHeight: 26
             radius: height / 2

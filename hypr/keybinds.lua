@@ -7,6 +7,7 @@
 
 local programs = require("programs")
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local Alt = "ALT"       -- For readability in binds using ALT
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(programs.terminal))
@@ -19,6 +20,11 @@ hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("vicinae vicinae://launch/clipboard/history"))
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("helium-browser"))
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("zeditor"))
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("t3code-nightly"))
+hl.bind(mainMod .. " + ALT + D", hl.dsp.exec_cmd("element-desktop-nightly & vesktop"))
+hl.bind(mainMod .. " + ALT + G", hl.dsp.exec_cmd("spotify-launcher"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "l" }))
@@ -86,7 +92,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 
 -- Screenshot
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("hyprshot -m window"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region -z"))
 
 -- Screen recording
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("/home/reazn/.config/hypr/scripts/record-region.sh"))
@@ -100,3 +106,54 @@ hl.bind(mainMod .. " + CTRL + SHIFT + N", hl.dsp.exec_cmd("hyprctl hyprsunset te
 
 -- Toggle notifications panel
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("quickshell ipc call bar toggleNotifications"))
+
+-- Toggle workspace overview
+hl.bind(Alt .. " + Tab", hl.dsp.exec_cmd("quickshell ipc call bar toggleWorkspaceOverview"))
+
+--###########################################
+--## DYNAMIC ULTRAWIDE LAYOUT CONTROLLER  ###
+--###########################################
+
+local regional_workspaces = {} -- Tracks regionally constrained workspaces
+local focused_2560_workspaces = {} -- Tracks 2560x1440 centered workspaces
+
+-- Toggle Behavior: Regional centering constraint (SUPER + X)
+local function toggle_center_region()
+    local ws = hl.get_active_workspace()
+    local id = tostring(ws.id)
+
+    if regional_workspaces[id] then
+        -- Disable: Reset gapsout for the workspace
+        hl.workspace_rule({ workspace = id, gaps_out = 0 })
+        regional_workspaces[id] = nil
+        focused_2560_workspaces[id] = nil
+        hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: DISABLED'")
+    else
+        -- Enable: Set 600px left/right margins for all tiled windows
+        hl.workspace_rule({ workspace = id, gaps_out = { left = 600, right = 600 } })
+        regional_workspaces[id] = true
+        focused_2560_workspaces[id] = nil
+        hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: ENABLED (600px sides)'")
+    end
+end
+
+-- Toggle Behavior: 2560x1440 centered constraint (SUPER + ALT + X)
+local function toggle_2560_region()
+    local ws = hl.get_active_workspace()
+    local id = tostring(ws.id)
+
+    if focused_2560_workspaces[id] then
+        hl.workspace_rule({ workspace = id, gaps_out = 0 })
+        focused_2560_workspaces[id] = nil
+        hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: DISABLED'")
+    else
+        hl.workspace_rule({ workspace = id, gaps_out = { left = 1280, right = 1280 } })
+        focused_2560_workspaces[id] = true
+        regional_workspaces[id] = nil
+        hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: 2560x1440'")
+    end
+end
+
+-- Bind the toggle
+hl.bind(mainMod .. " + X", toggle_center_region)
+hl.bind(mainMod .. " + ALT + X", toggle_2560_region)

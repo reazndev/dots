@@ -100,8 +100,8 @@ Rectangle {
             height: 18
             value: root.progressValue
             icon: root.player && root.player.playbackStatus === "Playing" ? "\uE13C" : "\uE12E"
-            fgColor: Theme.green
-            lineWidth: 2
+            fgColor: Theme.blue
+            lineWidth: 3
         }
     }
 }

@@ -16,6 +16,12 @@ Rectangle {
     border.width: Theme.borderWidth
     radius: Theme.radius
 
+    function islandFilePrefix(type) {
+        if (type === "localsend")
+            return "LocalSend";
+        return type.charAt(0).toUpperCase() + type.slice(1);
+    }
+
     states: State {
         name: "visible"
         when: parent.visible
@@ -51,8 +57,7 @@ Rectangle {
             if (!island)
                 return "";
             var type = island.type;
-            type = type.charAt(0).toUpperCase() + type.slice(1);
-            return "islands/" + type + "IslandExpanded.qml";
+            return "islands/" + popupRoot.islandFilePrefix(type) + "IslandExpanded.qml";
         }
     }
 }

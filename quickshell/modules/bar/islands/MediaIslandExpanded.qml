@@ -1,164 +1,229 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Services.Mpris
 import "../../../services"
 import "../../../components"
 
 ColumnLayout {
     id: root
     anchors.fill: parent
-    anchors.margins: 12
-    spacing: 10
-
-    property var islandData: IslandManager.activeIsland ? IslandManager.activeIsland.data : {}
-    property var player: islandData.player || null
-    property real progressValue: 0
-    property real localPosition: 0
-
-    Timer {
-        interval: 500
-        running: player !== null
-        repeat: true
-        triggeredOnStart: true
-        onTriggered: {
-            if (player && player.position > 0) {
-                root.localPosition = player.position;
-            } else if (player) {
-                var len = player.length || (player.metadata ? player.metadata["mpris:length"] : 0) || 0;
-                if (len <= 0 || root.localPosition < len) {
-                    root.localPosition += 500000;
-                }
-            }
-            updateProgress();
-        }
-    }
-
-    function updateProgress() {
-        if (!player) {
-            progressValue = 0;
-            return;
-        }
-        var len = player.length || (player.metadata ? player.metadata["mpris:length"] : 0) || 0;
-        var pos = (player.position > 0) ? player.position : root.localPosition;
-        progressValue = len > 0 ? Math.min((pos / len) * 100, 100) : 0;
-    }
+    anchors.margins: Theme.islandPadding
+    spacing: Theme.islandGap
 
     function seekToRatio(ratio) {
+        var player = MediaService.activePlayer;
         if (!player)
             return;
-        var len = player.length || (player.metadata ? player.metadata["mpris:length"] : 0) || 0;
-        if (len <= 0)
+        var length = Number(player.length) || 0;
+        if (length <= 0 && player.metadata && player.metadata["mpris:length"])
+            length = Number(player.metadata["mpris:length"]);
+        if (length <= 0)
             return;
-        var target = ratio * len;
-        var delta = target - root.localPosition;
+
+        var target = ratio * length;
+        var delta = target - (Number(player.position) || 0);
         player.seek(delta);
-        root.localPosition = target;
-        updateProgress();
+        MediaService.updateProgress();
     }
 
-    function formatTime(value) {
-        if (!value || value <= 0)
-            return "0:00";
-        var seconds = value > 100000 ? Math.floor(value / 1000000) : Math.floor(value);
-        var minutes = Math.floor(seconds / 60);
-        var secs = seconds % 60;
-        return minutes + ":" + (secs < 10 ? "0" : "") + secs;
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: Theme.islandGap
+
+        RoundedImage {
+            id: expandedArt
+            Layout.preferredWidth: Theme.islandAlbumSize
+            Layout.preferredHeight: Theme.islandAlbumSize
+            maskSource: "file:///home/reazn/.config/quickshell/assets/mask_expanded.png"
+            source: MediaService.artUrl
+
+            Icon {
+                anchors.centerIn: parent
+                text: "\uE122"
+                font.pixelSize: Theme.fontSizeLarge
+                color: Theme.bg
+                visible: expandedArt.status !== Image.Ready
+            }
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: Math.max(2, Math.round(Theme.islandGap / 2))
+
+            StyledText {
+                Layout.fillWidth: true
+                text: MediaService.trackTitle || "No music playing"
+                role: "fg"
+                font.family: Theme.fontFamilyUi
+                font.pixelSize: Theme.fontSizeLarge
+                font.bold: true
+                elide: Text.ElideRight
+            }
+
+            StyledText {
+                Layout.fillWidth: true
+                text: MediaService.artist
+                role: "fgDim"
+                font.family: Theme.fontFamilyUi
+                elide: Text.ElideRight
+                visible: text !== ""
+            }
+        }
+
+        Row {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 44
+            Layout.preferredHeight: Theme.islandButtonSize
+            spacing: 4
+
+            Repeater {
+                model: 5
+                delegate: Rectangle {
+                    required property int index
+                    width: 4
+                    height: MediaService.isPlaying
+                        ? 7 + (parent.height - 7) * (0.22 + 0.66 * Math.abs(Math.sin(root.visualizerPhase + index * 0.78)))
+                        : 7 + (parent.height - 7) * ([0.34, 0.58, 0.82, 0.58, 0.34][index])
+                    radius: width / 2
+                    color: MediaService.isPlaying ? Theme.accent : Theme.fgDim
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: MediaService.isPlaying ? 120 : 260
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Theme.islandAnimationDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    Connections {
-        target: player || null
-        function onPositionChanged() {
-            updateProgress();
-        }
-        function onLengthChanged() {
-            updateProgress();
-        }
-        function onMetadataChanged() {
-            root.localPosition = 0;
-            updateProgress();
+    property real visualizerPhase: 0
+
+    Timer {
+        interval: 64
+        repeat: true
+        running: MediaService.isPlaying
+        onTriggered: {
+            root.visualizerPhase += 0.18;
+            if (root.visualizerPhase > Math.PI * 2)
+                root.visualizerPhase -= Math.PI * 2;
         }
     }
 
-    // Time row: current position (left) | total length (right)
     RowLayout {
         Layout.fillWidth: true
 
         StyledText {
-            text: formatTime((player && player.position > 0) ? player.position : root.localPosition)
+            text: MediaService.timePlayed
             role: "fgDim"
-            font.pixelSize: 11
+            font.pixelSize: Theme.fontSize - 1
         }
 
-        Item {
+        Rectangle {
+            id: progressTrack
             Layout.fillWidth: true
+            Layout.preferredHeight: Math.max(6, Math.round(Theme.islandGap * 0.7))
+            radius: height / 2
+            color: Qt.rgba(Theme.fg.r, Theme.fg.g, Theme.fg.b, 0.12)
+
+            Rectangle {
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: parent.width * MediaService.progress
+                radius: parent.radius
+                color: Theme.fg
+
+                Behavior on width {
+                    NumberAnimation {
+                        duration: 500
+                        easing.type: Easing.OutCubic
+                    }
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: root.seekToRatio(mouse.x / width)
+            }
         }
 
         StyledText {
-            text: formatTime(player && player.metadata ? player.metadata["mpris:length"] : 0)
+            text: MediaService.timeTotal
             role: "fgDim"
-            font.pixelSize: 11
+            font.pixelSize: Theme.fontSize - 1
         }
-    }
-
-    WaveProgressBar {
-        Layout.fillWidth: true
-        height: 8
-        value: progressValue
-        onSeekRequested: ratio => root.seekToRatio(ratio)
     }
 
     RowLayout {
         Layout.alignment: Qt.AlignHCenter
-        spacing: 28
+        spacing: Theme.islandButtonSize
 
         Icon {
             text: "\uE15F"
-            font.pixelSize: 20
-            color: Theme.fg
+            font.pixelSize: Theme.fontSizeLarge + 4
+            color: prevArea.pressed ? Theme.fgDim : Theme.fg
+            scale: prevArea.pressed ? 0.84 : 1
+
+            Behavior on scale { NumberAnimation { duration: 100 } }
+
             MouseArea {
+                id: prevArea
                 anchors.fill: parent
+                anchors.margins: -Theme.islandGap
                 cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    if (player && player.previous)
-                        player.previous();
-                }
+                onClicked: if (MediaService.activePlayer) MediaService.activePlayer.previous()
             }
         }
 
         Rectangle {
-            width: 40
-            height: 40
-            radius: 20
-            color: Theme.accent
+            Layout.preferredWidth: Theme.islandButtonSize + 8
+            Layout.preferredHeight: Theme.islandButtonSize + 8
+            radius: width / 2
+            color: playArea.pressed ? Theme.fgDim : Theme.accent
+            scale: playArea.pressed ? 0.88 : 1
+
+            Behavior on scale { NumberAnimation { duration: 100 } }
+            Behavior on color { ColorAnimation { duration: Theme.islandAnimationDuration } }
 
             Icon {
                 anchors.centerIn: parent
-                text: player && player.playbackState === MprisPlaybackState.Playing ? "\uE12E" : "\uE13C"
-                font.pixelSize: 20
+                text: MediaService.isPlaying ? "\uE12E" : "\uE13C"
+                font.pixelSize: Theme.fontSizeLarge + 2
                 color: Theme.bg
             }
 
             MouseArea {
+                id: playArea
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    if (player && player.togglePlaying)
-                        player.togglePlaying();
-                }
+                onClicked: MediaService.togglePlayback()
             }
         }
 
         Icon {
             text: "\uE160"
-            font.pixelSize: 20
-            color: Theme.fg
+            font.pixelSize: Theme.fontSizeLarge + 4
+            color: nextArea.pressed ? Theme.fgDim : Theme.fg
+            scale: nextArea.pressed ? 0.84 : 1
+
+            Behavior on scale { NumberAnimation { duration: 100 } }
+
             MouseArea {
+                id: nextArea
                 anchors.fill: parent
+                anchors.margins: -Theme.islandGap
                 cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    if (player && player.next)
-                        player.next();
-                }
+                onClicked: if (MediaService.activePlayer) MediaService.activePlayer.next()
             }
         }
     }

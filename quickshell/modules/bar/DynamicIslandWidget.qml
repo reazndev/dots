@@ -1,22 +1,35 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Services.Mpris
+import Quickshell.Hyprland
 import "../../services"
 import "../../components"
 
 Rectangle {
     id: root
-    height: expanded ? expandedHeight : 28
+    height: expanded ? expandedHeight : compactHeight
     width: {
         var mainType = displayedIslandType();
-        if (expanded && mainType === "notification") {
-            if (NotificationService.unreadCount > 0 || NotificationService.activeTransientNotification !== null) {
-                return 380;
-            }
+        if (expanded) {
+            if (mainType === "workspace")
+                return workspaceExpandedWidth();
+            if (mainType === "media")
+                return Theme.islandMediaWidth;
+            if (mainType === "bluetooth")
+                return Theme.islandBluetoothWidth;
+            if (mainType === "volume")
+                return Theme.islandClockWidth;
+            if (mainType === "clock")
+                return Theme.islandClockWidth;
+            if (mainType === "localsend")
+                return Theme.islandLocalSendWidth;
         }
-        return mainLoader.implicitWidth + compactPaddingLeft + compactPaddingRight;
+        if (mainType === "notification")
+            return expanded ? Theme.islandNotificationWidth : Theme.islandNotificationCompactWidth;
+        if (expanded && mainType === "notification")
+            return Theme.islandNotificationWidth;
+        return compactRow.implicitWidth + compactPaddingLeft + compactPaddingRight;
     }
-    radius: 14
+    radius: expanded ? Theme.islandExpandedRadius : (displayedIslandType() === "notification" ? Theme.islandNotificationCompactRadius : Theme.islandCompactRadius)
     color: Theme.bg
     border.color: Theme.border
     border.width: Theme.borderWidth
@@ -25,32 +38,138 @@ Rectangle {
 
     property bool expanded: false
     property bool forceNotificationIsland: false
+    property bool forceWorkspaceIsland: false
+    property bool autoExpandedByTrack: false
     property int expandedHeight: {
-        if (displayedIslandType() === "notification") {
-            return 300;
+        var type = displayedIslandType();
+        if (type === "notification") {
+            return Theme.islandNotificationHeight;
         }
-        return 156;
+        if (type === "workspace")
+            return workspaceExpandedHeight();
+        if (type === "media")
+            return Theme.islandMediaHeight;
+        if (type === "clock")
+            return Theme.islandClockHeight;
+        if (type === "volume")
+            return Theme.islandClockHeight;
+        if (type === "localsend")
+            return localsendExpandedHeight();
+        return Theme.islandBluetoothHeight;
     }
     property int compactPaddingLeft: 12
     property int compactPaddingRight: 8
-    readonly property int compactWidth: mainLoader.implicitWidth + compactPaddingLeft + compactPaddingRight
+    readonly property int compactHeight: displayedIslandType() === "notification" && !expanded ? Theme.islandNotificationCompactHeight : Theme.islandCompactHeight
+    readonly property int compactWidth: compactRow.implicitWidth + compactPaddingLeft + compactPaddingRight
+
+    function workspaceExpandedWidth() {
+        var fallback = Theme.islandOverviewCellWidth * 5 + Theme.islandOverviewCellGap * 4 + Theme.islandOverviewOuterPadding * 2;
+        return parent ? Math.max(fallback, parent.width - Theme.barMargin * 2) : fallback;
+    }
+
+    function workspaceMonitorAspect() {
+        var monitor = HyprlandSnapshotService.monitors && HyprlandSnapshotService.monitors.length > 0
+            ? HyprlandSnapshotService.monitors[0]
+            : null;
+        var width = monitor && monitor.width ? Number(monitor.width) : 1920;
+        var height = monitor && monitor.height ? Number(monitor.height) : 1080;
+        return width > 0 ? Math.max(0.22, Math.min(0.58, height / width)) : 0.5625;
+    }
+
+    function workspaceOverviewRows() {
+        return Math.max(1, Math.ceil((7 + HyprlandSnapshotService.specialWorkspaceNames.length) / 5));
+    }
+
+    function workspaceExpandedHeight() {
+        var contentWidth = workspaceExpandedWidth() - Theme.islandOverviewOuterPadding * 2;
+        var cellWidth = (contentWidth - Theme.islandOverviewCellGap * 4) / 5;
+        var cellHeight = Math.max(Theme.islandOverviewCellHeight, Math.round(cellWidth * workspaceMonitorAspect()));
+        var rows = workspaceOverviewRows();
+        return cellHeight * rows + Theme.islandOverviewCellGap * (rows - 1) + Theme.islandOverviewOuterPadding * 2;
+    }
+
+    function localsendExpandedHeight() {
+        var rowHeight = Theme.islandButtonSize + Math.round(Theme.islandGap / 3);
+        var visibleFileRows = Math.min(3, LocalSendService.selectedFiles.length);
+        var visibleDeviceRows = Math.min(2, LocalSendService.devices.length);
+        var listRows = Math.max(visibleFileRows, visibleDeviceRows);
+        if (LocalSendService.mode === "sending" || LocalSendService.mode === "receiving")
+            listRows = 1;
+        if (LocalSendService.mode === "incoming")
+            listRows = 0;
+
+        var wanted = Theme.islandLocalSendHeight + listRows * rowHeight;
+        return Math.min(Theme.islandLocalSendMaxHeight, wanted);
+    }
 
     function displayedIslandType() {
         var island = IslandManager.activeIsland;
+
+        if (root.expanded && island && island.type === "localsend")
+            return "localsend";
         
         if (NotificationService.presentationMode === "transient" && NotificationService.activeTransientNotification !== null)
             return "notification";
             
         if (forceNotificationIsland && NotificationService.unreadCount > 0)
             return "notification";
+
+        if (forceWorkspaceIsland)
+            return "workspace";
             
         if (island)
             return island.type;
             
-        if (NotificationService.unreadCount > 0 || NotificationService.activeTransientNotification !== null)
-            return "notification";
-            
-        return "";
+        return "clock";
+    }
+
+    function compactModuleType() {
+        var island = IslandManager.activeIsland;
+        if (forceWorkspaceIsland || (island && island.type === "workspace"))
+            return "workspace";
+        if (island && island.type === "layoutMode")
+            return "layoutMode";
+        if (island && island.type === "localsend")
+            return "localsend";
+        if (island && island.type === "bluetooth")
+            return "bluetooth";
+        return "clock";
+    }
+
+    function islandFilePrefix(type) {
+        if (type === "localsend")
+            return "LocalSend";
+        return type.charAt(0).toUpperCase() + type.slice(1);
+    }
+
+    function expandDefaultAction() {
+        if (MediaService.isPlaying) {
+            IslandManager.addIsland("media", 1, {});
+            autoExpandedByTrack = false;
+            expanded = true;
+            return;
+        }
+        expanded = !expanded;
+    }
+
+    function markManualMediaInteraction() {
+        if (displayedIslandType() === "media")
+            autoExpandedByTrack = false;
+    }
+
+    function toggleWorkspaceOverview() {
+        if (expanded && displayedIslandType() === "workspace") {
+            closeWorkspaceOverview();
+            return;
+        }
+        forceWorkspaceIsland = true;
+        expanded = true;
+    }
+
+    function closeWorkspaceOverview() {
+        expanded = false;
+        forceWorkspaceIsland = false;
+        IslandManager.removeIsland("workspace");
     }
 
     MouseArea {
@@ -86,8 +205,13 @@ Rectangle {
         expanded = false
 
     onExpandedChanged: {
-        if (!expanded)
+        if (!expanded) {
             forceNotificationIsland = false;
+            forceWorkspaceIsland = false;
+            autoExpandedByTrack = false;
+            if (IslandManager.activeIsland && IslandManager.activeIsland.type === "media" && MediaService.isPlaying)
+                IslandManager.addIsland("media", 1, {});
+        }
     }
 
     Connections {
@@ -96,6 +220,8 @@ Rectangle {
             root.expanded = false;
             if (NotificationService.unreadCount === 0)
                 root.forceNotificationIsland = false;
+            if (IslandManager.activeIsland && IslandManager.activeIsland.type !== "workspace")
+                root.forceWorkspaceIsland = false;
         }
     }
 
@@ -111,67 +237,233 @@ Rectangle {
 
     // ========== CONTROLLERS ==========
     Item {
+        id: clockController
+        Component.onCompleted: IslandManager.addIsland("clock", 0, {})
+    }
+
+    Item {
         id: mediaController
-        property var player: findBestPlayer()
-
-        function findBestPlayer() {
-            var players = Mpris.players.values;
-            for (var i = 0; i < players.length; i++) {
-                if (players[i] && players[i].metadata && players[i].metadata["xesam:title"]) {
-                    return players[i];
-                }
-            }
-            return null;
-        }
-
-        onPlayerChanged: checkMedia()
+        property string lastTrackKey: MediaService.trackKey
 
         Timer {
-            interval: 2000
-            running: true
-            repeat: true
+            id: mediaAutoHideTimer
+            interval: 3600
+            repeat: false
             onTriggered: {
-                var best = mediaController.findBestPlayer();
-                if (best !== mediaController.player) {
-                    mediaController.player = best;
-                }
+                if (root.expanded && root.displayedIslandType() === "media" && root.autoExpandedByTrack)
+                    root.expanded = false;
             }
         }
 
         function checkMedia() {
-            if (player && player.metadata && player.metadata["xesam:title"]) {
-                IslandManager.addIsland("media", 1, {
-                    player: player
-                });
+            if (MediaService.isPlaying) {
+                IslandManager.addIsland("media", 1, {});
             } else {
                 IslandManager.removeIsland("media");
             }
         }
 
-        Connections {
-            target: mediaController.player || null
-            function onMetadataChanged() {
-                mediaController.checkMedia();
-            }
-            function onPlaybackStateChanged() {
-                mediaController.checkMedia();
-            }
+        function showTrackChangePreview() {
+            if (!MediaService.isPlaying)
+                return;
+            if (root.displayedIslandType() === "notification" || root.displayedIslandType() === "bluetooth")
+                return;
+            if (root.expanded && root.displayedIslandType() === "media" && !root.autoExpandedByTrack)
+                return;
+
+            IslandManager.addIsland("media", 6, {});
+            root.forceNotificationIsland = false;
+            root.forceWorkspaceIsland = false;
+            root.autoExpandedByTrack = true;
+            root.expanded = true;
+            mediaAutoHideTimer.restart();
         }
 
         Connections {
-            target: Mpris.players
-            function onValuesChanged() {
-                mediaController.player = mediaController.findBestPlayer();
+            target: MediaService
+            function onHasPlayerChanged() {
                 mediaController.checkMedia();
+            }
+            function onIsPlayingChanged() {
+                mediaController.checkMedia();
+            }
+            function onActivePlayerChanged() {
+                mediaController.checkMedia();
+            }
+            function onTrackKeyChanged() {
+                if (mediaController.lastTrackKey === MediaService.trackKey)
+                    return;
+
+                var previousTrackKey = mediaController.lastTrackKey;
+                mediaController.lastTrackKey = MediaService.trackKey;
+                if (previousTrackKey !== "" && MediaService.trackKey !== "")
+                    mediaController.showTrackChangePreview();
             }
         }
 
         Component.onCompleted: checkMedia()
     }
 
+    Item {
+        id: workspaceController
+
+        property int lastWorkspaceId: HyprlandSnapshotService.activeWorkspaceId
+        property string lastSpecialWorkspaceName: HyprlandSnapshotService.activeSpecialWorkspaceName
+
+        function normalizeWorkspaceId(rawValue) {
+            var parsed = parseInt(String(rawValue === undefined || rawValue === null ? "" : rawValue), 10);
+            return isNaN(parsed) ? -1 : parsed;
+        }
+
+        function showWorkspaceModule(workspaceId, specialName) {
+            var cleanSpecialName = String(specialName || "");
+            var cleanWorkspaceId = normalizeWorkspaceId(workspaceId);
+            if (cleanWorkspaceId > 0)
+                HyprlandSnapshotService.activeWorkspaceId = cleanWorkspaceId;
+            HyprlandSnapshotService.activeSpecialWorkspaceName = cleanSpecialName;
+
+            IslandManager.addIsland("workspace", 4, {
+                workspaceId: cleanWorkspaceId > 0 ? cleanWorkspaceId : HyprlandSnapshotService.activeWorkspaceId,
+                specialName: cleanSpecialName
+            });
+            workspaceHideTimer.restart();
+        }
+
+        function handleWorkspaceEvent(event) {
+            if (!event || !event.name)
+                return;
+
+            if (event.name === "workspacev2" || event.name === "workspace") {
+                var workspaceArgs = event.parse(event.name === "workspacev2" ? 2 : 1);
+                var workspaceId = normalizeWorkspaceId(workspaceArgs.length > 0 ? workspaceArgs[0] : "");
+                if (workspaceId > 0)
+                    showWorkspaceModule(workspaceId, "");
+                return;
+            }
+
+            if (event.name === "focusedmonv2" || event.name === "focusedmon") {
+                var monitorArgs = event.parse(2);
+                var focusedWorkspaceId = normalizeWorkspaceId(monitorArgs.length > 1 ? monitorArgs[1] : "");
+                if (focusedWorkspaceId > 0)
+                    showWorkspaceModule(focusedWorkspaceId, "");
+                return;
+            }
+
+            if (event.name === "activespecial") {
+                var specialArgs = event.parse(2);
+                var specialName = specialArgs.length > 0 ? String(specialArgs[0]) : "";
+                if (specialName !== "")
+                    showWorkspaceModule(HyprlandSnapshotService.activeWorkspaceId, specialName);
+            }
+        }
+
+        Timer {
+            id: workspaceHideTimer
+            interval: 650
+            repeat: false
+            onTriggered: {
+                if (!root.expanded)
+                    IslandManager.removeIsland("workspace");
+            }
+        }
+
+        Connections {
+            target: HyprlandSnapshotService
+            function onActiveWorkspaceIdChanged() {
+                if (workspaceController.lastWorkspaceId === HyprlandSnapshotService.activeWorkspaceId)
+                    return;
+                workspaceController.lastWorkspaceId = HyprlandSnapshotService.activeWorkspaceId;
+                workspaceController.showWorkspaceModule(HyprlandSnapshotService.activeWorkspaceId, HyprlandSnapshotService.activeSpecialWorkspaceName);
+            }
+            function onActiveSpecialWorkspaceNameChanged() {
+                if (workspaceController.lastSpecialWorkspaceName === HyprlandSnapshotService.activeSpecialWorkspaceName)
+                    return;
+                workspaceController.lastSpecialWorkspaceName = HyprlandSnapshotService.activeSpecialWorkspaceName;
+                if (HyprlandSnapshotService.activeSpecialWorkspaceName !== "")
+                    workspaceController.showWorkspaceModule(HyprlandSnapshotService.activeWorkspaceId, HyprlandSnapshotService.activeSpecialWorkspaceName);
+            }
+        }
+
+        Connections {
+            target: Hyprland
+            function onRawEvent(event) {
+                workspaceController.handleWorkspaceEvent(event);
+            }
+        }
+    }
+
+    Item {
+        id: bluetoothController
+
+        Timer {
+            id: bluetoothHideTimer
+            interval: 3600
+            repeat: false
+            onTriggered: {
+                if (!root.expanded)
+                    IslandManager.removeIsland("bluetooth");
+            }
+        }
+
+        Connections {
+            target: BluetoothConnectionService
+            function onNewConnection(device) {
+                IslandManager.addIsland("bluetooth", 5, { device: device });
+                bluetoothHideTimer.restart();
+            }
+        }
+    }
+
+    Item {
+        id: volumeController
+
+        Timer {
+            id: volumeHideTimer
+            interval: 900
+            repeat: false
+            onTriggered: {
+                if (!root.expanded)
+                    IslandManager.removeIsland("volume");
+            }
+        }
+
+        Connections {
+            target: VolumeService
+            function onVolumeAdjusted() {
+                IslandManager.addIsland("volume", 7, {});
+                root.forceNotificationIsland = false;
+                root.forceWorkspaceIsland = false;
+                root.expanded = false;
+                volumeHideTimer.restart();
+            }
+        }
+    }
+
     // Notification controller
     Item {
         id: notificationController
+
+        Timer {
+            id: layoutModeHideTimer
+            interval: 650
+            repeat: false
+            onTriggered: {
+                if (!root.expanded)
+                    IslandManager.removeIsland("layoutMode");
+            }
+        }
+
+        Connections {
+            target: NotificationService
+            function onLayoutModeRequested(label) {
+                IslandManager.addIsland("layoutMode", 4, { label: label });
+                root.forceNotificationIsland = false;
+                root.forceWorkspaceIsland = false;
+                root.expanded = false;
+                layoutModeHideTimer.restart();
+            }
+        }
+
         Component.onCompleted: {
             // Force instantiation of the notification service on startup
             var _ = NotificationService;
@@ -184,6 +476,57 @@ Rectangle {
     // LocalSend controller (stub)
     Item {
         id: localsendController
+
+        function shouldShowCompact() {
+            return LocalSendService.mode === "incoming"
+                || LocalSendService.mode === "sending"
+                || LocalSendService.mode === "receiving"
+                || LocalSendService.mode === "complete"
+                || LocalSendService.mode === "error"
+                || LocalSendService.hasFiles;
+        }
+
+        function hideIfIdleMinimized() {
+            if (!root.expanded && !shouldShowCompact())
+                IslandManager.removeIsland("localsend");
+        }
+
+        function show(priority) {
+            IslandManager.addIsland("localsend", priority, {});
+            root.forceNotificationIsland = false;
+            root.forceWorkspaceIsland = false;
+            hideIfIdleMinimized();
+        }
+
+        Connections {
+            target: LocalSendService
+            function onIncomingRequested() {
+                localsendController.show(9);
+                root.expanded = true;
+            }
+            function onTransferStarted() {
+                localsendController.show(8);
+                root.expanded = true;
+            }
+            function onTransferFinished() {
+                localsendController.show(8);
+            }
+            function onDismissed() {
+                IslandManager.removeIsland("localsend");
+                if (root.displayedIslandType() === "media" && MediaService.isPlaying)
+                    IslandManager.addIsland("media", 1, {});
+            }
+            function onFilesSelected() {
+                localsendController.show(7);
+                root.expanded = true;
+            }
+            function onModeChanged() {
+                localsendController.hideIfIdleMinimized();
+            }
+            function onHasFilesChanged() {
+                localsendController.hideIfIdleMinimized();
+            }
+        }
     }
 
     // ========== COMPACT CONTENT ==========
@@ -192,34 +535,127 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: 28
-        visible: !root.expanded || root.displayedIslandType() !== "notification"
+        height: root.compactHeight
+        visible: !root.expanded || (root.displayedIslandType() !== "notification" && root.displayedIslandType() !== "media" && root.displayedIslandType() !== "workspace" && root.displayedIslandType() !== "localsend" && root.displayedIslandType() !== "clock")
 
-        Item {
-            id: mainArea
+        Loader {
+            id: compactNotificationLoader
             anchors.left: parent.left
+            anchors.leftMargin: root.compactPaddingLeft
             anchors.verticalCenter: parent.verticalCenter
-            width: mainLoader.implicitWidth
-            height: parent.height
+            source: "islands/NotificationIsland.qml"
+            visible: root.displayedIslandType() === "notification" && !root.expanded
+        }
 
-            Loader {
-                id: mainLoader
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: root.compactPaddingLeft
-                source: {
-                    var type = root.displayedIslandType();
-                    if (!type)
-                        return "";
-                    type = type.charAt(0).toUpperCase() + type.slice(1);
-                    return "islands/" + type + "Island.qml";
+        RowLayout {
+            id: compactRow
+            z: 1
+            anchors.left: parent.left
+            anchors.leftMargin: root.compactPaddingLeft
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Theme.islandGap
+            visible: root.displayedIslandType() !== "notification" || root.expanded
+
+            StyledText {
+                id: compactVolumeAmount
+                Layout.alignment: Qt.AlignVCenter
+                text: VolumeService.displayText
+                role: "fg"
+                font.family: Theme.fontFamilyUi
+                font.pixelSize: Theme.fontSizeLarge
+                font.bold: true
+                visible: root.displayedIslandType() === "volume"
+            }
+
+            RoundedImage {
+                id: compactAlbumArt
+                Layout.preferredWidth: Theme.islandCompactHeight - 6
+                Layout.preferredHeight: Theme.islandCompactHeight - 6
+                maskSource: "file:///home/reazn/.config/quickshell/assets/mask_compact.png"
+                source: MediaService.artUrl
+                visible: MediaService.isPlaying && root.displayedIslandType() !== "volume" && root.displayedIslandType() !== "localsend"
+
+                Icon {
+                    anchors.centerIn: parent
+                    text: "\uE122"
+                    font.pixelSize: Theme.fontSize - 2
+                    color: Theme.bg
+                    visible: compactAlbumArt.status !== Image.Ready
                 }
             }
 
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: root.expanded = !root.expanded
+            Item {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredWidth: Math.max(Theme.islandCompactModuleMinWidth, mainLoader.implicitWidth)
+                Layout.preferredHeight: Theme.islandCompactHeight
+
+                Loader {
+                    id: mainLoader
+                    anchors.centerIn: parent
+                    source: {
+                        var type = root.compactModuleType();
+                        if (!type)
+                            return "";
+                        return "islands/" + root.islandFilePrefix(type) + "Island.qml";
+                    }
+                }
+            }
+
+            DonutChart {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredWidth: 18
+                Layout.preferredHeight: 18
+                icon: ""
+                fgColor: Theme.blue
+                lineWidth: 3
+                visible: root.displayedIslandType() === "volume" || root.displayedIslandType() === "localsend" || MediaService.isPlaying
+                value: root.displayedIslandType() === "localsend" ? LocalSendService.progress : (root.displayedIslandType() === "volume" ? VolumeService.displayPercent : MediaService.progress * 100)
+            }
+        }
+
+        MouseArea {
+            z: -1
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onClicked: mouse => {
+                if (mouse.button === Qt.RightButton) {
+                    root.toggleWorkspaceOverview();
+                    return;
+                }
+                if (root.displayedIslandType() === "layoutMode")
+                    return;
+                if (root.displayedIslandType() === "notification") {
+                    root.expanded = true;
+                    return;
+                }
+                root.expandDefaultAction();
+            }
+        }
+    }
+
+    DropArea {
+        anchors.fill: parent
+        keys: ["text/uri-list"]
+        onEntered: {
+            LocalSendService.previewDrop();
+            IslandManager.addIsland("localsend", 7, {});
+            root.expanded = true;
+        }
+        onExited: {
+            if (!LocalSendService.hasFiles && LocalSendService.mode === "drop") {
+                LocalSendService.cancelDropPreview();
+                IslandManager.removeIsland("localsend");
+                root.expanded = false;
+            }
+        }
+        onDropped: drop => {
+            if (drop.urls && drop.urls.length > 0) {
+                LocalSendService.addFiles(drop.urls);
+                LocalSendService.startScan();
+                IslandManager.addIsland("localsend", 7, {});
+                root.expanded = true;
+                drop.acceptProposedAction();
             }
         }
     }
@@ -228,7 +664,7 @@ Rectangle {
     Loader {
         id: expandedLoader
         anchors.top: parent.top
-        anchors.topMargin: (root.expanded && root.displayedIslandType() === "notification") ? 0 : 28
+        anchors.topMargin: (root.expanded && (root.displayedIslandType() === "notification" || root.displayedIslandType() === "media" || root.displayedIslandType() === "workspace" || root.displayedIslandType() === "localsend" || root.displayedIslandType() === "clock")) ? 0 : Theme.islandCompactHeight
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width
         height: parent.height - anchors.topMargin
@@ -239,8 +675,21 @@ Rectangle {
             var type = root.displayedIslandType();
             if (!type)
                 return "";
-            type = type.charAt(0).toUpperCase() + type.slice(1);
-            return "islands/" + type + "IslandExpanded.qml";
+            return "islands/" + root.islandFilePrefix(type) + "IslandExpanded.qml";
+        }
+        onLoaded: {
+            if (item && item.closeRequested)
+                item.closeRequested.connect(root.closeWorkspaceOverview);
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+            propagateComposedEvents: true
+            onPressed: mouse => {
+                root.markManualMediaInteraction();
+                mouse.accepted = false;
+            }
         }
 
         Behavior on opacity {

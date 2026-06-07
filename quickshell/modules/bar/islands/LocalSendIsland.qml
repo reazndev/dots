@@ -4,19 +4,42 @@ import "../../../services"
 import "../../../components"
 
 RowLayout {
-    spacing: 6
+    spacing: Math.round(Theme.islandGap / 2)
 
-    // TODO: Connect to LocalSend / file transfer service
-    // Replace static text with transfer progress / file name
+    function label() {
+        switch (LocalSendService.mode) {
+        case "scanning":
+            return "Scanning";
+        case "devices":
+            return LocalSendService.devices.length + " devices";
+        case "incoming":
+            return LocalSendService.incomingRequest ? LocalSendService.incomingRequest.sender : "Incoming";
+        case "sending":
+            return "Sending";
+        case "receiving":
+            return "Receiving";
+        case "complete":
+            return "Complete";
+        case "error":
+            return "LocalSend";
+        case "drop":
+            return LocalSendService.hasFiles ? LocalSendService.selectedFiles.length + " files" : "Drop files";
+        default:
+            return "LocalSend";
+        }
+    }
 
     Icon {
         text: "\uE152"
-        font.pixelSize: 12
-        color: Theme.fg
+        font.pixelSize: Theme.fontSize
+        color: LocalSendService.mode === "error" ? Theme.yellow : Theme.fg
     }
 
     StyledText {
-        text: "LocalSend"
-        role: "fg"
+        text: label()
+        role: LocalSendService.mode === "error" ? "yellow" : "fg"
+        font.family: Theme.fontFamilyUi
+        elide: Text.ElideRight
+        Layout.maximumWidth: Theme.islandCompactModuleMinWidth + Theme.islandButtonSize
     }
 }

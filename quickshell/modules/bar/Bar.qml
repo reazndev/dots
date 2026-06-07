@@ -12,8 +12,21 @@ PanelRoot {
     property var systemPopup: null
     property var nightlightPopup: null
     property alias islandExpanded: island.expanded
+    readonly property int reservedIslandHeight: Math.max(
+        Theme.islandNotificationHeight,
+        Theme.islandMediaHeight,
+        Theme.islandBluetoothHeight,
+        Theme.islandClockHeight,
+        island.workspaceExpandedHeight()
+    )
 
     function toggleNotifications() {
+        if (NotificationService.unreadCount === 0 && NotificationService.activeTransientNotification === null) {
+            island.expanded = false;
+            island.forceNotificationIsland = false;
+            return;
+        }
+
         if (island.expanded && island.displayedIslandType() === "notification") {
             island.expanded = false;
         } else {
@@ -22,11 +35,15 @@ PanelRoot {
         }
     }
 
-    extraHeight: island.visible ? Math.max(0, island.expandedHeight - (Theme.barHeight + 28) / 2) : 0
+    function toggleWorkspaceOverview() {
+        island.toggleWorkspaceOverview();
+    }
+
+    extraHeight: Math.max(0, island.y + reservedIslandHeight - Theme.barHeight + 4)
     islandMaskX: island.x
     islandMaskY: island.y
     islandMaskWidth: island.width
-    islandMaskHeight: island.visible ? island.height : 0
+    islandMaskHeight: island.visible ? island.height + 4 : 0
 
     Item {
         anchors.top: parent.top
@@ -55,15 +72,17 @@ PanelRoot {
         DynamicIslandWidget {
             id: island
             anchors.top: parent.top
-            anchors.topMargin: (Theme.barHeight - 28) / 2
+            anchors.topMargin: (Theme.barHeight - Theme.islandCompactHeight) / 2
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
         NotificationBadgeWidget {
             id: notificationBadge
             anchors.verticalCenter: parent.verticalCenter
-            x: parent.width / 2 + island.compactWidth / 2 + 6
-            visible: notificationBadge.visibleBadge && !(island.expanded && island.displayedIslandType() === "notification")
+            x: island.x + island.width + 6
+            visible: notificationBadge.visibleBadge
+                && island.displayedIslandType() !== "notification"
+                && (!island.expanded || island.displayedIslandType() === "localsend")
             onActivated: {
                 island.forceNotificationIsland = true;
                 island.expanded = true;
@@ -74,11 +93,6 @@ PanelRoot {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             spacing: 12
-
-            SystemWidget {
-                Layout.alignment: Qt.AlignVCenter
-                popup: barPanel.systemPopup
-            }
 
             NetworkWidget {
                 id: networkWidget
@@ -99,10 +113,11 @@ PanelRoot {
                 popup: barPanel.nightlightPopup
             }
 
-            ClockWidget {
+            SystemWidget {
                 Layout.alignment: Qt.AlignVCenter
-                Layout.preferredHeight: Theme.fontSize + 4
+                popup: barPanel.systemPopup
             }
+
         }
     }
 }

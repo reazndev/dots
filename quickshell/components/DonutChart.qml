@@ -4,7 +4,7 @@ import "../services"
 Item {
     id: root
     property real value: 0
-    property color bgColor: Theme.fgDim
+    property color bgColor: Qt.rgba(fgColor.r, fgColor.g, fgColor.b, 0.25)
     property color fgColor: Theme.accent
     property real lineWidth: 1.5
     property string icon: ""

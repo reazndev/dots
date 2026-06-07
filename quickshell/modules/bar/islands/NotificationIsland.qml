@@ -5,16 +5,65 @@ import "../../../components"
 
 RowLayout {
     id: root
-    spacing: 8
+    spacing: Theme.islandGap
+    height: Theme.islandNotificationCompactHeight - 12
+    clip: true
 
     property int count: NotificationService.unreadCount
     property var notification: NotificationService.latestNotification
 
+    function compactText(value) {
+        return String(value || "")
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function summaryText() {
+        if (!notification)
+            return "Notifications";
+
+        var summary = compactText(notification.summary);
+        var appLabel = compactText(NotificationService.appLabel(notification));
+        var appName = compactText(notification.appName);
+        var body = compactText(notification.body);
+
+        if (!summary)
+            return body || "Notification";
+
+        var sLower = summary.toLowerCase();
+        if (sLower === appLabel.toLowerCase() || sLower === appName.toLowerCase())
+            return body || "Notification";
+
+        return summary;
+    }
+
+    function bodyText() {
+        if (!notification)
+            return "";
+
+        var summary = compactText(notification.summary);
+        var body = compactText(notification.body);
+        var appLabel = compactText(NotificationService.appLabel(notification));
+        var appName = compactText(notification.appName);
+
+        if (!body)
+            return "";
+
+        var sLower = summary.toLowerCase();
+        if (!summary || sLower === appLabel.toLowerCase() || sLower === appName.toLowerCase())
+            return "";
+
+        return body;
+    }
+
     Item {
         id: iconOrFallback
-        width: 26
-        height: 26
+        width: 30
+        height: 30
         Layout.alignment: Qt.AlignVCenter
+        Layout.preferredWidth: width
+        Layout.preferredHeight: height
 
         Image {
             id: appIconImage
@@ -39,41 +88,40 @@ RowLayout {
         }
     }
 
-    StyledText {
-        text: {
-            if (!notification)
-                return "Notifications";
-            
-            var summary = (notification.summary || "").trim();
-            var body = (notification.body || "").trim();
-            var appLabel = (NotificationService.appLabel(notification) || "").trim();
-            var appName = (notification.appName || "").trim();
-            
-            var text = summary;
-            
-            var isAppName = false;
-            if (summary) {
-                var sLower = summary.toLowerCase();
-                var labelLower = appLabel.toLowerCase();
-                var nameLower = appName.toLowerCase();
-                if (sLower === labelLower || sLower === nameLower || sLower === "vesktop" || sLower === "discord" || sLower === "element" || sLower === "spotify" || sLower === "cachyos-hello" || sLower === "cachyos hello") {
-                    isAppName = true;
-                }
-            }
-            
-            if (body && (!summary || isAppName)) {
-                text = body;
-            } else if (!text) {
-                text = body || appLabel;
-            }
-            
-            if (text.length > 42)
-                return text.substring(0, 42) + "…";
-            return text;
-        }
-        role: "fg"
-        font.bold: true
+    ColumnLayout {
+        Layout.preferredWidth: count > 1 ? Theme.islandNotificationCompactTextWidth : Theme.islandNotificationCompactTextWidth + 38
+        Layout.maximumWidth: Layout.preferredWidth
         Layout.alignment: Qt.AlignVCenter
+        Layout.preferredHeight: Theme.fontSize * 2 + 6
+        spacing: 1
+
+        StyledText {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Theme.fontSize + 1
+            text: root.summaryText()
+            role: "fg"
+            font.bold: true
+            font.family: Theme.fontFamilyUi
+            font.pixelSize: Theme.fontSize
+            textFormat: Text.PlainText
+            wrapMode: Text.NoWrap
+            elide: Text.ElideRight
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        StyledText {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Theme.fontSize + 1
+            text: root.bodyText()
+            role: "fgDim"
+            font.family: Theme.fontFamilyUi
+            font.pixelSize: Theme.fontSize - 1
+            textFormat: Text.PlainText
+            wrapMode: Text.NoWrap
+            elide: Text.ElideRight
+            verticalAlignment: Text.AlignVCenter
+            visible: text !== ""
+        }
     }
 
     // Number badge on the right when there are multiple notifications

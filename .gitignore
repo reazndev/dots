@@ -40,6 +40,11 @@ quickshell/**
 !quickshell/**/*.png
 !quickshell/**/*.svg
 !quickshell/**/*.conf
+!quickshell/**/.gitignore
+!quickshell/**/Cargo.toml
+!quickshell/**/Cargo.lock
+!quickshell/**/*.rs
+quickshell/**/target/
 
 # Sensitive: usage tracking API tokens
 quickshell/usage.json

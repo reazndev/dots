@@ -9,6 +9,45 @@ ColumnLayout {
     anchors.margins: Theme.islandPadding
     spacing: Theme.islandGap
 
+    function cleanText(value) {
+        return String(value || "")
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function titleText(notification) {
+        var summary = cleanText(notification ? notification.summary : "");
+        var body = cleanText(notification ? notification.body : "");
+        var appLabel = cleanText(NotificationService.appLabel(notification));
+        var appName = cleanText(notification ? notification.appName : "");
+
+        if (!summary)
+            return body || "Notification";
+
+        var sLower = summary.toLowerCase();
+        if (sLower === appLabel.toLowerCase() || sLower === appName.toLowerCase())
+            return body || "Notification";
+
+        return summary;
+    }
+
+    function bodyText(notification) {
+        var summary = cleanText(notification ? notification.summary : "");
+        var body = cleanText(notification ? notification.body : "");
+        var appLabel = cleanText(NotificationService.appLabel(notification));
+        var appName = cleanText(notification ? notification.appName : "");
+
+        if (!body)
+            return "";
+
+        var sLower = summary.toLowerCase();
+        if (!summary || sLower === appLabel.toLowerCase() || sLower === appName.toLowerCase())
+            return "";
+
+        return body;
+    }
+
     function dismissNotification(notification) {
         if (!notification)
             return;
@@ -188,7 +227,7 @@ ColumnLayout {
 
                     StyledText {
                         Layout.fillWidth: true
-                        text: modelData.summary || NotificationService.appLabel(modelData)
+                        text: root.titleText(modelData)
                         role: "fg"
                         font.family: Theme.fontFamilyUi
                         font.pixelSize: Theme.fontSize
@@ -199,7 +238,7 @@ ColumnLayout {
 
                     StyledText {
                         Layout.fillWidth: true
-                        text: modelData.body || ""
+                        text: root.bodyText(modelData)
                         role: "fgDim"
                         font.family: Theme.fontFamilyUi
                         font.pixelSize: Theme.fontSize - 1

@@ -104,6 +104,9 @@ Rectangle {
 
     function displayedIslandType() {
         var island = IslandManager.activeIsland;
+
+        if (root.expanded && island && island.type === "localsend")
+            return "localsend";
         
         if (NotificationService.presentationMode === "transient" && NotificationService.activeTransientNotification !== null)
             return "notification";
@@ -474,10 +477,25 @@ Rectangle {
     Item {
         id: localsendController
 
+        function shouldShowCompact() {
+            return LocalSendService.mode === "incoming"
+                || LocalSendService.mode === "sending"
+                || LocalSendService.mode === "receiving"
+                || LocalSendService.mode === "complete"
+                || LocalSendService.mode === "error"
+                || LocalSendService.hasFiles;
+        }
+
+        function hideIfIdleMinimized() {
+            if (!root.expanded && !shouldShowCompact())
+                IslandManager.removeIsland("localsend");
+        }
+
         function show(priority) {
             IslandManager.addIsland("localsend", priority, {});
             root.forceNotificationIsland = false;
             root.forceWorkspaceIsland = false;
+            hideIfIdleMinimized();
         }
 
         Connections {
@@ -502,6 +520,12 @@ Rectangle {
                 localsendController.show(7);
                 root.expanded = true;
             }
+            function onModeChanged() {
+                localsendController.hideIfIdleMinimized();
+            }
+            function onHasFilesChanged() {
+                localsendController.hideIfIdleMinimized();
+            }
         }
     }
 
@@ -512,7 +536,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         height: root.compactHeight
-        visible: !root.expanded || (root.displayedIslandType() !== "notification" && root.displayedIslandType() !== "media" && root.displayedIslandType() !== "workspace" && root.displayedIslandType() !== "localsend")
+        visible: !root.expanded || (root.displayedIslandType() !== "notification" && root.displayedIslandType() !== "media" && root.displayedIslandType() !== "workspace" && root.displayedIslandType() !== "localsend" && root.displayedIslandType() !== "clock")
 
         Loader {
             id: compactNotificationLoader
@@ -640,7 +664,7 @@ Rectangle {
     Loader {
         id: expandedLoader
         anchors.top: parent.top
-        anchors.topMargin: (root.expanded && (root.displayedIslandType() === "notification" || root.displayedIslandType() === "media" || root.displayedIslandType() === "workspace" || root.displayedIslandType() === "localsend")) ? 0 : Theme.islandCompactHeight
+        anchors.topMargin: (root.expanded && (root.displayedIslandType() === "notification" || root.displayedIslandType() === "media" || root.displayedIslandType() === "workspace" || root.displayedIslandType() === "localsend" || root.displayedIslandType() === "clock")) ? 0 : Theme.islandCompactHeight
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width
         height: parent.height - anchors.topMargin

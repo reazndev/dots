@@ -204,11 +204,12 @@ Item {
                         Image {
                             anchors.fill: parent
                             anchors.margins: 1
-                            source: "file://" + Theme.overviewWallpaperPath
+                            source: Theme.overviewWallpaperPath !== "" ? "file://" + Theme.overviewWallpaperPath : ""
                             fillMode: Image.PreserveAspectCrop
                             asynchronous: true
                             cache: true
                             opacity: 0.68
+                            visible: Theme.overviewWallpaperPath !== ""
                         }
 
                         Rectangle {

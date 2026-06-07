@@ -80,7 +80,9 @@ PanelRoot {
             id: notificationBadge
             anchors.verticalCenter: parent.verticalCenter
             x: island.x + island.width + 6
-            visible: notificationBadge.visibleBadge && !island.expanded && island.displayedIslandType() !== "notification"
+            visible: notificationBadge.visibleBadge
+                && island.displayedIslandType() !== "notification"
+                && (!island.expanded || island.displayedIslandType() === "localsend")
             onActivated: {
                 island.forceNotificationIsland = true;
                 island.expanded = true;

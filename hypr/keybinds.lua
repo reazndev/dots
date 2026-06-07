@@ -115,6 +115,7 @@ hl.bind(Alt .. " + Tab", hl.dsp.exec_cmd("quickshell ipc call bar toggleWorkspac
 --###########################################
 
 local regional_workspaces = {} -- Tracks regionally constrained workspaces
+local focused_2560_workspaces = {} -- Tracks 2560x1440 centered workspaces
 
 -- Toggle Behavior: Regional centering constraint (SUPER + X)
 local function toggle_center_region()
@@ -125,14 +126,34 @@ local function toggle_center_region()
         -- Disable: Reset gapsout for the workspace
         hl.workspace_rule({ workspace = id, gaps_out = 0 })
         regional_workspaces[id] = nil
+        focused_2560_workspaces[id] = nil
         hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: DISABLED'")
     else
         -- Enable: Set 600px left/right margins for all tiled windows
         hl.workspace_rule({ workspace = id, gaps_out = { left = 600, right = 600 } })
         regional_workspaces[id] = true
+        focused_2560_workspaces[id] = nil
         hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: ENABLED (600px sides)'")
+    end
+end
+
+-- Toggle Behavior: 2560x1440 centered constraint (SUPER + ALT + X)
+local function toggle_2560_region()
+    local ws = hl.get_active_workspace()
+    local id = tostring(ws.id)
+
+    if focused_2560_workspaces[id] then
+        hl.workspace_rule({ workspace = id, gaps_out = 0 })
+        focused_2560_workspaces[id] = nil
+        hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: DISABLED'")
+    else
+        hl.workspace_rule({ workspace = id, gaps_out = { left = 1280, right = 1280 } })
+        focused_2560_workspaces[id] = true
+        regional_workspaces[id] = nil
+        hl.exec_cmd("notify-send 'Ultrawide Layout' 'Regional constraint: 2560x1440'")
     end
 end
 
 -- Bind the toggle
 hl.bind(mainMod .. " + X", toggle_center_region)
+hl.bind(mainMod .. " + ALT + X", toggle_2560_region)

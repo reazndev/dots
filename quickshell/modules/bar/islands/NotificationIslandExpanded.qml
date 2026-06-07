@@ -33,7 +33,6 @@ ColumnLayout {
         spacing: Theme.islandGap
 
         ColumnLayout {
-            Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
             spacing: 1
 
@@ -51,6 +50,10 @@ ColumnLayout {
                 font.family: Theme.fontFamilyUi
                 font.pixelSize: Theme.fontSize - 1
             }
+        }
+
+        Item {
+            Layout.fillWidth: true
         }
 
         Rectangle {

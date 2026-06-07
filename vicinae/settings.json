@@ -27,6 +27,13 @@
       "opacity": 0.98
    },
    "providers": {
+      "@Sn0wye/store.raycast.lucide-icons": {
+         "entrypoints": {
+            "index": {
+               "alias": "lc"
+            }
+         }
+      },
       "@mmazzarolo/store.raycast.unicode-symbols": {
          "entrypoints": {
             "index": {

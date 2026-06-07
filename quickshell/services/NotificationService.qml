@@ -14,7 +14,9 @@ Item {
     property var activeTransientNotification: null
     readonly property var latestNotification: activeTransientNotification !== null ? activeTransientNotification : (unreadCount > 0 ? trackedNotifications.values[unreadCount - 1] : null)
     property string presentationMode: "none" // none, sticky, transient
-    property int transientDuration: 10000
+    property int transientDuration: 5000
+
+    signal layoutModeRequested(string label)
 
     Timer {
         id: transientTimer
@@ -29,6 +31,12 @@ Item {
     function appIconSource(notification) {
         if (!notification)
             return "";
+
+        var notificationText = ((notification.appName || "") + " " + (notification.summary || "") + " " + (notification.body || "")).toLowerCase();
+        if (notificationText.indexOf("codex") !== -1)
+            return "file:///home/reazn/.config/icons/png/codex.png";
+        if (notificationText.indexOf("color picker") !== -1)
+            return "file:///home/reazn/.config/icons/png/hyprpicker.png";
 
         // 1. Try custom notification image/avatar (e.g. sender avatar)
         if (notification.image) {
@@ -68,6 +76,9 @@ Item {
                 "dev.zed.zed-preview": "zed.png",
                 "github": "github.png",
                 "github-desktop": "github.png",
+                "codex": "codex.png",
+                "color picker": "hyprpicker.png",
+                "colorpicker": "hyprpicker.png",
                 "hyprpicker": "hyprpicker.png",
                 "hyprshot": "hyprshot.png",
                 "screenshot": "hyprshot.png",
@@ -205,6 +216,28 @@ Item {
         return notification.appName;
     }
 
+    function isLayoutModeNotification(notification) {
+        if (!notification)
+            return false;
+
+        return (notification.summary || "").toLowerCase().trim() === "ultrawide layout";
+    }
+
+    function layoutModeLabel(notification) {
+        if (!isLayoutModeNotification(notification))
+            return "";
+
+        var body = (notification.body || "").toLowerCase();
+        if (body.indexOf("2560x1440") !== -1)
+            return "narrow";
+        if (body.indexOf("enabled") !== -1)
+            return "mid";
+        if (body.indexOf("disabled") !== -1)
+            return "wide";
+
+        return "layout";
+    }
+
     function shouldTrack(notification) {
         if (!notification)
             return false;
@@ -212,6 +245,10 @@ Item {
         var app = (notification.appName || "").toLowerCase();
         var summary = (notification.summary || "").toLowerCase();
         var body = (notification.body || "").toLowerCase();
+
+        // Layout mode changes get a compact transient island only.
+        if (isLayoutModeNotification(notification))
+            return false;
 
         // 1. Screenshot check
         if (app.indexOf("hyprshot") !== -1 || app.indexOf("screenshot") !== -1 ||
@@ -235,6 +272,15 @@ Item {
     function receiveNotification(notification) {
         if (!notification)
             return;
+
+        if (isLayoutModeNotification(notification)) {
+            notification.tracked = false;
+            transientTimer.stop();
+            root.presentationMode = "none";
+            root.activeTransientNotification = null;
+            root.layoutModeRequested(layoutModeLabel(notification));
+            return;
+        }
 
         var tracked = shouldTrack(notification);
         if (tracked) {

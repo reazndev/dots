@@ -20,6 +20,8 @@ Rectangle {
                 return Theme.islandClockWidth;
             if (mainType === "clock")
                 return Theme.islandClockWidth;
+            if (mainType === "localsend")
+                return Theme.islandLocalSendWidth;
         }
         if (mainType === "notification")
             return expanded ? Theme.islandNotificationWidth : Theme.islandNotificationCompactWidth;
@@ -51,6 +53,8 @@ Rectangle {
             return Theme.islandClockHeight;
         if (type === "volume")
             return Theme.islandClockHeight;
+        if (type === "localsend")
+            return localsendExpandedHeight();
         return Theme.islandBluetoothHeight;
     }
     property int compactPaddingLeft: 12
@@ -84,6 +88,20 @@ Rectangle {
         return cellHeight * rows + Theme.islandOverviewCellGap * (rows - 1) + Theme.islandOverviewOuterPadding * 2;
     }
 
+    function localsendExpandedHeight() {
+        var rowHeight = Theme.islandButtonSize + Math.round(Theme.islandGap / 3);
+        var visibleFileRows = Math.min(3, LocalSendService.selectedFiles.length);
+        var visibleDeviceRows = Math.min(2, LocalSendService.devices.length);
+        var listRows = Math.max(visibleFileRows, visibleDeviceRows);
+        if (LocalSendService.mode === "sending" || LocalSendService.mode === "receiving")
+            listRows = 1;
+        if (LocalSendService.mode === "incoming")
+            listRows = 0;
+
+        var wanted = Theme.islandLocalSendHeight + listRows * rowHeight;
+        return Math.min(Theme.islandLocalSendMaxHeight, wanted);
+    }
+
     function displayedIslandType() {
         var island = IslandManager.activeIsland;
         
@@ -106,9 +124,19 @@ Rectangle {
         var island = IslandManager.activeIsland;
         if (forceWorkspaceIsland || (island && island.type === "workspace"))
             return "workspace";
+        if (island && island.type === "layoutMode")
+            return "layoutMode";
+        if (island && island.type === "localsend")
+            return "localsend";
         if (island && island.type === "bluetooth")
             return "bluetooth";
         return "clock";
+    }
+
+    function islandFilePrefix(type) {
+        if (type === "localsend")
+            return "LocalSend";
+        return type.charAt(0).toUpperCase() + type.slice(1);
     }
 
     function expandDefaultAction() {
@@ -411,6 +439,28 @@ Rectangle {
     // Notification controller
     Item {
         id: notificationController
+
+        Timer {
+            id: layoutModeHideTimer
+            interval: 650
+            repeat: false
+            onTriggered: {
+                if (!root.expanded)
+                    IslandManager.removeIsland("layoutMode");
+            }
+        }
+
+        Connections {
+            target: NotificationService
+            function onLayoutModeRequested(label) {
+                IslandManager.addIsland("layoutMode", 4, { label: label });
+                root.forceNotificationIsland = false;
+                root.forceWorkspaceIsland = false;
+                root.expanded = false;
+                layoutModeHideTimer.restart();
+            }
+        }
+
         Component.onCompleted: {
             // Force instantiation of the notification service on startup
             var _ = NotificationService;
@@ -423,6 +473,36 @@ Rectangle {
     // LocalSend controller (stub)
     Item {
         id: localsendController
+
+        function show(priority) {
+            IslandManager.addIsland("localsend", priority, {});
+            root.forceNotificationIsland = false;
+            root.forceWorkspaceIsland = false;
+        }
+
+        Connections {
+            target: LocalSendService
+            function onIncomingRequested() {
+                localsendController.show(9);
+                root.expanded = true;
+            }
+            function onTransferStarted() {
+                localsendController.show(8);
+                root.expanded = true;
+            }
+            function onTransferFinished() {
+                localsendController.show(8);
+            }
+            function onDismissed() {
+                IslandManager.removeIsland("localsend");
+                if (root.displayedIslandType() === "media" && MediaService.isPlaying)
+                    IslandManager.addIsland("media", 1, {});
+            }
+            function onFilesSelected() {
+                localsendController.show(7);
+                root.expanded = true;
+            }
+        }
     }
 
     // ========== COMPACT CONTENT ==========
@@ -432,7 +512,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         height: root.compactHeight
-        visible: !root.expanded || (root.displayedIslandType() !== "notification" && root.displayedIslandType() !== "media" && root.displayedIslandType() !== "workspace")
+        visible: !root.expanded || (root.displayedIslandType() !== "notification" && root.displayedIslandType() !== "media" && root.displayedIslandType() !== "workspace" && root.displayedIslandType() !== "localsend")
 
         Loader {
             id: compactNotificationLoader
@@ -469,7 +549,7 @@ Rectangle {
                 Layout.preferredHeight: Theme.islandCompactHeight - 6
                 maskSource: "file:///home/reazn/.config/quickshell/assets/mask_compact.png"
                 source: MediaService.artUrl
-                visible: MediaService.isPlaying && root.displayedIslandType() !== "volume"
+                visible: MediaService.isPlaying && root.displayedIslandType() !== "volume" && root.displayedIslandType() !== "localsend"
 
                 Icon {
                     anchors.centerIn: parent
@@ -492,8 +572,7 @@ Rectangle {
                         var type = root.compactModuleType();
                         if (!type)
                             return "";
-                        type = type.charAt(0).toUpperCase() + type.slice(1);
-                        return "islands/" + type + "Island.qml";
+                        return "islands/" + root.islandFilePrefix(type) + "Island.qml";
                     }
                 }
             }
@@ -502,11 +581,11 @@ Rectangle {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredWidth: 18
                 Layout.preferredHeight: 18
-                value: root.displayedIslandType() === "volume" ? VolumeService.displayPercent : MediaService.progress * 100
                 icon: ""
                 fgColor: Theme.blue
                 lineWidth: 3
-                visible: root.displayedIslandType() === "volume" || MediaService.isPlaying
+                visible: root.displayedIslandType() === "volume" || root.displayedIslandType() === "localsend" || MediaService.isPlaying
+                value: root.displayedIslandType() === "localsend" ? LocalSendService.progress : (root.displayedIslandType() === "volume" ? VolumeService.displayPercent : MediaService.progress * 100)
             }
         }
 
@@ -520,6 +599,8 @@ Rectangle {
                     root.toggleWorkspaceOverview();
                     return;
                 }
+                if (root.displayedIslandType() === "layoutMode")
+                    return;
                 if (root.displayedIslandType() === "notification") {
                     root.expanded = true;
                     return;
@@ -529,11 +610,37 @@ Rectangle {
         }
     }
 
+    DropArea {
+        anchors.fill: parent
+        keys: ["text/uri-list"]
+        onEntered: {
+            LocalSendService.previewDrop();
+            IslandManager.addIsland("localsend", 7, {});
+            root.expanded = true;
+        }
+        onExited: {
+            if (!LocalSendService.hasFiles && LocalSendService.mode === "drop") {
+                LocalSendService.cancelDropPreview();
+                IslandManager.removeIsland("localsend");
+                root.expanded = false;
+            }
+        }
+        onDropped: drop => {
+            if (drop.urls && drop.urls.length > 0) {
+                LocalSendService.addFiles(drop.urls);
+                LocalSendService.startScan();
+                IslandManager.addIsland("localsend", 7, {});
+                root.expanded = true;
+                drop.acceptProposedAction();
+            }
+        }
+    }
+
     // ========== EXPANDED CONTENT ==========
     Loader {
         id: expandedLoader
         anchors.top: parent.top
-        anchors.topMargin: (root.expanded && (root.displayedIslandType() === "notification" || root.displayedIslandType() === "media" || root.displayedIslandType() === "workspace")) ? 0 : Theme.islandCompactHeight
+        anchors.topMargin: (root.expanded && (root.displayedIslandType() === "notification" || root.displayedIslandType() === "media" || root.displayedIslandType() === "workspace" || root.displayedIslandType() === "localsend")) ? 0 : Theme.islandCompactHeight
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width
         height: parent.height - anchors.topMargin
@@ -544,8 +651,7 @@ Rectangle {
             var type = root.displayedIslandType();
             if (!type)
                 return "";
-            type = type.charAt(0).toUpperCase() + type.slice(1);
-            return "islands/" + type + "IslandExpanded.qml";
+            return "islands/" + root.islandFilePrefix(type) + "IslandExpanded.qml";
         }
         onLoaded: {
             if (item && item.closeRequested)

@@ -8,3 +8,4 @@ singleton MediaService 1.0 MediaService.qml
 singleton BluetoothConnectionService 1.0 BluetoothConnectionService.qml
 singleton HyprlandSnapshotService 1.0 HyprlandSnapshotService.qml
 singleton VolumeService 1.0 VolumeService.qml
+singleton LocalSendService 1.0 LocalSendService.qml

@@ -51,6 +51,11 @@ QtObject {
     property int islandBluetoothHeight: 156
     property int islandClockWidth: 220
     property int islandClockHeight: 96
+    property int islandLocalSendWidth: 420
+    property int islandLocalSendHeight: 248
+    property int islandLocalSendMaxHeight: 360
+    property int islandLocalSendDropHeight: 72
+    property int islandLocalSendDeviceHeight: 42
 
     // Opacity
     property real bgOpacity: 0.92

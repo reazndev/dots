@@ -11,7 +11,7 @@ hl.env("HYPRCURSOR_SIZE", "24")
 
 -- Dark mode for GTK/Qt apps
 hl.env("GTK_THEME", "Adwaita:dark")
-hl.env("QT_QPA_PLATFORMTHEME", "gtk2")
+hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
 
 -- Apply dark mode preference via gsettings (GNOME/GTK portal)
 
@@ -19,4 +19,3 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark")
     hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark")
 end)
-

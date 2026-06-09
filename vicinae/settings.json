@@ -41,6 +41,13 @@
             }
          }
       },
+      "@rithvikvibhu/store.vicinae.arch-packages": {
+         "entrypoints": {
+            "search-arch-packages": {
+               "alias": "aur"
+            }
+         }
+      },
       "@sovereign/store.vicinae.awww-switcher": {
          "preferences": {
             "wallpaperPath": "/home/reazn/Pictures/Wallpaper",

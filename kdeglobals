@@ -1,40 +1,43 @@
 [General]
-ColorScheme=BreezeDark
+ColorScheme=Wallust
 Name=Wallust
 
 [Colors:Window]
-BackgroundNormal=21,23,23
-ForegroundNormal=252,250,231
-BackgroundAlternate=22,24,24
-ForegroundInactive=169,168,149
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
+BackgroundAlternate=4,0,3
+ForegroundInactive=157,156,156
 
 [Colors:View]
-BackgroundNormal=20,22,22
-ForegroundNormal=252,250,231
-BackgroundAlternate=21,23,23
-ForegroundInactive=169,168,149
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
+BackgroundAlternate=29,26,28
+ForegroundInactive=157,156,156
 
 [Colors:Selection]
-BackgroundNormal=155,162,150
-ForegroundNormal=23,25,25
-BackgroundAlternate=89,94,88
+BackgroundNormal=139,131,144
+ForegroundNormal=4,0,3
+BackgroundAlternate=72,66,74
 
 [Colors:Button]
-BackgroundNormal=22,24,24
-ForegroundNormal=252,250,231
-BackgroundAlternate=21,23,23
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
+BackgroundAlternate=4,0,3
 
 [Colors:Tooltip]
-BackgroundNormal=22,24,24
-ForegroundNormal=252,250,231
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
 
 [Colors:Header]
-BackgroundNormal=20,22,22
-ForegroundNormal=252,250,231
-BackgroundAlternate=21,23,23
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
+BackgroundAlternate=4,0,3
+
+[Icons]
+Theme=MacTahoe-dark
 
 [WM]
-activeBackground=155,162,150
-activeForeground=23,25,25
-inactiveBackground=21,23,23
-inactiveForeground=169,168,149
+activeBackground=139,131,144
+activeForeground=4,0,3
+inactiveBackground=4,0,3
+inactiveForeground=157,156,156

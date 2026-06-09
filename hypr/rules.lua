@@ -65,6 +65,14 @@ hl.window_rule({
     float = true,
 })
 
+hl.window_rule({
+    name = "dolphin-opacity",
+    match = {
+        class = "^(org\\.kde\\.dolphin|dolphin)$",
+    },
+    opacity = "0.97 override 0.97 override",
+})
+
 hl.layer_rule({
     name = "vicinae-blur",
     match = {

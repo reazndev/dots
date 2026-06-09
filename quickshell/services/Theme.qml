@@ -3,20 +3,20 @@ import QtQuick
 
 QtObject {
     // Backgrounds
-    property color bg: "#171919"
+    property color bg: "#040003"
     property color bgTransparent: "transparent"
     property string overviewWallpaperPath: ""
 
     // Foregrounds
-    property color fg: "#FCFAE7"
-    property color fgDim: "#A9A895"
+    property color fg: "#EFEEEF"
+    property color fgDim: "#9D9C9C"
 
     // Accents
-    property color accent: "#9BA296"
-    property color green: "#5B605A"
-    property color yellow: "#A37662"
-    property color red: "#462A26"
-    property color blue: "#ECA747"
+    property color accent: "#8B8390"
+    property color green: "#7A574A"
+    property color yellow: "#348DAF"
+    property color red: "#2C475A"
+    property color blue: "#92D1DF"
 
     // Geometry
     property int barHeight: 36
@@ -71,7 +71,7 @@ QtObject {
     property real bgOpacity: 0.92
 
     // Border
-    property color border: "#A9A895"
+    property color border: "#9D9C9C"
 
     // Typography
     property int fontSize: 13

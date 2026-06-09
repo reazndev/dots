@@ -33,9 +33,6 @@ BackgroundNormal={{background | darken(0.12) | rgb}}
 ForegroundNormal={{foreground | rgb}}
 BackgroundAlternate={{background | darken(0.12) | rgb}}
 
-[Icons]
-Theme=MacTahoe-dark
-
 [WM]
 activeBackground={{color4 | rgb}}
 activeForeground={{background | rgb}}

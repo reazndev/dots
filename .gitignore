@@ -85,6 +85,16 @@ zed/themes/*
 vicinae/*
 !vicinae/settings.json
 
+# Vesktop / Vencord theme settings
+!vesktop/
+vesktop/*
+!vesktop/settings/
+vesktop/settings/*
+!vesktop/settings/settings.json
+!vesktop/themes/
+vesktop/themes/*
+!vesktop/themes/wallust.css
+
 # GTK-3.0 & GTK-4.0 configurations
 !gtk-3.0/
 gtk-3.0/*

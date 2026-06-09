@@ -19,3 +19,4 @@ kdeglobals = { src = "kdeglobals.template", dst = "/home/reazn/.config/kdeglobal
 kdecolors = { src = "kdecolors.template", dst = "/home/reazn/.local/share/color-schemes/Wallust.colors" }
 vicinae = { src = "vicinae.toml.template", dst = "/home/reazn/.local/share/vicinae/themes/wallust.toml" }
 spicetify = { src = "spicetify.ini.template", dst = "/home/reazn/.config/spicetify/Themes/wallust/color.ini" }
+vesktop = { src = "vesktop.css.template", dst = "/home/reazn/.config/vesktop/themes/wallust.css" }

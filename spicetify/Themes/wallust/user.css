@@ -1,0 +1,170 @@
+:root {
+  --wallust-bg-opacity: 0.97;
+  --wallust-surface-opacity: 0.94;
+  --wallust-bg-blur: 18px;
+  --player-bar-height: 96px;
+
+  --spice-main-alpha: rgba(var(--spice-rgb-main), var(--wallust-bg-opacity));
+  --spice-sidebar-alpha: rgba(var(--spice-rgb-sidebar), var(--wallust-bg-opacity));
+  --spice-player-alpha: rgba(var(--spice-rgb-player), var(--wallust-bg-opacity));
+  --spice-card-alpha: rgba(var(--spice-rgb-card), var(--wallust-surface-opacity));
+  --spice-highlight-alpha: rgba(var(--spice-rgb-highlight), var(--wallust-surface-opacity));
+}
+
+body,
+.Root,
+.Root__globalNav,
+.Root__top-container,
+.Root__main-view,
+.main-view-container,
+.main-view-container__scroll-node,
+.main-view-container__scroll-node-child,
+.main-view-container__scroll-node-child-spacer,
+.main-yourLibraryX-entryPoints,
+.main-yourLibraryX-libraryRootlist,
+.main-yourLibraryX-listItem,
+.main-buddyFeed-buddyFeedRoot {
+  background: transparent !important;
+}
+
+.Root__nav-bar,
+.Root__main-view,
+.Root__right-sidebar,
+.main-view-container,
+.main-buddyFeed-buddyFeedRoot,
+.main-yourLibraryX-library,
+.main-yourLibraryX-libraryRootlist,
+.main-yourLibraryX-entryPoints,
+.main-nowPlayingView-section,
+.main-nowPlayingView-contextItemInfo {
+  background-color: var(--spice-main-alpha) !important;
+  backdrop-filter: blur(var(--wallust-bg-blur));
+}
+
+.Root__nav-bar,
+.main-yourLibraryX-library,
+.main-buddyFeed-buddyFeedRoot {
+  background-color: var(--spice-sidebar-alpha) !important;
+}
+
+.Root__now-playing-bar,
+.main-nowPlayingBar-nowPlayingBar,
+.main-nowPlayingBar-container {
+  height: var(--player-bar-height);
+  background-color: var(--spice-player-alpha) !important;
+  border-top: 1px solid rgba(var(--spice-rgb-subtext), 0.22);
+  backdrop-filter: blur(var(--wallust-bg-blur));
+}
+
+.main-topBar-background,
+.main-topBar-overlay,
+.main-entityHeader-overlay,
+.main-actionBarBackground-background,
+.x-actionBarBackground-background,
+.main-home-homeHeader,
+.main-entityHeader-backgroundColor {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+.main-card-card,
+.main-card-cardContainer,
+.main-shelf-shelfGrid .main-card-card,
+.main-trackList-trackListRow,
+.main-trackList-trackListHeader,
+.main-rootlist-rootlistItemLink,
+.main-yourLibraryX-listItem,
+.x-entityImage-imageContainer,
+.main-contextMenu-menu,
+.main-dropDown-dropDown,
+.main-trackCreditsModal-mainSection {
+  background-color: transparent;
+}
+
+.main-card-card:hover,
+.main-card-card[data-context-menu-open="true"],
+.main-trackList-trackListRow:hover,
+.main-rootlist-rootlistItemLink:hover,
+.main-yourLibraryX-listItem:hover,
+.main-yourLibraryX-listItem[aria-selected="true"],
+.main-rootlist-rootlistItemLink.main-rootlist-rootlistItemLinkActive,
+.main-navBar-navBarLinkActive {
+  background-color: var(--spice-highlight-alpha) !important;
+}
+
+.main-card-card,
+.main-contextMenu-menu,
+.main-dropDown-dropDown,
+.main-trackCreditsModal-mainSection,
+.x-searchInput-searchInputInput,
+.main-yourLibraryX-filterArea,
+.main-yourLibraryX-collapseButtonWrapper {
+  border: 1px solid rgba(var(--spice-rgb-subtext), 0.20);
+  border-radius: 8px;
+}
+
+.x-searchInput-searchInputInput,
+input {
+  background-color: var(--spice-card-alpha) !important;
+  color: var(--spice-text) !important;
+  border-color: rgba(var(--spice-rgb-subtext), 0.28) !important;
+}
+
+.main-playButton-PlayButton.main-playButton-primary,
+.main-playPauseButton-button,
+.Button-sc-qlcn5g-0.encore-bright-accent-set {
+  background-color: var(--spice-button) !important;
+  color: var(--spice-main) !important;
+}
+
+.main-playButton-PlayButton.main-playButton-primary:hover,
+.main-playPauseButton-button:hover,
+.Button-sc-qlcn5g-0.encore-bright-accent-set:hover {
+  background-color: var(--spice-button-active) !important;
+}
+
+a,
+.link-subtle,
+.main-entityHeader-metaDataText,
+.main-duration-container,
+.main-trackList-rowSubTitle,
+.main-buddyFeed-activityMetadata .main-buddyFeed-artistAndTrackName a,
+.main-buddyFeed-activityMetadata .main-buddyFeed-username a,
+.main-buddyFeed-activityMetadata .main-buddyFeed-playbackContextLink {
+  color: var(--spice-subtext);
+}
+
+.main-trackList-trackListRow.main-trackList-active .main-trackList-rowMarker,
+.main-trackList-trackListRow.main-trackList-active .main-trackList-rowTitle,
+.main-trackList-playingIcon,
+.main-trackList-trackListRow.main-trackList-active:hover .main-trackList-rowMarker,
+.main-trackList-trackListRow.main-trackList-active:hover .main-trackList-rowTitle {
+  color: var(--spice-button) !important;
+}
+
+.main-rootlist-rootlistDivider,
+.main-yourLibraryX-libraryFilter,
+.main-yourLibraryX-libraryHeader,
+.main-buddyFeed-header {
+  border-color: rgba(var(--spice-rgb-subtext), 0.22) !important;
+}
+
+.main-entityHeader-shadow,
+.connect-device-list-container,
+.main-contextMenu-menu,
+.main-dropDown-dropDown {
+  box-shadow: 0 10px 30px rgba(var(--spice-rgb-shadow), 0.34);
+}
+
+.main-entityHeader-background.main-entityHeader-gradient {
+  opacity: 0.22;
+}
+
+.main-entityHeader-background.main-entityHeader-overlay::after {
+  background-image: linear-gradient(transparent, rgba(var(--spice-rgb-main), 0.72)), linear-gradient(var(--spice-main-alpha), var(--spice-main-alpha));
+}
+
+.main-cardImage-imageWrapper,
+.main-rootlist-rootlistDividerGradient {
+  background: transparent !important;
+}

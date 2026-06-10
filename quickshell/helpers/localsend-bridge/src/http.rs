@@ -102,7 +102,7 @@ async fn prepare_upload(
         IncomingSession {
             files: req.files.clone(),
             tokens: tokens.clone(),
-            responder: Some(response_tx),
+            responder: if state.auto_accept { None } else { Some(response_tx) },
         },
     );
     emit(
@@ -118,6 +118,14 @@ async fn prepare_upload(
             },
         },
     );
+
+    if state.auto_accept {
+        let body = PrepareUploadResponse {
+            session_id: request_id,
+            files: tokens,
+        };
+        return (StatusCode::OK, Json(body)).into_response();
+    }
 
     match tokio::time::timeout(Duration::from_secs(120), response_rx).await {
         Ok(Ok(true)) => {

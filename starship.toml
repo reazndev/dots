@@ -7,29 +7,29 @@ $character"""
 add_newline = false
 
 [directory]
-style = "bold #C58D3C"
+style = "bold #8B8390"
 format = "[$path]($style)"
 truncation_length = 0
 truncate_to_repo = false
 
 [git_branch]
-style = "bold #F7F3D5"
+style = "bold #D2CFD0"
 format = " [ $branch]($style)"
 
 [git_status]
 format = " $ahead_behind$staged$modified$untracked$deleted$renamed$stashed"
-ahead = "[↑$count](bold #61731E)"
-behind = "[↓$count](bold #2F2332)"
-diverged = "[↑$ahead_count↓$behind_count](bold #2F2332)"
-staged = "[\\[$count staged\\]](bold #61731E)"
-modified = "[\\[~$count\\]](bold #FDCACD)"
-untracked = "[\\[?$count\\]](bold #806D6A)"
-deleted = "[\\[✗$count\\]](bold #2F2332)"
-renamed = "[\\[»$count\\]](bold #806D6A)"
-stashed = "[\\[≡$count stashed\\]](bold #C58D3C)"
+ahead = "[↑$count](bold #7A574A)"
+behind = "[↓$count](bold #2C475A)"
+diverged = "[↑$ahead_count↓$behind_count](bold #2C475A)"
+staged = "[\\[$count staged\\]](bold #7A574A)"
+modified = "[\\[~$count\\]](bold #92D1DF)"
+untracked = "[\\[?$count\\]](bold #348DAF)"
+deleted = "[\\[✗$count\\]](bold #2C475A)"
+renamed = "[\\[»$count\\]](bold #348DAF)"
+stashed = "[\\[≡$count stashed\\]](bold #8B8390)"
 ignore_submodules = true
 
 [character]
-success_symbol = "[↪](bold #61731E)"
-error_symbol = "[↪](bold #2F2332)"
-vicmd_symbol = "[↪](bold #C58D3C)"
+success_symbol = "[↪](bold #7A574A)"
+error_symbol = "[↪](bold #2C475A)"
+vicmd_symbol = "[↪](bold #8B8390)"

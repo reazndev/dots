@@ -3,41 +3,41 @@ ColorScheme=Wallust
 Name=Wallust
 
 [Colors:Window]
-BackgroundNormal=38,35,38
-ForegroundNormal=252,251,240
-BackgroundAlternate=36,33,36
-ForegroundInactive=170,168,158
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
+BackgroundAlternate=4,0,3
+ForegroundInactive=157,156,156
 
 [Colors:View]
-BackgroundNormal=36,33,36
-ForegroundNormal=252,251,240
-BackgroundAlternate=62,60,62
-ForegroundInactive=170,168,158
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
+BackgroundAlternate=29,26,28
+ForegroundInactive=157,156,156
 
 [Colors:Selection]
-BackgroundNormal=197,141,60
-ForegroundNormal=41,38,41
-BackgroundAlternate=119,90,51
+BackgroundNormal=139,131,144
+ForegroundNormal=4,0,3
+BackgroundAlternate=72,66,74
 
 [Colors:Button]
-BackgroundNormal=39,36,39
-ForegroundNormal=252,251,240
-BackgroundAlternate=36,33,36
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
+BackgroundAlternate=4,0,3
 
 [Colors:Tooltip]
-BackgroundNormal=39,36,39
-ForegroundNormal=252,251,240
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
 
 [Colors:Header]
-BackgroundNormal=36,33,36
-ForegroundNormal=252,251,240
-BackgroundAlternate=36,33,36
+BackgroundNormal=4,0,3
+ForegroundNormal=239,238,239
+BackgroundAlternate=4,0,3
 
 [Icons]
 Theme=MacTahoe-dark
 
 [WM]
-activeBackground=197,141,60
-activeForeground=41,38,41
-inactiveBackground=38,35,38
-inactiveForeground=170,168,158
+activeBackground=139,131,144
+activeForeground=4,0,3
+inactiveBackground=4,0,3
+inactiveForeground=157,156,156

@@ -20,6 +20,7 @@ pub struct AppState {
     pub receive_dir: PathBuf,
     pub incoming: Arc<Mutex<HashMap<String, IncomingSession>>>,
     pub devices: Arc<Mutex<HashMap<String, Device>>>,
+    pub auto_accept: bool,
 }
 
 pub struct IncomingSession {

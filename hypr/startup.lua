@@ -14,7 +14,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("vicinae server")
     hl.exec_cmd("awww-daemon")
     hl.exec_cmd("quickshell")
+    hl.exec_cmd("sh -lc 'sleep 2; pgrep -fx \"/home/reazn/.config/quickshell/helpers/localsend-bridge/target/release/localsend-bridge --auto-accept\" >/dev/null || /home/reazn/.config/quickshell/helpers/localsend-bridge/target/release/localsend-bridge --auto-accept >/tmp/localsend-bridge.log 2>&1 &'")
     hl.exec_cmd("hyprsunset")
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
 end)
-

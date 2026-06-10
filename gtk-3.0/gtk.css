@@ -3,47 +3,47 @@
  * ============================================================================== */
 
 /* GTK 3 Core Variables */
-@define-color theme_bg_color #262326;
-@define-color theme_fg_color #FCFBF0;
-@define-color theme_base_color #242124;
-@define-color theme_alternate_base_color #3E3C3E;
-@define-color theme_text_color #FCFBF0;
-@define-color theme_selected_bg_color #C58D3C;
-@define-color theme_selected_fg_color #292629;
-@define-color theme_view_bg_color #242124;
-@define-color theme_view_alternate_bg_color #3E3C3E;
-@define-color theme_view_text_color #FCFBF0;
-@define-color theme_header_background #242124;
-@define-color theme_header_foreground #FCFBF0;
-@define-color theme_sidebar_background #242124;
-@define-color theme_sidebar_foreground #FCFBF0;
+@define-color theme_bg_color #040003;
+@define-color theme_fg_color #EFEEEF;
+@define-color theme_base_color #040003;
+@define-color theme_alternate_base_color #1D1A1C;
+@define-color theme_text_color #EFEEEF;
+@define-color theme_selected_bg_color #8B8390;
+@define-color theme_selected_fg_color #040003;
+@define-color theme_view_bg_color #040003;
+@define-color theme_view_alternate_bg_color #1D1A1C;
+@define-color theme_view_text_color #EFEEEF;
+@define-color theme_header_background #040003;
+@define-color theme_header_foreground #EFEEEF;
+@define-color theme_sidebar_background #040003;
+@define-color theme_sidebar_foreground #EFEEEF;
 
 /* GTK 3 Muted States & Borders */
-@define-color insensitive_bg_color #272427;
-@define-color insensitive_fg_color #AAA89E;
-@define-color insensitive_base_color #272427;
-@define-color borders #88867E;
-@define-color outline #88867E;
+@define-color insensitive_bg_color #040003;
+@define-color insensitive_fg_color #9D9C9C;
+@define-color insensitive_base_color #040003;
+@define-color borders #7E7D7D;
+@define-color outline #7E7D7D;
 
 /* GTK 4 / Libadwaita Core Overrides */
-@define-color window_bg_color #262326;
-@define-color window_fg_color #FCFBF0;
-@define-color view_bg_color #242124;
-@define-color view_alternate_bg_color #3E3C3E;
-@define-color view_fg_color #FCFBF0;
-@define-color headerbar_bg_color #242124;
-@define-color headerbar_fg_color #FCFBF0;
-@define-color sidebar_bg_color #242124;
-@define-color sidebar_fg_color #FCFBF0;
-@define-color card_bg_color #272427;
-@define-color card_fg_color #FCFBF0;
-@define-color popover_bg_color #272427;
-@define-color popover_fg_color #FCFBF0;
+@define-color window_bg_color #040003;
+@define-color window_fg_color #EFEEEF;
+@define-color view_bg_color #040003;
+@define-color view_alternate_bg_color #1D1A1C;
+@define-color view_fg_color #EFEEEF;
+@define-color headerbar_bg_color #040003;
+@define-color headerbar_fg_color #EFEEEF;
+@define-color sidebar_bg_color #040003;
+@define-color sidebar_fg_color #EFEEEF;
+@define-color card_bg_color #040003;
+@define-color card_fg_color #EFEEEF;
+@define-color popover_bg_color #040003;
+@define-color popover_fg_color #EFEEEF;
 
 /* Libadwaita Selection & Accent Highlights */
-@define-color accent_color #C58D3C;
-@define-color accent_bg_color #C58D3C;
-@define-color accent_fg_color #292629;
+@define-color accent_color #8B8390;
+@define-color accent_bg_color #8B8390;
+@define-color accent_fg_color #040003;
 
 /* Keep Qt's GTK platform theme from exporting the wrong AlternateBase. */
 treeview.view,

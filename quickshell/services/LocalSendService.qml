@@ -259,7 +259,7 @@ Item {
         id: bridge
         running: true
         stdinEnabled: true
-        command: [root.helperPath()]
+        command: [root.helperPath(), "--auto-accept"]
         stdout: SplitParser {
             onRead: data => root.handleLine(data)
         }

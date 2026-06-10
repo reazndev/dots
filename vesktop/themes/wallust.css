@@ -10,11 +10,11 @@
 .visual-refresh,
 .visual-refresh.theme-dark,
 #app-mount .theme-dark {
-  --wallust-bg: #262326;
-  --wallust-bg-deep: #232123;
-  --wallust-surface: #272427;
-  --wallust-surface-alt: #322F32;
-  --wallust-surface-hover: #3A373A;
+  --wallust-bg: #040003;
+  --wallust-bg-deep: #030003;
+  --wallust-surface: #040003;
+  --wallust-surface-alt: #0E0A0D;
+  --wallust-surface-hover: #181417;
   --wallust-bg-opacity: 97%;
   --wallust-surface-opacity: 94%;
   --wallust-bg-blur: 18px;
@@ -22,16 +22,16 @@
   --wallust-bg-deep-alpha: color-mix(in srgb, var(--wallust-bg-deep) var(--wallust-bg-opacity), transparent);
   --wallust-surface-alpha: color-mix(in srgb, var(--wallust-surface) var(--wallust-surface-opacity), transparent);
   --wallust-surface-alt-alpha: color-mix(in srgb, var(--wallust-surface-alt) var(--wallust-surface-opacity), transparent);
-  --wallust-border: #88867E;
-  --wallust-text: #FCFBF0;
-  --wallust-text-muted: #AAA89E;
-  --wallust-accent: #C58D3C;
-  --wallust-accent-hover: #C58D3C;
-  --wallust-accent-text: #292629;
-  --wallust-danger: #2F2332;
-  --wallust-success: #61731E;
-  --wallust-warning: #806D6A;
-  --wallust-info: #FDCACD;
+  --wallust-border: #7E7D7D;
+  --wallust-text: #EFEEEF;
+  --wallust-text-muted: #9D9C9C;
+  --wallust-accent: #8B8390;
+  --wallust-accent-hover: #8B8390;
+  --wallust-accent-text: #040003;
+  --wallust-danger: #2C475A;
+  --wallust-success: #7A574A;
+  --wallust-warning: #348DAF;
+  --wallust-info: #92D1DF;
 
   --background-primary: var(--wallust-bg-alpha);
   --background-secondary: var(--wallust-surface-alpha);

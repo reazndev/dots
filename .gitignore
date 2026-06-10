@@ -85,6 +85,17 @@ zed/themes/*
 vicinae/*
 !vicinae/settings.json
 
+# Spicetify Spotify theming
+!spicetify/
+spicetify/*
+!spicetify/config-xpui.ini
+!spicetify/Themes/
+spicetify/Themes/*
+!spicetify/Themes/wallust/
+spicetify/Themes/wallust/*
+!spicetify/Themes/wallust/user.css
+!spicetify/Themes/wallust/color.ini
+
 # Vesktop / Vencord theme settings
 !vesktop/
 vesktop/*

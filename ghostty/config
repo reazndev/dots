@@ -1,5 +1,15 @@
 # Ghostty configuration
 theme = "/home/reazn/.config/ghostty/themes/wallust"
-background-opacity = 0.98
+background-opacity = 0.92
 font-family = Lilex Nerd Font
 font-size = 12
+
+keybind = shift+alt+r=new_split:right
+keybind = shift+alt+d=new_split:down
+keybind = shift+alt+w=close_surface
+
+keybind = shift+alt+h=goto_split:left
+keybind = shift+alt+j=goto_split:down
+keybind = shift+alt+k=goto_split:up
+keybind = shift+alt+l=goto_split:right
+keybind = shift+alt+tab=goto_split:next

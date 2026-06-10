@@ -30,6 +30,7 @@ use crate::{
 #[tokio::main]
 async fn main() -> Result<()> {
     let _ = rustls::crypto::ring::default_provider().install_default();
+    let auto_accept = std::env::args().any(|arg| arg == "--auto-accept");
 
     let alias = hostname::get()
         .ok()
@@ -39,6 +40,11 @@ async fn main() -> Result<()> {
     let _http_fingerprint = persisted_fingerprint().await?;
     let (tx, mut rx) = mpsc::unbounded_channel::<Event>();
     let (cmd_tx, mut cmd_rx) = mpsc::unbounded_channel::<Command>();
+    let headless_keepalive = if auto_accept {
+        Some(cmd_tx.clone())
+    } else {
+        None
+    };
     let devices = Arc::new(Mutex::new(HashMap::<String, Device>::new()));
     let selected_files = Arc::new(Mutex::new(Vec::<SelectedFile>::new()));
     let receive_dir = dirs_download().unwrap_or_else(|| ".".into());
@@ -69,6 +75,7 @@ async fn main() -> Result<()> {
         receive_dir,
         incoming: Arc::new(Mutex::new(HashMap::<String, IncomingSession>::new())),
         devices: devices.clone(),
+        auto_accept,
     };
 
     spawn_stdout_writer(&mut rx);
@@ -203,5 +210,6 @@ async fn main() -> Result<()> {
         }
     }
 
+    drop(headless_keepalive);
     Ok(())
 }

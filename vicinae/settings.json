@@ -95,6 +95,9 @@
             },
             "spotify-launcher": {
                "alias": "sp"
+            },
+            "t3code-nightly": {
+               "alias": "t3"
             }
          }
       },

@@ -18,6 +18,23 @@ QtObject {
     property color red: "#2C475A"
     property color blue: "#92D1DF"
 
+    // Material-style roles derived from the wallust palette.
+    // Keep these tied to the generated colors instead of hardcoded M3 neutrals.
+    property color mdSurface: bg
+    property color mdSurfaceContainer: Qt.rgba(accent.r, accent.g, accent.b, 0.16)
+    property color mdSurfaceContainerHigh: Qt.rgba(blue.r, blue.g, blue.b, 0.18)
+    property color mdOnSurface: fg
+    property color mdOnSurfaceVariant: fgDim
+    property color mdPrimary: blue
+    property color mdOnPrimary: bg
+    property color mdPrimaryContainer: Qt.rgba(blue.r, blue.g, blue.b, 0.24)
+    property color mdOnPrimaryContainer: blue
+    property color mdOutlineVariant: Qt.rgba(border.r, border.g, border.b, 0.55)
+    property real mdHoverState: 0.12
+    property real mdPressedState: 0.20
+    property int mdMotionShort: islandAnimationDuration
+    property int mdMotionMedium: islandAnimationDuration + 60
+
     // Geometry
     property int barHeight: 36
     property int barMargin: 16

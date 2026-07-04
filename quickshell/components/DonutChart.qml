@@ -13,6 +13,9 @@ Item {
     height: 22
 
     onValueChanged: canvas.requestPaint()
+    onBgColorChanged: canvas.requestPaint()
+    onFgColorChanged: canvas.requestPaint()
+    onLineWidthChanged: canvas.requestPaint()
 
     Canvas {
         id: canvas

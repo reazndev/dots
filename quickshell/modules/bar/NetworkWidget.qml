@@ -2,14 +2,13 @@ import QtQuick
 import Quickshell.Networking
 import "../../components"
 
-Icon {
-    id: icon
-    role: "fg"
+MaterialBarButton {
+    id: button
 
-    property var popup: null
     property var netDevices: Networking.devices.values
 
-    text: {
+    active: popup && popup.visible
+    iconText: {
         for (var i = 0; i < netDevices.length; i++) {
             var dev = netDevices[i];
             if (dev.connected) {
@@ -20,14 +19,5 @@ Icon {
             }
         }
         return "\uE1AF";
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
-        onClicked: {
-            if (icon.popup)
-                icon.popup.visible = !icon.popup.visible;
-        }
     }
 }

@@ -2,20 +2,10 @@ import QtQuick
 import "../../components"
 import "../../services"
 
-Icon {
-    id: icon
+MaterialBarButton {
+    id: button
 
-    property var popup: null
-
+    active: popup && popup.visible
     role: NightlightService.enabled ? "yellow" : "fgDim"
-    text: NightlightService.enabled ? "" : ""
-
-    MouseArea {
-        anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
-        onClicked: {
-            if (icon.popup)
-                icon.popup.visible = !icon.popup.visible;
-        }
-    }
+    iconText: NightlightService.enabled ? "" : ""
 }

@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
+import QtQuick
 import "modules/bar"
 import "services"
 
@@ -24,17 +25,46 @@ ShellRoot {
         anchor.window: bar
         anchor.rect.x: bar.width - 260 - Theme.barMargin
         anchor.rect.y: Theme.barHeight + 4
-        implicitWidth: 220
-        implicitHeight: 240
+        implicitWidth: 260
+        implicitHeight: 260
         visible: false
-        grabFocus: true
+        grabFocus: pinned
         color: "transparent"
+        property bool pinned: false
+        property bool hovered: false
+        property bool triggerHovered: false
 
-        SystemPopup {}
+        function requestClose() {
+            systemCloseDelay.restart();
+        }
+
+        function closeFloating() {
+            if (!pinned && !hovered && !triggerHovered)
+                visible = false;
+        }
+
+        onVisibleChanged: {
+            if (!visible) {
+                pinned = false;
+                hovered = false;
+                triggerHovered = false;
+            }
+        }
+
+        SystemPopup {
+            popupWindow: systemPopupWindow
+        }
+
+        Timer {
+            id: systemCloseDelay
+            interval: 300
+            repeat: false
+            onTriggered: systemPopupWindow.closeFloating()
+        }
 
         HyprlandFocusGrab {
             windows: [systemPopupWindow]
-            active: systemPopupWindow.visible
+            active: systemPopupWindow.visible && systemPopupWindow.pinned
             onCleared: systemPopupWindow.visible = false
         }
     }
@@ -47,14 +77,43 @@ ShellRoot {
         implicitWidth: 260
         implicitHeight: 340
         visible: false
-        grabFocus: true
+        grabFocus: pinned
         color: "transparent"
+        property bool pinned: false
+        property bool hovered: false
+        property bool triggerHovered: false
 
-        NetworkPopup {}
+        function requestClose() {
+            networkCloseDelay.restart();
+        }
+
+        function closeFloating() {
+            if (!pinned && !hovered && !triggerHovered)
+                visible = false;
+        }
+
+        onVisibleChanged: {
+            if (!visible) {
+                pinned = false;
+                hovered = false;
+                triggerHovered = false;
+            }
+        }
+
+        NetworkPopup {
+            popupWindow: networkPopupWindow
+        }
+
+        Timer {
+            id: networkCloseDelay
+            interval: 300
+            repeat: false
+            onTriggered: networkPopupWindow.closeFloating()
+        }
 
         HyprlandFocusGrab {
             windows: [networkPopupWindow]
-            active: networkPopupWindow.visible
+            active: networkPopupWindow.visible && networkPopupWindow.pinned
             onCleared: networkPopupWindow.visible = false
         }
     }
@@ -67,14 +126,43 @@ ShellRoot {
         implicitWidth: 260
         implicitHeight: 280
         visible: false
-        grabFocus: true
+        grabFocus: pinned
         color: "transparent"
+        property bool pinned: false
+        property bool hovered: false
+        property bool triggerHovered: false
 
-        BluetoothPopup {}
+        function requestClose() {
+            bluetoothCloseDelay.restart();
+        }
+
+        function closeFloating() {
+            if (!pinned && !hovered && !triggerHovered)
+                visible = false;
+        }
+
+        onVisibleChanged: {
+            if (!visible) {
+                pinned = false;
+                hovered = false;
+                triggerHovered = false;
+            }
+        }
+
+        BluetoothPopup {
+            popupWindow: bluetoothPopupWindow
+        }
+
+        Timer {
+            id: bluetoothCloseDelay
+            interval: 300
+            repeat: false
+            onTriggered: bluetoothPopupWindow.closeFloating()
+        }
 
         HyprlandFocusGrab {
             windows: [bluetoothPopupWindow]
-            active: bluetoothPopupWindow.visible
+            active: bluetoothPopupWindow.visible && bluetoothPopupWindow.pinned
             onCleared: bluetoothPopupWindow.visible = false
         }
     }
@@ -87,14 +175,43 @@ ShellRoot {
         implicitWidth: 260
         implicitHeight: 220
         visible: false
-        grabFocus: true
+        grabFocus: pinned
         color: "transparent"
+        property bool pinned: false
+        property bool hovered: false
+        property bool triggerHovered: false
 
-        NightlightPopup {}
+        function requestClose() {
+            nightlightCloseDelay.restart();
+        }
+
+        function closeFloating() {
+            if (!pinned && !hovered && !triggerHovered)
+                visible = false;
+        }
+
+        onVisibleChanged: {
+            if (!visible) {
+                pinned = false;
+                hovered = false;
+                triggerHovered = false;
+            }
+        }
+
+        NightlightPopup {
+            popupWindow: nightlightPopupWindow
+        }
+
+        Timer {
+            id: nightlightCloseDelay
+            interval: 300
+            repeat: false
+            onTriggered: nightlightPopupWindow.closeFloating()
+        }
 
         HyprlandFocusGrab {
             windows: [nightlightPopupWindow]
-            active: nightlightPopupWindow.visible
+            active: nightlightPopupWindow.visible && nightlightPopupWindow.pinned
             onCleared: nightlightPopupWindow.visible = false
         }
     }

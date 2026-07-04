@@ -5,11 +5,42 @@ import "../../components"
 import "../../services"
 
 Rectangle {
+    id: root
+
     anchors.fill: parent
-    color: Theme.bg
-    border.color: Theme.border
+    color: Theme.mdSurface
+    border.color: Theme.mdOutlineVariant
     border.width: Theme.borderWidth
-    radius: Theme.radius
+    radius: 24
+    clip: true
+    opacity: parent && parent.visible ? 1 : 0
+    scale: parent && parent.visible ? 1 : 0.96
+
+    property var popupWindow: null
+
+    Behavior on opacity {
+        NumberAnimation {
+            duration: Theme.mdMotionMedium
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    Behavior on scale {
+        NumberAnimation {
+            duration: Theme.mdMotionMedium
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    HoverHandler {
+        onHoveredChanged: {
+            if (!root.popupWindow)
+                return;
+            root.popupWindow.hovered = hovered;
+            if (!hovered)
+                root.popupWindow.requestClose();
+        }
+    }
 
     function stateText(state) {
         switch (state) {
@@ -26,15 +57,34 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 16
+        anchors.margins: 14
         spacing: 12
 
         // Header
         RowLayout {
             Layout.fillWidth: true
+            spacing: 10
+
+            Rectangle {
+                Layout.preferredWidth: 34
+                Layout.preferredHeight: 34
+                radius: 17
+                color: Theme.mdPrimaryContainer
+
+                StyledText {
+                    anchors.centerIn: parent
+                    text: "\uE05C"
+                    font.family: Theme.iconFontFamily
+                    font.pixelSize: 16
+                    color: Theme.mdOnPrimaryContainer
+                }
+            }
+
             StyledText {
                 text: "Bluetooth"
+                font.family: Theme.fontFamilyUi
                 font.pixelSize: Theme.fontSizeLarge
+                color: Theme.mdOnSurface
             }
             Item {
                 Layout.fillWidth: true
@@ -51,7 +101,8 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             height: 1
-            color: Theme.border
+            color: Theme.mdOutlineVariant
+            opacity: 0.55
             visible: Bluetooth.devices.values.length > 0
         }
 
@@ -66,18 +117,32 @@ Rectangle {
             delegate: Rectangle {
                 required property var modelData
                 width: ListView.view.width
-                height: 36
-                radius: 6
-                color: mouseArea.containsMouse ? Qt.rgba(Theme.fg.r, Theme.fg.g, Theme.fg.b, 0.05) : "transparent"
+                height: 42
+                radius: 16
+                color: modelData.connected
+                    ? Theme.mdPrimaryContainer
+                    : (mouseArea.pressed
+                        ? Qt.rgba(Theme.mdPrimary.r, Theme.mdPrimary.g, Theme.mdPrimary.b, Theme.mdPressedState)
+                        : (mouseArea.containsMouse
+                            ? Qt.rgba(Theme.mdPrimary.r, Theme.mdPrimary.g, Theme.mdPrimary.b, Theme.mdHoverState)
+                            : Theme.mdSurfaceContainer))
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Theme.mdMotionShort
+                        easing.type: Easing.OutCubic
+                    }
+                }
 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.leftMargin: 8
-                    anchors.rightMargin: 8
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 12
 
                     StyledText {
                         text: modelData.name || modelData.address
-                        role: modelData.connected ? "accent" : "fg"
+                        font.family: Theme.fontFamilyUi
+                        color: modelData.connected ? Theme.mdOnPrimaryContainer : Theme.mdOnSurface
                     }
 
                     Item {
@@ -86,7 +151,8 @@ Rectangle {
 
                     StyledText {
                         text: stateText(modelData.state)
-                        role: modelData.connected ? "green" : "fgDim"
+                        font.family: Theme.fontFamilyUi
+                        color: modelData.connected ? Theme.mdOnPrimaryContainer : Theme.mdOnSurfaceVariant
                         font.pixelSize: 11
                         visible: text !== ""
                     }
@@ -115,7 +181,8 @@ Rectangle {
         StyledText {
             visible: Bluetooth.devices.values.length === 0
             text: "No devices"
-            role: "fgDim"
+            font.family: Theme.fontFamilyUi
+            color: Theme.mdOnSurfaceVariant
             Layout.alignment: Qt.AlignHCenter
         }
 
@@ -123,14 +190,26 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             height: 32
-            radius: 6
+            radius: 16
             visible: Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled
-            color: mouseAreaScan.containsMouse ? Qt.rgba(Theme.fg.r, Theme.fg.g, Theme.fg.b, 0.1) : Qt.rgba(Theme.fg.r, Theme.fg.g, Theme.fg.b, 0.05)
+            color: mouseAreaScan.pressed
+                ? Qt.rgba(Theme.mdPrimary.r, Theme.mdPrimary.g, Theme.mdPrimary.b, Theme.mdPressedState)
+                : (mouseAreaScan.containsMouse
+                    ? Qt.rgba(Theme.mdPrimary.r, Theme.mdPrimary.g, Theme.mdPrimary.b, Theme.mdHoverState)
+                    : Theme.mdSurfaceContainerHigh)
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: Theme.mdMotionShort
+                    easing.type: Easing.OutCubic
+                }
+            }
 
             StyledText {
                 anchors.centerIn: parent
                 text: Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.discovering ? "Scanning..." : "Scan Devices"
-                role: "fgDim"
+                font.family: Theme.fontFamilyUi
+                color: Theme.mdOnSurfaceVariant
             }
 
             MouseArea {

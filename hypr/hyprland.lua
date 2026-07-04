@@ -78,6 +78,7 @@ require("decorations")
 require("animations")
 -- Source: /home/reazn/.config/hypr/misc.conf — convert this file to Lua and ensure it is on Lua's package.path.
 require("misc")
+require("scrolloverview")
 -- Source: /home/reazn/.config/hypr/rules.conf — convert this file to Lua and ensure it is on Lua's package.path.
 require("rules")
 -- Source: /home/reazn/.config/hypr/keybinds.conf — convert this file to Lua and ensure it is on Lua's package.path.

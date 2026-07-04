@@ -108,7 +108,7 @@ hl.bind(mainMod .. " + CTRL + SHIFT + N", hl.dsp.exec_cmd("hyprctl hyprsunset te
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("quickshell ipc call bar toggleNotifications"))
 
 -- Toggle workspace overview
-hl.bind(Alt .. " + Tab", hl.dsp.exec_cmd("quickshell ipc call bar toggleWorkspaceOverview"))
+hl.bind(Alt .. " + Tab", hl.plugin.scrolloverview.overview("toggle"))
 
 --###########################################
 --## DYNAMIC ULTRAWIDE LAYOUT CONTROLLER  ###

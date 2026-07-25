@@ -1,0 +1,22 @@
+# ~/.config/wallust/wallust.toml
+
+# Color extraction engine settings
+backend = "resized"
+color_space = "lab"
+palette = "dark"
+
+# Template mappings to dynamically write configuration files
+[templates]
+quickshell = { src = "Theme.qml.template", dst = "/home/reazn/.config/quickshell/services/Theme.qml" }
+ghostty = { src = "ghostty.template", dst = "/home/reazn/.config/ghostty/themes/wallust" }
+starship = { src = "starship.toml.template", dst = "/home/reazn/.config/starship.toml" }
+kitty = { src = "kitty.template", dst = "/home/reazn/.config/kitty/theme.conf" }
+hyprland = { src = "hyprland.template", dst = "/home/reazn/.config/hypr/colors.conf" }
+zed = { src = "zed.template", dst = "/home/reazn/.config/zed/themes/wallust.json" }
+gtk3 = { src = "gtk.css.template", dst = "/home/reazn/.config/gtk-3.0/gtk.css" }
+gtk4 = { src = "gtk.css.template", dst = "/home/reazn/.config/gtk-4.0/gtk.css" }
+kdeglobals = { src = "kdeglobals.template", dst = "/home/reazn/.config/kdeglobals" }
+kdecolors = { src = "kdecolors.template", dst = "/home/reazn/.local/share/color-schemes/Wallust.colors" }
+vicinae = { src = "vicinae.toml.template", dst = "/home/reazn/.local/share/vicinae/themes/wallust.toml" }
+spicetify = { src = "spicetify.ini.template", dst = "/home/reazn/.config/spicetify/Themes/wallust/color.ini" }
+vesktop = { src = "vesktop.css.template", dst = "/home/reazn/.config/vesktop/themes/wallust.css" }

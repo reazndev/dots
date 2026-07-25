@@ -1,0 +1,61 @@
+# This repository lives directly in ~/.config. Ignore everything by default:
+# application profiles frequently include sessions, cookies, tokens, caches,
+# databases, logs, and machine-specific state.
+/*
+
+# Repository metadata and documentation
+!/.gitignore
+!/README.md
+!/install.sh
+
+# Deliberately versioned dotfiles
+!/autostart/
+!/autostart/**
+!/btop/
+!/btop/**
+!/cachyos/
+!/cachyos/**
+!/cachyos-hello.json
+!/dconf/
+!/dconf/**
+!/dolphinrc
+!/fastfetch/
+!/fastfetch/**
+!/fish/
+!/fish/**
+!/fontconfig/
+!/fontconfig/**
+!/git/
+!/git/**
+!/ghostty/
+!/ghostty/**
+!/gtk-3.0/
+!/gtk-3.0/**
+!/gtk-4.0/
+!/gtk-4.0/**
+!/hypr/
+!/hypr/**
+!/hyprsunset.conf
+!/icons/
+!/icons/**
+!/kdeglobals
+!/kitty/
+!/kitty/**
+!/mimeapps.list
+!/pavucontrol.ini
+!/pulse/
+!/pulse/**
+!/quickshell/
+!/quickshell/**
+!/starship.toml
+!/user-dirs.dirs
+!/user-dirs.locale
+!/vesktop-flags.conf
+!/wallust/
+!/wallust/**
+!/zed/
+!/zed/**
+
+# Runtime artifacts inside otherwise versioned configuration directories
+*.log
+/pulse/cookie

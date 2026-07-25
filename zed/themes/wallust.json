@@ -1,0 +1,41 @@
+{
+  "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
+  "name": "Wallust",
+  "author": "Antigravity",
+  "themes": [
+    {
+      "name": "Wallust",
+      "appearance": "dark",
+      "style": {
+        "background": "#000108",
+        "foreground": "#E6D9D9",
+        "editor.background": "#000108",
+        "editor.foreground": "#E6D9D9",
+        "editor.line_number": "#948686",
+        "editor.active_line_number": "#80717D",
+        "editor.wrap_guide": "#948686",
+        "editor.active_line.background": "#0A0B13",
+        "border": "#766B6B",
+        "tab.active_background": "#000109",
+        "tab.inactive_background": "#000108",
+        "tab.active_foreground": "#E6D9D9",
+        "tab.inactive_foreground": "#948686",
+        "title_bar.background": "#000108",
+        "status_bar.background": "#000108",
+        "pane.background": "#000108",
+        "panel.background": "#000108",
+        "syntax": {
+          "comment": { "color": "#7A889B" },
+          "string": { "color": "#98C379" },
+          "keyword": { "color": "#C678DD" },
+          "function": { "color": "#61AFEF" },
+          "type": { "color": "#E5C07B" },
+          "number": { "color": "#D19A66" },
+          "property": { "color": "#ABB2BF" },
+          "constant": { "color": "#D19A66" },
+          "operator": { "color": "#56B6C2" }
+        }
+      }
+    }
+  ]
+}

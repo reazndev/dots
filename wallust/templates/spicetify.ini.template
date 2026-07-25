@@ -1,0 +1,59 @@
+[wallust]
+text               = {{foreground | strip}}
+subtext            = {{color8 | strip}}
+main               = {{background | strip}}
+main-elevated      = {{background | lighten(0.06) | strip}}
+highlight          = {{background | lighten(0.08) | strip}}
+highlight-elevated = {{background | lighten(0.12) | strip}}
+sidebar            = {{background | darken(0.08) | strip}}
+player             = {{background | darken(0.08) | strip}}
+card               = {{background | lighten(0.06) | strip}}
+shadow             = {{color0 | strip}}
+selected-row       = {{color8 | strip}}
+button             = {{color4 | strip}}
+button-active      = {{color12 | strip}}
+button-disabled    = {{color8 | strip}}
+tab-active         = {{color4 | strip}}
+notification       = {{color4 | strip}}
+notification-error = {{color1 | strip}}
+misc               = {{color7 | strip}}
+
+[Base]
+text               = {{foreground | strip}}
+subtext            = {{color8 | strip}}
+main               = {{background | strip}}
+main-elevated      = {{background | lighten(0.06) | strip}}
+highlight          = {{background | lighten(0.08) | strip}}
+highlight-elevated = {{background | lighten(0.12) | strip}}
+sidebar            = {{background | darken(0.08) | strip}}
+player             = {{background | darken(0.08) | strip}}
+card               = {{background | lighten(0.06) | strip}}
+shadow             = {{color0 | strip}}
+selected-row       = {{color8 | strip}}
+button             = {{color4 | strip}}
+button-active      = {{color12 | strip}}
+button-disabled    = {{color8 | strip}}
+tab-active         = {{color4 | strip}}
+notification       = {{color4 | strip}}
+notification-error = {{color1 | strip}}
+misc               = {{color7 | strip}}
+
+[Marketplace]
+text               = {{foreground | strip}}
+subtext            = {{color8 | strip}}
+main               = {{background | strip}}
+main-elevated      = {{background | lighten(0.06) | strip}}
+highlight          = {{background | lighten(0.08) | strip}}
+highlight-elevated = {{background | lighten(0.12) | strip}}
+sidebar            = {{background | darken(0.08) | strip}}
+player             = {{background | darken(0.08) | strip}}
+card               = {{background | lighten(0.06) | strip}}
+shadow             = {{color0 | strip}}
+selected-row       = {{color8 | strip}}
+button             = {{color4 | strip}}
+button-active      = {{color12 | strip}}
+button-disabled    = {{color8 | strip}}
+tab-active         = {{color4 | strip}}
+notification       = {{color4 | strip}}
+notification-error = {{color1 | strip}}
+misc               = {{color7 | strip}}

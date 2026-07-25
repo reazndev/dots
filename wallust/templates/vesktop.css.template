@@ -1,0 +1,290 @@
+/**
+ * @name Wallust
+ * @author reazn
+ * @description Vesktop theme generated from Wallust colors.
+ * @version 1.0.0
+ */
+
+:root,
+.theme-dark,
+.visual-refresh,
+.visual-refresh.theme-dark,
+#app-mount .theme-dark {
+  --wallust-bg: {{background | darken(0.08)}};
+  --wallust-bg-deep: {{background | darken(0.14)}};
+  --wallust-surface: {{background | darken(0.04)}};
+  --wallust-surface-alt: {{background | lighten(0.04)}};
+  --wallust-surface-hover: {{background | lighten(0.08)}};
+  --wallust-bg-opacity: 97%;
+  --wallust-surface-opacity: 94%;
+  --wallust-bg-blur: 18px;
+  --wallust-bg-alpha: color-mix(in srgb, var(--wallust-bg) var(--wallust-bg-opacity), transparent);
+  --wallust-bg-deep-alpha: color-mix(in srgb, var(--wallust-bg-deep) var(--wallust-bg-opacity), transparent);
+  --wallust-surface-alpha: color-mix(in srgb, var(--wallust-surface) var(--wallust-surface-opacity), transparent);
+  --wallust-surface-alt-alpha: color-mix(in srgb, var(--wallust-surface-alt) var(--wallust-surface-opacity), transparent);
+  --wallust-border: {{color8 | darken(0.2)}};
+  --wallust-text: {{foreground}};
+  --wallust-text-muted: {{color8}};
+  --wallust-accent: {{color4}};
+  --wallust-accent-hover: {{color12}};
+  --wallust-accent-text: {{background}};
+  --wallust-danger: {{color1}};
+  --wallust-success: {{color2}};
+  --wallust-warning: {{color3}};
+  --wallust-info: {{color5}};
+
+  --background-primary: var(--wallust-bg-alpha);
+  --background-secondary: var(--wallust-surface-alpha);
+  --background-secondary-alt: var(--wallust-bg-deep-alpha);
+  --background-tertiary: var(--wallust-bg-deep-alpha);
+  --background-accent: var(--wallust-accent);
+  --background-floating: var(--wallust-surface-alpha);
+  --background-modifier-hover: color-mix(in srgb, var(--wallust-surface-hover) 78%, transparent);
+  --background-modifier-active: color-mix(in srgb, var(--wallust-accent) 22%, var(--wallust-surface));
+  --background-modifier-selected: color-mix(in srgb, var(--wallust-accent) 18%, var(--wallust-surface));
+  --background-modifier-accent: var(--wallust-border);
+
+  --bg-base-primary: var(--wallust-bg-alpha);
+  --bg-base-secondary: var(--wallust-surface-alpha);
+  --bg-base-tertiary: var(--wallust-bg-deep-alpha);
+  --bg-surface-raised: var(--wallust-surface-alpha);
+  --bg-surface-overlay: var(--wallust-surface-alpha);
+  --bg-surface-overlay-tmp: var(--wallust-surface-alpha);
+  --bg-surface-higher: var(--wallust-surface-alt-alpha);
+  --bg-surface-high: var(--wallust-surface-alpha);
+  --bg-surface-low: var(--wallust-bg-alpha);
+  --bg-surface-lowest: var(--wallust-bg-deep-alpha);
+  --background-base-lowest: var(--wallust-bg-deep-alpha);
+  --background-base-lower: var(--wallust-bg-alpha);
+  --background-base-low: var(--wallust-bg-alpha);
+  --background-surface-highest: var(--wallust-surface-hover);
+  --background-surface-higher: var(--wallust-surface-alt-alpha);
+  --background-surface-high: var(--wallust-surface-alpha);
+  --background-surface-low: var(--wallust-bg-alpha);
+  --background-surface-lower: var(--wallust-bg-deep-alpha);
+  --background-surface-lowest: var(--wallust-bg-deep-alpha);
+  --app-background-frame: var(--wallust-bg-deep-alpha);
+  --app-background: var(--wallust-bg-alpha);
+  --custom-app-top-bar-background: var(--wallust-bg-deep-alpha);
+  --custom-channel-members-bg: var(--wallust-bg-alpha);
+  --custom-guild-list-background: var(--wallust-bg-deep-alpha);
+  --custom-sidebar-background: var(--wallust-bg-alpha);
+  --custom-chat-input-margin-bottom: 24px;
+
+  --border-faint: color-mix(in srgb, var(--wallust-border) 35%, transparent);
+  --border-subtle: color-mix(in srgb, var(--wallust-border) 55%, transparent);
+  --border-normal: var(--wallust-border);
+  --border-strong: var(--wallust-text-muted);
+
+  --channeltextarea-background: var(--wallust-surface-alpha);
+  --input-background: var(--wallust-surface-alpha);
+  --input-border: var(--wallust-border);
+  --modal-background: var(--wallust-bg-alpha);
+  --modal-footer-background: var(--wallust-bg-deep-alpha);
+  --card-primary-bg: var(--wallust-surface-alpha);
+  --card-secondary-bg: var(--wallust-bg-alpha);
+  --spoiler-hidden-background: var(--wallust-surface-hover);
+  --profile-body-background-color: var(--wallust-bg-alpha);
+  --profile-gradient-primary-color: var(--wallust-bg-alpha);
+  --profile-gradient-secondary-color: var(--wallust-surface-alpha);
+
+  --text-normal: var(--wallust-text);
+  --text-primary: var(--wallust-text);
+  --text-secondary: var(--wallust-text-muted);
+  --text-tertiary: var(--wallust-text-muted);
+  --text-muted: var(--wallust-text-muted);
+  --text-link: var(--wallust-info);
+  --header-primary: var(--wallust-text);
+  --header-secondary: var(--wallust-text-muted);
+  --interactive-normal: var(--wallust-text);
+  --interactive-hover: var(--wallust-accent-hover);
+  --interactive-active: var(--wallust-accent);
+  --interactive-muted: var(--wallust-text-muted);
+
+  --brand-360: var(--wallust-accent);
+  --brand-400: var(--wallust-accent);
+  --brand-460: var(--wallust-accent);
+  --brand-500: var(--wallust-accent);
+  --brand-560: var(--wallust-accent-hover);
+  --brand-600: var(--wallust-accent-hover);
+  --button-positive-background: var(--wallust-success);
+  --button-danger-background: var(--wallust-danger);
+  --status-danger: var(--wallust-danger);
+  --status-positive: var(--wallust-success);
+  --status-warning: var(--wallust-warning);
+}
+
+body,
+.appMount__51fd7,
+.app__160d8,
+.bg__960e4,
+.visual-refresh,
+.theme-dark,
+[class*="appMount"],
+[class*="app_"],
+[class*="bg_"] {
+  background: transparent !important;
+  color: var(--wallust-text);
+}
+
+.layers__960e4,
+.layer__960e4,
+.base_c48ade,
+.page_c48ade,
+.chat_f75fb0,
+.chatContent_f75fb0,
+.content_f75fb0,
+.container_c48ade,
+.container__9293f,
+.container__133bf,
+.tabBody__133bf,
+.peopleColumn__133bf,
+.nowPlayingColumn__133bf,
+.container_c8ffbb,
+.members_c8ffbb,
+.member_c8ffbb,
+.searchBar__35e86,
+.searchBarComponent__35e86,
+.privateChannels__35e86,
+.scroller__99e7c,
+.scroller__7d20c,
+.scrollerBase__99f8c {
+  background-color: var(--wallust-bg-alpha) !important;
+  backdrop-filter: blur(var(--wallust-bg-blur));
+}
+
+.sidebar_c48ade,
+.container__2637a,
+.privateChannels__35e86,
+.panels_c48ade,
+.chat_f75fb0,
+.container_c8ffbb,
+.members_c8ffbb,
+.container__133bf,
+.content_f75fb0,
+.standardSidebarView__23e6b,
+.sidebarRegionScroller__23e6b,
+.contentRegionScroller__23e6b {
+  background: var(--wallust-bg-alpha) !important;
+  backdrop-filter: blur(var(--wallust-bg-blur));
+}
+
+.guilds_c48ade,
+.scroller_ef3116,
+.itemsContainer_ef3116,
+.tree_ef3116,
+.wrapper_ef3116,
+.panels_c48ade,
+.sidebarList_c48ade {
+  background: var(--wallust-bg-deep-alpha) !important;
+  backdrop-filter: blur(var(--wallust-bg-blur));
+}
+
+.children__9293f::after,
+.form_f75fb0::before {
+  display: none;
+}
+
+.themed__9293f,
+.header_f37cb1,
+.searchBar__97492,
+.inner_a45028,
+.channelTextArea_f75fb0,
+.channelTextArea__74017,
+.scrollableContainer__74017,
+.container__0f2e8,
+.peopleListItem_cc6179,
+.itemCard__7e549,
+.nowPlayingColumn__133bf .container__7d20c,
+.member_c8ffbb,
+.memberInner__5d473,
+.layout__91a9d,
+.wrapper__2ea32,
+.link__2ea32 {
+  background-color: transparent;
+}
+
+.channelTextArea_f75fb0,
+.channelTextArea__74017,
+.scrollableContainer__74017,
+.searchBar__97492,
+.searchBarComponent__35e86,
+.itemCard__7e549,
+.nowPlayingColumn__133bf .container__7d20c {
+  background-color: var(--wallust-surface-alpha) !important;
+  backdrop-filter: blur(var(--wallust-bg-blur));
+  border: 1px solid color-mix(in srgb, var(--wallust-border) 38%, transparent);
+}
+
+.guilds_c48ade,
+.scroller_ef3116,
+.sidebar_c48ade,
+.container__2637a,
+.members_c8ffbb,
+.nowPlayingColumn__133bf,
+.container__7d20c,
+.panels_c48ade,
+.chatContent_f75fb0 {
+  border-color: var(--wallust-border);
+}
+
+.containerDefault_c69b6d.selected_c69b6d .link__2ea32,
+.channel__972a0.selected__972a0 a,
+.interactiveSelected__972a0,
+.item__133bf.selected__133bf,
+.tabBarItem__133bf.selected__133bf {
+  background: color-mix(in srgb, var(--wallust-accent) 22%, transparent);
+  color: var(--wallust-text);
+}
+
+.link__2ea32:hover,
+.channel__972a0:hover a,
+.clickable__91a9d:hover .layout__91a9d,
+.member__5d473:hover .layout__91a9d,
+.interactive__972a0:hover {
+  background: color-mix(in srgb, var(--wallust-surface-hover) 72%, transparent);
+}
+
+.mentioned__5126c,
+.replying__5126c {
+  background: color-mix(in srgb, var(--wallust-accent) 12%, transparent);
+}
+
+.mentioned__5126c::before,
+.replying__5126c::before {
+  background: var(--wallust-accent);
+}
+
+.newMessagesBar__0f481,
+.barButtonBase__0f481,
+.unreadPill__908e2,
+.numberBadge__2b1f5,
+.mention__3b95d {
+  background: var(--wallust-accent) !important;
+  color: var(--wallust-accent-text) !important;
+}
+
+.button__201d5.lookFilled__201d5.colorBrand__201d5,
+.lookFilled__201d5.colorBrand__201d5,
+.lookFilled__201d5.colorGreen__201d5 {
+  background: var(--wallust-accent);
+  color: var(--wallust-accent-text);
+}
+
+.button__201d5.lookFilled__201d5.colorBrand__201d5:hover,
+.lookFilled__201d5.colorBrand__201d5:hover,
+.lookFilled__201d5.colorGreen__201d5:hover {
+  background: var(--wallust-accent-hover);
+  color: var(--wallust-accent-text);
+}
+
+.scrollbarGhostHairline__506b3::-webkit-scrollbar-thumb,
+.auto__99f8c::-webkit-scrollbar-thumb,
+.thin__99f8c::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--wallust-accent) 45%, var(--wallust-bg-deep)) !important;
+}
+
+.scrollbarGhostHairline__506b3::-webkit-scrollbar-track,
+.auto__99f8c::-webkit-scrollbar-track {
+  background: var(--wallust-bg-deep) !important;
+}

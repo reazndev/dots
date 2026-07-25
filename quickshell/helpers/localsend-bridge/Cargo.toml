@@ -1,0 +1,24 @@
+[package]
+name = "localsend-bridge"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0"
+axum = "0.8"
+axum-server = { version = "0.7", features = ["tls-rustls"] }
+chrono = { version = "0.4", features = ["serde"] }
+futures-util = "0.3"
+hostname = "0.4"
+if-addrs = "0.13"
+mime_guess = "2.0"
+percent-encoding = "2.3"
+rcgen = "0.13"
+reqwest = { version = "0.12", default-features = false, features = ["json", "multipart", "rustls-tls", "stream"] }
+rustls = { version = "0.23", default-features = false, features = ["ring"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+tokio = { version = "1.48", features = ["full"] }
+tokio-util = { version = "0.7", features = ["codec", "io"] }
+uuid = { version = "1.18", features = ["v4", "serde"] }

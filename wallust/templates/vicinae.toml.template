@@ -1,0 +1,79 @@
+[meta]
+version = 1
+name = "Wallust"
+description = "Wallust generated theme for Vicinae"
+variant = "dark"
+inherits = "vicinae-dark"
+
+[colors.core]
+accent = "{{color4}}"
+accent_foreground = "{{background}}"
+background = "{{background}}"
+foreground = "{{foreground}}"
+secondary_background = "{{background | lighten(0.03)}}"
+border = "{{background | lighten(0.05)}}"
+
+[colors.main_window]
+border = "{{background | lighten(0.05)}}"
+footer = { background = "colors.core.secondary_background" }
+
+[colors.settings_window]
+border = "{{background | lighten(0.05)}}"
+
+[colors.accents]
+blue = "{{color4}}"
+green = "{{color2}}"
+magenta = "{{color5}}"
+orange = "{{color9}}"
+red = "{{color1}}"
+yellow = "{{color3}}"
+cyan = "{{color6}}"
+purple = "{{color13}}"
+
+[colors.shortcut]
+border = "colors.core.border"
+
+[colors.text]
+default = "colors.core.foreground"
+muted = "{{color8}}"
+danger = "{{color1}}"
+success = "{{color2}}"
+placeholder = "{{color8}}"
+selection = { background = "{{color4}}", foreground = "{{background}}" }
+
+[colors.text.links]
+default = "{{color4}}"
+visited = "{{color5}}"
+
+[colors.input]
+border = "{{background | lighten(0.05)}}"
+border_focus = "{{color4}}"
+border_error = "{{color1}}"
+
+[colors.button.primary]
+background = "{{background | lighten(0.05)}}"
+foreground = "{{foreground}}"
+hover = { background = "{{background | lighten(0.1)}}" }
+focus = { outline = "colors.core.accent" }
+
+[colors.list.item.hover]
+foreground = "{{foreground}}"
+secondary_foreground = "{{foreground}}"
+
+[colors.list.item.selection]
+background = "{{background | lighten(0.05)}}"
+foreground = "{{foreground}}"
+secondary_background = "{{background | lighten(0.05)}}"
+secondary_foreground = "{{foreground}}"
+
+[colors.grid.item]
+background = "{{background | lighten(0.03)}}"
+hover = { outline = "{{foreground}}" }
+selection = { outline = "{{foreground}}" }
+
+[colors.scrollbars]
+background = "{{background | lighten(0.05)}}"
+
+[colors.loading]
+bar = "{{color4}}"
+spinner = "{{foreground}}"

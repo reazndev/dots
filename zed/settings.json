@@ -1,0 +1,206 @@
+{
+  "cli_default_open_behavior": "existing_window",
+  "edit_predictions": {
+    "provider": "copilot"
+  },
+  "outline_panel": {
+    "dock": "right",
+  },
+  "collaboration_panel": {
+    "dock": "right",
+  },
+  "git_panel": {
+    "dock": "right",
+  },
+  "agent": {
+    "tool_permissions": {
+      "tools": {
+        "terminal": {
+          "default": "allow",
+        },
+        "create_directory": {
+          "default": "allow",
+        },
+      },
+    },
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "gpt-5.2-codex",
+      "enable_thinking": true,
+      "effort": "medium",
+    },
+    "dock": "left",
+    "favorite_models": [],
+    "model_parameters": [],
+  },
+  "terminal": {
+    "dock": "right",
+  },
+  "project_panel": {
+    "dock": "right",
+  },
+  "redact_private_values": false,
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Colored Zed Icons Theme Dark",
+    "dark": "Colored Zed Icons Theme Dark",
+  },
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "format_on_save": "on",
+  "languages": {
+    "TypeScript": {
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "HTML": {
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "CSS": {
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "JSON": {
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+    "Markdown": {
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "--no-install",
+            "prettier",
+            "--stdin-filepath",
+            "{buffer_path}",
+          ],
+        },
+      },
+    },
+  },
+  "theme": {
+    "mode": "dark",
+    "light": "Gruvbox Light",
+    "dark": "Ayu Dark",
+  },
+  "agent_servers": {
+    "github-copilot-cli": {
+      "type": "registry"
+    },
+    "gemini": {
+      "type": "registry",
+    },
+    "codex-acp": {
+      "type": "registry",
+    },
+    "agoragentic-acp": {
+      "type": "registry",
+    },
+    "claude-acp": {
+      "type": "registry",
+    },
+    "Kimi Code CLI": {
+      "type": "custom",
+      "command": "kimi",
+      "args": ["acp"],
+      "env": {},
+    },
+  },
+  "lsp": {
+    "discord_presence": {
+      "initialization_options": {
+        // Application ID for the rich presence (don't touch it unless you know what you're doing)
+        "application_id": "1263505205522337886",
+        // Base URL for all language icons
+        "base_icons_url": "https://raw.githubusercontent.com/xhyrom/zed-discord-presence/main/assets/icons/",
+
+        // "state": "",
+        "details": "In {workspace}",
+        // URL for the large image
+        "large_image": "{base_icons_url}/{language:lo}.png", // :lo lowercase the language name
+        "large_text": "{language:u}", // :u capitalizes the first letter
+        // URL for the small image
+        "small_image": "{base_icons_url}/zed.png",
+        "small_text": "Zed",
+
+        // Idle settings - when you're inactive
+        "idle": {
+          "timeout": 600, // Idle timeout in seconds (300 seconds = 5 minutes)
+
+          // Action to take when idle
+          // `change_activity` - changes the activity to idle with the following details
+          // `clear_activity` - clears the activity (hides it)
+          "action": "change_activity",
+
+          "state": "Idling",
+          "details": "In {workspace}",
+          "large_image": "{base_icons_url}/zed.png",
+          "large_text": "Zed",
+          "small_image": "{base_icons_url}/idle.png",
+          "small_text": "Idle",
+        },
+
+        // Rules to disable presence in specific workspaces
+        "rules": {
+          "mode": "blacklist", // Can also be "whitelist"
+          "paths": ["absolute path"],
+        },
+
+        "git_integration": true,
+      },
+    },
+  },
+}
